@@ -1,6 +1,8 @@
 import jwt from 'jsonwebtoken';
 
-const SECRET = process.env.JWT_SECRET || 'DEV_SECRET';
+// Strip UTF-8 BOM (0xFEFF) that PowerShell pipe encoding can prepend to env vars on Windows
+const _rawSecret = process.env.JWT_SECRET || 'DEV_SECRET';
+const SECRET = _rawSecret.charCodeAt(0) === 0xFEFF ? _rawSecret.slice(1) : _rawSecret;
 
 export function createToken(userId: number) {
   return jwt.sign({ userId }, SECRET, { expiresIn: '7d' });
