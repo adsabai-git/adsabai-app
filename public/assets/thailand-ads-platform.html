@@ -1,0 +1,2726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AdSabai – Thailand's Premier Classifieds</title>
+<script>(function(){try{var t=localStorage.getItem('adSabaiTheme');if(t!=='dark')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700;800&family=Sarabun:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #F0D078;
+    --gold-dark: #9A7A30;
+    --thai-red: #A8192E;
+    --thai-teal: #006B6B;
+    --deep-navy: #0D1B2A;
+    --navy: #162032;
+    --card-bg: #1A2740;
+    --border: rgba(201,168,76,0.18);
+    --text: #F4EFE0;
+    --text-muted: #9BA8B8;
+    --accent-green: #2ECC8A;
+    --accent-pink: #E85D8A;
+    --surface: #1E2D42;
+  }
+
+  /* ── LIGHT THEME ── */
+  html[data-theme="light"] {
+    --deep-navy: #F9F6EE;
+    --navy:      #EDE8DC;
+    --card-bg:   #FFFFFF;
+    --border:    rgba(0,0,0,0.10);
+    --text:      #1A1207;
+    --text-muted:#6B6258;
+    --surface:   #F2EDE0;
+  }
+  html[data-theme="light"] nav {
+    background: rgba(249,246,238,0.97);
+    border-bottom-color: rgba(0,0,0,0.10);
+  }
+  html[data-theme="light"] .mobile-menu {
+    background: rgba(249,246,238,0.97);
+  }
+  html[data-theme="light"] .mobile-menu-panel {
+    background: var(--navy);
+    box-shadow: 12px 0 40px rgba(0,0,0,0.12);
+  }
+  html[data-theme="light"] .search-bar {
+    box-shadow: 0 8px 32px rgba(0,0,0,0.10);
+  }
+  html[data-theme="light"] .search-bar select {
+    background: rgba(201,168,76,0.10);
+  }
+  html[data-theme="light"] #lightbox {
+    background: rgba(249,246,238,0.97);
+  }
+
+  /* ── THEME TOGGLE BUTTON ── */
+  #theme-toggle {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: border-color .2s, color .2s, background .2s;
+    flex-shrink: 0;
+  }
+  #theme-toggle:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+    background: rgba(201,168,76,0.08);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html {
+    overflow-x: hidden;
+    max-width: 100%;
+  }
+
+  body {
+    font-family: 'Sarabun', sans-serif;
+    background: var(--deep-navy);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+    max-width: 100%;
+    padding-top: 56px;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 102;
+    background: rgba(13,27,42,0.98);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 1.25rem;
+    display: flex; align-items: center;
+    height: 52px;
+    gap: 1.5rem;
+  }
+  .nav-logo {
+    font-family: 'Kanit', sans-serif;
+    font-weight: 800; font-size: 1.25rem;
+    background: linear-gradient(135deg, var(--gold-light), var(--gold));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    letter-spacing: -0.5px;
+    cursor: pointer;
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+  .nav-logo span { color: var(--thai-red); -webkit-text-fill-color: var(--thai-red); }
+  .nav-links {
+    display: flex; gap: 1.5rem; align-items: center;
+    margin-left: auto;
+  }
+  /* Right-side action group: Post Ad + theme toggle, always together */
+  .nav-cta {
+    display: flex; align-items: center; gap: 0.5rem; flex-shrink: 0;
+  }
+  .nav-links a {
+    color: var(--text-muted); text-decoration: none;
+    font-size: 0.9rem; font-weight: 500;
+    transition: color .2s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+  #nav-auth {
+    display: flex; align-items: center; gap: 1.5rem;
+  }
+  .btn-post {
+    background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+    color: var(--deep-navy); font-family: 'Kanit', sans-serif;
+    font-weight: 700; font-size: 0.85rem;
+    padding: 0.5rem 1.2rem; border-radius: 8px;
+    border: none; cursor: pointer;
+    transition: transform .15s, box-shadow .15s;
+    box-shadow: 0 4px 16px rgba(201,168,76,0.3);
+    min-width: 100px;
+  }
+  .btn-post:hover { box-shadow: 0 6px 24px rgba(201,168,76,0.45); }
+  .btn-post.disabled {
+    opacity: 0.95;
+    cursor: pointer;
+    background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+  }
+  .user-info {
+    display: flex; align-items: center; gap: 0.8rem;
+    color: var(--text);
+  }
+  .user-avatar {
+    width: 32px; height: 32px;
+    background: var(--gold);
+    color: var(--deep-navy);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.9rem;
+  }
+  .user-name {
+    font-weight: 600; font-size: 0.9rem;
+  }
+  .logout-btn {
+    background: none; border: 1px solid var(--border);
+    color: var(--text-muted); font-size: 0.8rem;
+    padding: 0.3rem 0.8rem; border-radius: 6px;
+    cursor: pointer; transition: all .2s;
+  }
+  .logout-btn:hover { border-color: var(--thai-red); color: var(--thai-red); }
+  .hamburger { display: none; background: none; border: none; color: var(--text); font-size: 1.4rem; cursor: pointer; padding: 0.2rem; }
+  .mobile-menu {
+    position: fixed; inset: 0; z-index: 150;
+    background: rgba(13,27,42,0.96);
+    backdrop-filter: blur(14px);
+    display: flex; justify-content: flex-start;
+    transform: translateX(-100%);
+    transition: transform .25s ease;
+  }
+  .mobile-menu.open { transform: translateX(0); }
+  .mobile-menu-panel {
+    width: min(320px, 90vw);
+    background: var(--navy);
+    padding: 1.5rem;
+    display: flex; flex-direction: column;
+    gap: 1rem;
+    box-shadow: 12px 0 40px rgba(0,0,0,0.35);
+    max-height: 100vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .mobile-menu-close {
+    align-self: flex-end;
+    background: none; border: none;
+    color: var(--text); font-size: 1.5rem; cursor: pointer;
+  }
+  .mobile-menu .menu-section { border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 0.8rem; }
+  .mobile-menu .menu-section h3 {
+    margin: 0 0 0.75rem;
+    font-family: 'Kanit', sans-serif;
+    font-size: 0.95rem; color: var(--gold);
+    font-weight: 700;
+  }
+  .mobile-menu a,
+  .mobile-menu button.category-item {
+    display: block;
+    width: 100%;
+    background: none;
+    border: none;
+    color: var(--text);
+    text-align: left;
+    font-size: 0.95rem;
+    padding: 0.8rem 0;
+    cursor: pointer;
+    text-decoration: none;
+    font-family: 'Sarabun', sans-serif;
+  }
+  .mobile-menu a:hover,
+  .mobile-menu button.category-item:hover { color: var(--gold); }
+  .mobile-menu button.category-item { border-bottom: 1px solid rgba(255,255,255,0.05); }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    padding: 5rem 1.5rem 4rem;
+    text-align: center;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0; z-index: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 0%, rgba(201,168,76,0.12) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 40% at 10% 80%, rgba(168,25,46,0.12) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 40% at 90% 70%, rgba(0,107,107,0.12) 0%, transparent 60%);
+  }
+  .hero-badge {
+    display: inline-block;
+    background: rgba(201,168,76,0.12);
+    border: 1px solid rgba(201,168,76,0.35);
+    color: var(--gold);
+    font-size: 0.75rem; font-weight: 600; letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 0.35rem 1rem; border-radius: 999px;
+    margin-bottom: 1.5rem;
+    position: relative; z-index: 1;
+  }
+  .hero h1 {
+    font-family: 'Kanit', sans-serif;
+    font-size: clamp(2.2rem, 6vw, 4rem);
+    font-weight: 800; line-height: 1.1;
+    position: relative; z-index: 1;
+    margin-bottom: 1rem;
+  }
+  .hero h1 em {
+    font-style: normal;
+    background: linear-gradient(135deg, var(--gold-light), var(--gold));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .hero p {
+    color: var(--text-muted); font-size: 1.05rem;
+    max-width: 520px; margin: 0 auto 2.5rem;
+    position: relative; z-index: 1;
+  }
+
+  /* ── SEARCH BAR ── */
+  .search-bar {
+    display: flex; max-width: 680px; margin: 0 auto 1rem;
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    position: relative; z-index: 1;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  }
+  .search-bar select {
+    background: rgba(201,168,76,0.08);
+    border: none; border-right: 1px solid var(--border);
+    color: var(--gold); font-family: 'Sarabun', sans-serif;
+    font-size: 0.85rem; padding: 0 1rem;
+    min-width: 140px; cursor: pointer; outline: none;
+  }
+  .search-bar select option { background: var(--navy); color: var(--text); }
+  .search-bar input {
+    flex: 1; background: none; border: none;
+    color: var(--text); font-family: 'Sarabun', sans-serif;
+    font-size: 0.95rem; padding: 1rem 1rem;
+    outline: none;
+  }
+  .search-bar input::placeholder { color: var(--text-muted); }
+  .search-bar button {
+    background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+    border: none; color: var(--deep-navy);
+    font-weight: 700; font-size: 0.9rem;
+    padding: 0 1.5rem; cursor: pointer;
+    font-family: 'Kanit', sans-serif;
+    transition: opacity .2s;
+  }
+  .search-bar button:hover { opacity: 0.9; }
+
+  .hero-stats {
+    display: flex; gap: 2.5rem; justify-content: center;
+    position: relative; z-index: 1; flex-wrap: wrap;
+    margin-top: 0.5rem;
+  }
+  .stat { text-align: center; }
+  .stat strong { display: block; font-family: 'Kanit', sans-serif; font-size: 1.4rem; color: var(--gold); }
+  .stat span { font-size: 0.78rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+
+  /* ── CATEGORIES ── */
+  .section { padding: 3rem 1.5rem; max-width: 1200px; margin: 0 auto; }
+  .section-header {
+    display: flex; align-items: baseline; justify-content: space-between;
+    margin-bottom: 1.5rem;
+  }
+  .section-title {
+    font-family: 'Kanit', sans-serif;
+    font-size: 1.4rem; font-weight: 700;
+  }
+  .section-title span { color: var(--gold); }
+  .see-all { color: var(--gold); font-size: 0.85rem; text-decoration: none; font-weight: 600; }
+
+  .categories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 1rem;
+  }
+  .cat-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.5rem 1rem;
+    text-align: center;
+    cursor: pointer;
+    transition: transform .2s, border-color .2s, box-shadow .2s;
+    position: relative; overflow: hidden;
+  }
+  .cat-card::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: var(--cat-color, var(--gold));
+    opacity: 0; transition: opacity .2s;
+  }
+  .cat-card:hover { transform: translateY(-4px); border-color: var(--cat-color, var(--gold)); box-shadow: 0 12px 32px rgba(0,0,0,0.3); }
+  .cat-card:hover::before { opacity: 0.06; }
+  .cat-icon { font-size: 2rem; margin-bottom: 0.6rem; display: block; position: relative; z-index: 1; }
+  .cat-name { font-family: 'Kanit', sans-serif; font-weight: 600; font-size: 0.9rem; position: relative; z-index: 1; }
+  .cat-count { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.2rem; position: relative; z-index: 1; }
+
+  /* ── ADS GRID ── */
+  .ads-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1rem;
+  }
+
+  /* ── PAGINATION ── */
+  .ads-pagination {
+    display: flex; justify-content: center; align-items: center;
+    gap: 0.4rem; flex-wrap: wrap;
+    margin-top: 1.75rem; padding-bottom: 0.5rem;
+  }
+  .page-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-width: 40px; height: 40px; padding: 0 0.7rem;
+    border-radius: 9px; border: 1px solid var(--border);
+    background: var(--surface); color: var(--text);
+    font-family: 'Kanit', sans-serif; font-size: 0.9rem; font-weight: 600;
+    cursor: pointer; transition: all 0.15s;
+  }
+  .page-btn:hover { border-color: var(--gold); color: var(--gold); }
+  .page-btn.active {
+    background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+    color: var(--deep-navy); border: none;
+  }
+  .page-next { padding: 0 1rem; gap: 0.3rem; }
+  .page-ellipsis { color: var(--text-muted); line-height: 40px; padding: 0 0.2rem; }
+  .ad-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform .2s, box-shadow .2s;
+  }
+  .ad-card:hover { transform: translateY(-3px); box-shadow: 0 12px 36px rgba(0,0,0,0.4); }
+  .ad-img {
+    width: 100%; height: 140px; object-fit: cover;
+    background: var(--surface);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2.5rem;
+    position: relative;
+  }
+  .ad-img-bg {
+    width: 100%; height: 140px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2.5rem;
+    position: relative;
+    background-size: cover;
+    background-position: center;
+  }
+  .detail-image-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 0.85rem;
+    margin-bottom: 1.2rem;
+  }
+  .detail-thumb {
+    border-radius: 14px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    min-height: 140px;
+    overflow: hidden;
+  }
+  .detail-thumb::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(0,0,0,0.35) 100%);
+  }
+  .cover-pill {
+    position: absolute;
+    top: 0.8rem;
+    left: 0.8rem;
+    background: rgba(201,168,76,0.95);
+    color: #0d1b2a;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.25rem 0.55rem;
+    border-radius: 999px;
+    z-index: 1;
+  }
+  .image-preview-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+  }
+  .image-preview-item {
+    position: relative;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.04);
+  }
+  .image-preview-item img {
+    width: 100%;
+    display: block;
+    object-fit: cover;
+    height: 100px;
+  }
+  .image-preview-item input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .image-preview-item label {
+    position: absolute;
+    bottom: 0.55rem;
+    left: 0.55rem;
+    right: 0.55rem;
+    background: rgba(0,0,0,0.55);
+    color: #fff;
+    font-size: 0.75rem;
+    border-radius: 999px;
+    padding: 0.35rem 0.5rem;
+    text-align: center;
+    cursor: pointer;
+  }
+  .image-preview-item.selected {
+    box-shadow: 0 0 0 2px rgba(201,168,76,0.9);
+  }
+  .image-upload-hint {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    padding: 0.75rem 0.5rem;
+  }
+  .ad-badge {
+    position: absolute; top: 0.7rem; left: 0.7rem;
+    background: var(--badge-bg, var(--thai-teal));
+    color: white; font-size: 0.7rem; font-weight: 700;
+    padding: 0.2rem 0.6rem; border-radius: 6px;
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .ad-featured-badge {
+    position: absolute; top: 0.7rem; right: 0.7rem;
+    background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+    color: var(--deep-navy); font-size: 0.65rem; font-weight: 800;
+    padding: 0.2rem 0.6rem; border-radius: 6px;
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .ad-body { padding: 1rem 1.1rem 1.2rem; }
+  .ad-cat { font-size: 0.72rem; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; margin-bottom: 0.35rem; }
+  .ad-title { font-family: 'Kanit', sans-serif; font-size: 1rem; font-weight: 600; line-height: 1.3; margin-bottom: 0.4rem; }
+  .ad-desc { font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 0.8rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .ad-meta { display: flex; align-items: center; justify-content: space-between; }
+  .ad-location { font-size: 0.78rem; color: var(--text-muted); }
+  .ad-location::before { content: '📍 '; }
+  .ad-price { font-family: 'Kanit', sans-serif; font-weight: 700; color: var(--gold); font-size: 1rem; }
+  .ad-actions { margin-top: 0.9rem; display: grid; gap: 0.6rem; }
+  .ad-share-row { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; flex-wrap: wrap; }
+  .ad-share-label { font-size: 0.78rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.7px; }
+  .share-icons { display: flex; gap: 0.5rem; }
+  .share-icon {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 34px; height: 34px;
+    background: rgba(255,255,255,0.08);
+    border: 1.5px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    color: var(--text);
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background .2s, border-color .2s, color .2s;
+  }
+  .share-icon.whatsapp { color: #25D366; background: rgba(37,211,102,0.12); border-color: rgba(37,211,102,0.18); }
+  .share-icon.line { color: #00C300; background: rgba(0,195,0,0.12); border-color: rgba(0,195,0,0.18); }
+  .share-icon.facebook { color: #1877F2; background: rgba(24,119,242,0.12); border-color: rgba(24,119,242,0.18); }
+  .share-icon:hover { background: rgba(201,168,76,0.12); border-color: var(--gold); color: var(--gold); }
+  .share-icon.whatsapp:hover { background: rgba(37,211,102,0.18); border-color: rgba(37,211,102,0.4); color: #25D366; }
+  .share-icon.line:hover { background: rgba(0,195,0,0.18); border-color: rgba(0,195,0,0.4); color: #00C300; }
+  .share-icon.facebook:hover { background: rgba(24,119,242,0.18); border-color: rgba(24,119,242,0.4); color: #1877F2; }
+  .ad-copy { width: 44px; height: 44px; border: 1.5px solid var(--border); border-radius: 12px; background: rgba(255,255,255,0.08); color: var(--text); font-size: 1rem; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: background .2s, border-color .2s, color .2s; }
+  .ad-copy:hover { background: rgba(201,168,76,0.08); border-color: var(--gold); color: var(--gold); }
+  .ad-call { background: linear-gradient(135deg, var(--gold), var(--gold-dark)); color: var(--deep-navy); border: none; border-radius: 12px; padding: 0.65rem 0.95rem; font-family: 'Kanit', sans-serif; font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: transform .15s, box-shadow .15s; box-shadow: 0 4px 16px rgba(201,168,76,0.3); }
+  .ad-call:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(201,168,76,0.45); }
+
+  /* ── HOW IT WORKS ── */
+  .how-section {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 3.5rem 1.5rem;
+  }
+  .how-inner { max-width: 1000px; margin: 0 auto; }
+  .how-steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem; margin-top: 2rem;
+  }
+  .how-step { text-align: center; }
+  .step-num {
+    width: 56px; height: 56px;
+    background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Kanit', sans-serif; font-size: 1.4rem; font-weight: 800;
+    color: var(--deep-navy); margin: 0 auto 1rem;
+    box-shadow: 0 4px 20px rgba(201,168,76,0.35);
+  }
+  .step-title { font-family: 'Kanit', sans-serif; font-weight: 700; font-size: 1rem; margin-bottom: 0.4rem; }
+  .step-desc { font-size: 0.83rem; color: var(--text-muted); line-height: 1.5; }
+
+  /* ── PRICING ── */
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.25rem; margin-top: 2rem;
+  }
+  .price-card {
+    background: var(--card-bg);
+    border: 1.5px solid var(--border);
+    border-radius: 18px;
+    padding: 2rem 1.5rem;
+    text-align: center;
+    position: relative; overflow: hidden;
+    transition: transform .2s, border-color .2s;
+  }
+  .price-card:hover { transform: translateY(-4px); }
+  .price-card.featured {
+    border-color: var(--gold);
+    background: linear-gradient(160deg, rgba(201,168,76,0.08), var(--card-bg));
+  }
+  .price-label {
+    position: absolute; top: 1rem; right: -1.8rem;
+    background: var(--gold); color: var(--deep-navy);
+    font-size: 0.7rem; font-weight: 800;
+    padding: 0.2rem 2.5rem;
+    transform: rotate(45deg); letter-spacing: 1px;
+  }
+  .price-name { font-family: 'Kanit', sans-serif; font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; }
+  .price-amount {
+    font-family: 'Kanit', sans-serif; font-size: 2.2rem; font-weight: 800;
+    color: var(--gold); margin: 0.5rem 0;
+  }
+  .price-amount small { font-size: 1rem; color: var(--text-muted); font-weight: 400; }
+  .price-features { list-style: none; margin: 1.5rem 0; text-align: left; }
+  .price-features li { font-size: 0.85rem; color: var(--text-muted); padding: 0.35rem 0; display: flex; gap: 0.6rem; }
+  .price-features li::before { content: '✓'; color: var(--accent-green); font-weight: 700; }
+  .btn-select {
+    width: 100%; padding: 0.7rem;
+    border-radius: 10px; border: 1.5px solid var(--border);
+    background: none; color: var(--text);
+    font-family: 'Kanit', sans-serif; font-weight: 600;
+    cursor: pointer; transition: all .2s;
+  }
+  .btn-select:hover { border-color: var(--gold); color: var(--gold); }
+  .price-card.featured .btn-select {
+    background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+    color: var(--deep-navy); border: none;
+  }
+
+  /* ── POST AD MODAL ── */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0; z-index: 200;
+    background: rgba(0,0,0,0.75); backdrop-filter: blur(6px);
+    align-items: center; justify-content: center;
+    padding: 1rem;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--navy);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    width: 100%; max-width: 560px;
+    max-height: 90vh; overflow-y: auto;
+    padding: 2rem;
+    position: relative;
+  }
+  .modal-close {
+    position: absolute; top: 1rem; right: 1.2rem;
+    background: none; border: none; color: var(--text-muted);
+    font-size: 1.5rem; cursor: pointer;
+  }
+  /* ── Ad detail modal — always light/white ── */
+  .modal-detail {
+    background: #ffffff !important;
+    border-color: #e2e6ed !important;
+    --text:       #1a1e2e;
+    --text-muted: #6b7280;
+    --surface:    #f4f6f9;
+    --border:     #e2e6ed;
+    --navy:       #ffffff;
+    color: #1a1e2e;
+  }
+  .modal-detail .modal-close { color: #6b7280; }
+  .modal-detail .ad-cat      { color: var(--gold); }
+  .modal-detail .ad-call     { color: var(--deep-navy); }
+  .modal h2 { font-family: 'Kanit', sans-serif; font-size: 1.4rem; font-weight: 700; margin-bottom: 0.3rem; }
+  .modal-sub { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.5rem; }
+  .form-group { margin-bottom: 1.2rem; }
+  .form-group label { display: block; font-size: 0.82rem; color: var(--text-muted); margin-bottom: 0.4rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-family: 'Sarabun', sans-serif;
+    font-size: 0.92rem;
+    padding: 0.75rem 1rem;
+    outline: none; transition: border-color .2s;
+  }
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus { border-color: var(--gold); }
+  .form-group select option { background: var(--navy); }
+  .form-group textarea { resize: vertical; min-height: 90px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .pkg-selector { display: grid; grid-template-columns: repeat(3,1fr); gap: 0.7rem; margin-top: 0.5rem; }
+  .pkg-opt {
+    border: 1.5px solid var(--border); border-radius: 10px;
+    padding: 0.8rem 0.5rem; text-align: center;
+    cursor: pointer; transition: all .2s;
+  }
+  .pkg-opt.active { border-color: var(--gold); background: rgba(201,168,76,0.08); }
+  .pkg-opt strong { display: block; font-family: 'Kanit', sans-serif; font-size: 1rem; color: var(--gold); }
+  .pkg-opt span { font-size: 0.72rem; color: var(--text-muted); }
+  .btn-submit {
+    width: 100%; padding: 0.9rem;
+    background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+    border: none; border-radius: 12px;
+    color: var(--deep-navy); font-family: 'Kanit', sans-serif;
+    font-weight: 700; font-size: 1rem; cursor: pointer;
+    margin-top: 0.5rem; transition: opacity .2s, transform .1s;
+    box-shadow: 0 4px 24px rgba(201,168,76,0.35);
+  }
+  .btn-submit:hover { opacity: 0.92; transform: translateY(-1px); }
+  .payment-row {
+    display: flex; gap: 0.6rem; align-items: center;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 0.8rem 1rem;
+    margin-bottom: 1rem; font-size: 0.85rem;
+  }
+  .payment-row strong { color: var(--gold); font-size: 1.1rem; }
+
+  /* ── AD DETAIL MODAL ── */
+  .ad-detail { display: none; }
+
+  /* ── AUTH MODALS ── */
+  .auth-modal {
+    display: none; position: fixed; inset: 0; z-index: 300;
+    background: rgba(0,0,0,0.8); backdrop-filter: blur(8px);
+    align-items: flex-start; justify-content: center;
+    padding: 1.5rem 1rem;
+    overflow-y: auto;
+  }
+  .auth-modal.open { display: flex; }
+  .auth-form {
+    background: var(--navy);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    width: 100%; max-width: 440px;
+    padding: 2.5rem;
+    position: relative;
+    margin: auto;
+    box-sizing: border-box;
+  }
+  .field-hint {
+    display: block; font-size: 0.75rem; color: var(--text-muted);
+    margin-top: 0.35rem; line-height: 1.4;
+  }
+  .auth-close {
+    position: absolute; top: 1rem; right: 1rem;
+    background: none; border: none; color: var(--text-muted);
+    font-size: 1.5rem; cursor: pointer;
+    width: 32px; height: 32px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 50%;
+    transition: background .2s;
+  }
+  .auth-close:hover { background: var(--surface); }
+  .auth-form h2 {
+    font-family: 'Kanit', sans-serif; font-size: 1.6rem; font-weight: 700;
+    margin-bottom: 0.5rem; text-align: center;
+  }
+  .auth-sub {
+    color: var(--text-muted); font-size: 0.9rem;
+    text-align: center; margin-bottom: 2rem;
+  }
+  .auth-form .form-group {
+    margin-bottom: 1.5rem;
+  }
+  .auth-form label {
+    display: block; font-weight: 600; margin-bottom: 0.5rem;
+    color: var(--text);
+  }
+  .auth-form input {
+    width: 100%; padding: 0.8rem;
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    color: var(--text); font-family: 'Sarabun', sans-serif;
+    font-size: 0.95rem;
+    outline: none; transition: border-color .2s;
+    box-sizing: border-box;
+  }
+  .auth-form input:focus { border-color: var(--gold); }
+  .auth-btn {
+    width: 100%; padding: 0.9rem;
+    background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+    color: var(--deep-navy); font-family: 'Kanit', sans-serif;
+    font-weight: 700; font-size: 0.95rem;
+    border: none; border-radius: 10px;
+    cursor: pointer; transition: transform .15s;
+    margin-bottom: 1.5rem;
+  }
+  .auth-btn:hover { transform: translateY(-1px); }
+  .auth-switch {
+    text-align: center; font-size: 0.85rem; color: var(--text-muted);
+  }
+  .auth-switch a {
+    color: var(--gold); text-decoration: none;
+    font-weight: 600;
+  }
+  .auth-switch a:hover { text-decoration: underline; }
+
+  /* ── FILTER BAR ── */
+  .filter-bar {
+    display: flex; gap: 0.6rem; flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+  }
+  .filter-chip {
+    background: var(--surface); border: 1.5px solid var(--border);
+    color: var(--text-muted); font-size: 0.8rem; font-weight: 600;
+    padding: 0.4rem 0.9rem; border-radius: 999px;
+    cursor: pointer; transition: all .2s;
+  }
+  .filter-chip:hover, .filter-chip.active { border-color: var(--gold); color: var(--gold); background: rgba(201,168,76,0.08); }
+  .province-select {
+    background: var(--surface); border: 1.5px solid var(--border);
+    color: var(--text-muted); font-size: 0.8rem; font-weight: 600;
+    font-family: inherit; padding: 0.4rem 1.8rem 0.4rem 0.9rem;
+    border-radius: 999px; cursor: pointer; outline: none;
+    transition: border-color .2s, color .2s;
+    appearance: none; -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%239BA8B8'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 0.65rem center;
+  }
+  .province-select:hover { border-color: var(--gold); color: var(--gold); }
+  .province-select.active {
+    border-color: var(--gold); color: var(--gold); background-color: rgba(201,168,76,0.08);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23C9A84C'/%3E%3C/svg%3E");
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--navy);
+    border-top: 1px solid var(--border);
+    padding: 2.5rem 1.5rem 1.5rem;
+  }
+  .footer-inner { max-width: 1200px; margin: 0 auto; }
+  .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 2rem; margin-bottom: 2rem; }
+  .footer-col h4 { font-family: 'Kanit', sans-serif; font-weight: 700; margin-bottom: 0.8rem; color: var(--gold); font-size: 0.9rem; }
+  .footer-col a { display: block; color: var(--text-muted); text-decoration: none; font-size: 0.83rem; margin-bottom: 0.4rem; transition: color .2s; }
+  .footer-col a:hover { color: var(--text); }
+  .footer-bottom { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; border-top: 1px solid var(--border); padding-top: 1.5rem; }
+  .footer-bottom p { font-size: 0.78rem; color: var(--text-muted); }
+  .footer-logo { font-family: 'Kanit', sans-serif; font-weight: 800; font-size: 1.2rem; background: linear-gradient(135deg, var(--gold-light), var(--gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+  /* ── AD STATS (views & star rating on cards) ── */
+  .ad-stats { display:flex; align-items:center; gap:0.65rem; padding-top:0.45rem; border-top:1px solid var(--border); margin-top:0.5rem; font-size:0.74rem; color:var(--text-muted); flex-wrap:wrap; }
+  .ad-stats-star { color:var(--gold); letter-spacing:-1px; font-size:0.82rem; }
+
+  /* ── SUCCESS MESSAGE ── */
+  .success-msg {
+    display: none; text-align: center; padding: 2rem 0;
+  }
+  .success-msg .check { font-size: 3rem; margin-bottom: 1rem; }
+  .success-msg h3 { font-family: 'Kanit', sans-serif; font-size: 1.4rem; margin-bottom: 0.5rem; }
+  .success-msg p { color: var(--text-muted); font-size: 0.9rem; }
+
+  /* ── TOAST NOTIFICATIONS ── */
+  #toast-container {
+    position: fixed; bottom: 1.5rem; right: 1.5rem;
+    z-index: 9999; display: flex; flex-direction: column;
+    gap: 0.65rem; pointer-events: none;
+  }
+  .toast {
+    display: flex; align-items: flex-start; gap: 0.75rem;
+    min-width: 280px; max-width: 360px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 0.9rem 1.1rem;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    font-family: 'Sarabun', sans-serif;
+    font-size: 0.875rem;
+    color: var(--text);
+    line-height: 1.45;
+    pointer-events: auto;
+    animation: toastIn 0.3s cubic-bezier(.22,1,.36,1);
+    position: relative;
+    overflow: hidden;
+  }
+  .toast.hiding { animation: toastOut 0.25s ease forwards; }
+  .toast-bar {
+    position: absolute; bottom: 0; left: 0; height: 3px;
+    border-radius: 0 0 0 14px;
+    animation: toastBar 3.8s linear forwards;
+  }
+  .toast-icon { font-size: 1.2rem; flex-shrink: 0; margin-top: 0.05rem; }
+  .toast-body { flex: 1; }
+  .toast-title { font-family: 'Kanit', sans-serif; font-weight: 700; font-size: 0.8rem; letter-spacing: 0.04em; margin-bottom: 0.15rem; }
+  .toast-close {
+    background: none; border: none; color: var(--text-muted);
+    font-size: 1rem; cursor: pointer; padding: 0; flex-shrink: 0;
+    line-height: 1; margin-top: 0.05rem;
+    transition: color 0.15s;
+  }
+  .toast-close:hover { color: var(--text); }
+
+  .toast.success { border-color: rgba(46,204,138,0.35); }
+  .toast.success .toast-title { color: var(--accent-green); }
+  .toast.success .toast-bar { background: var(--accent-green); }
+
+  .toast.error { border-color: rgba(168,25,46,0.4); }
+  .toast.error .toast-title { color: #f47a8a; }
+  .toast.error .toast-bar { background: #f47a8a; }
+
+  .toast.warning { border-color: rgba(201,168,76,0.4); }
+  .toast.warning .toast-title { color: var(--gold); }
+  .toast.warning .toast-bar { background: var(--gold); }
+
+  .toast.info { border-color: rgba(77,217,217,0.3); }
+  .toast.info .toast-title { color: #4DD9D9; }
+  .toast.info .toast-bar { background: #4DD9D9; }
+
+  @keyframes toastIn {
+    from { opacity: 0; transform: translateX(60px) scale(0.95); }
+    to   { opacity: 1; transform: translateX(0)   scale(1); }
+  }
+  @keyframes toastOut {
+    from { opacity: 1; transform: translateX(0); max-height: 120px; margin-bottom: 0; }
+    to   { opacity: 0; transform: translateX(60px); max-height: 0; padding: 0; margin: 0; }
+  }
+  @keyframes toastBar {
+    from { width: 100%; }
+    to   { width: 0%; }
+  }
+  @media (max-width: 480px) {
+    #toast-container { left: 1rem; right: 1rem; bottom: 1rem; }
+    .toast { min-width: unset; max-width: 100%; }
+  }
+
+  /* ── LIGHTBOX ── */
+  #lightbox {
+    display: none; position: fixed; inset: 0; z-index: 600;
+    background: rgba(0,0,0,0.96);
+    align-items: center; justify-content: center;
+    flex-direction: column;
+  }
+  #lightbox.open { display: flex; }
+  #lb-img {
+    max-width: 95vw; max-height: 82vh;
+    object-fit: contain;
+    border-radius: 8px;
+    user-select: none;
+    -webkit-user-drag: none;
+    transition: opacity 0.15s;
+  }
+  #lb-close {
+    position: absolute; top: 1rem; right: 1rem;
+    background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.15);
+    color: #fff; font-size: 1.2rem;
+    width: 42px; height: 42px; border-radius: 50%;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s; z-index: 1;
+  }
+  #lb-close:hover { background: rgba(168,25,46,0.5); }
+  .lb-nav {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15);
+    color: #fff; font-size: 1.8rem;
+    width: 52px; height: 52px; border-radius: 50%;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s; user-select: none;
+  }
+  .lb-nav:hover { background: rgba(201,168,76,0.35); }
+  #lb-prev { left: 1rem; }
+  #lb-next { right: 1rem; }
+  #lb-counter {
+    position: absolute; bottom: 1.5rem;
+    color: rgba(255,255,255,0.65);
+    font-family: 'Kanit', sans-serif; font-size: 0.85rem; letter-spacing: 0.12em;
+  }
+  .detail-thumb { cursor: pointer; }
+  .detail-thumb:hover::after { background: linear-gradient(180deg, rgba(201,168,76,0.08) 0%, rgba(0,0,0,0.45) 100%); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 640px) {
+    .nav-links { display: none; }
+    .hamburger { display: block; }
+    nav { gap: 0.5rem; }
+    /* On mobile: hamburger left, logo right (auto margin), cta between */
+    .nav-logo { order: 3; margin-left: auto; }
+    .nav-cta  { order: 2; gap: 0.4rem; }
+    .btn-post {
+      font-size: 0.78rem;
+      padding: 0.4rem 0.85rem;
+      min-width: unset;
+    }
+    .form-row { grid-template-columns: 1fr; }
+    .pkg-selector { grid-template-columns: 1fr 1fr 1fr; }
+    .hero { padding: 3rem 1rem 2.5rem; }
+    .search-bar { flex-wrap: wrap; }
+    .search-bar select {
+      flex: 1; min-width: 0;
+      border-right: none;
+      border-bottom: 1px solid var(--border);
+      padding: 0.75rem 0.8rem;
+    }
+    .search-bar input {
+      flex: 1; min-width: 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .search-bar button {
+      flex: 0 0 100%;
+      padding: 0.85rem 1rem;
+      font-size: 0.9rem;
+    }
+    .categories-grid { grid-template-columns: repeat(3, 1fr); }
+    .ads-grid { grid-template-columns: 1fr; }
+    .how-steps { grid-template-columns: 1fr 1fr; }
+    .pricing-grid { grid-template-columns: 1fr; }
+  /* ── AUTH FORMS ── */
+  .auth-modal {
+    display: none; position: fixed; inset: 0; z-index: 300;
+    background: rgba(0,0,0,0.75); backdrop-filter: blur(6px);
+    align-items: flex-start; justify-content: center;
+    padding: 1rem;
+    overflow-y: auto;
+  }
+  .auth-modal.open { display: flex; }
+  .auth-form {
+    background: var(--navy);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    width: 100%; max-width: 100%;
+    padding: 1.5rem 1.25rem;
+    position: relative;
+    margin: auto 0;
+  }
+  .auth-form h2 {
+    font-family: 'Kanit', sans-serif;
+    font-size: 1.6rem; font-weight: 700;
+    text-align: center; margin-bottom: 0.5rem;
+    color: var(--gold);
+  }
+  .auth-form .auth-sub {
+    text-align: center; color: var(--text-muted);
+    font-size: 0.9rem; margin-bottom: 1.5rem;
+  }
+  .auth-form .form-group {
+    margin-bottom: 1.2rem;
+  }
+  .auth-form .form-group label {
+    display: block; font-size: 0.85rem;
+    color: var(--text-muted); margin-bottom: 0.4rem;
+    font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .auth-form .form-group input {
+    width: 100%;
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-family: 'Sarabun', sans-serif;
+    font-size: 0.95rem;
+    padding: 0.8rem 1rem;
+    outline: none; transition: border-color .2s;
+    box-sizing: border-box;
+  }
+  .auth-form .form-group input:focus { border-color: var(--gold); }
+  .auth-form .field-hint {
+    display: block; font-size: 0.75rem; color: var(--text-muted);
+    margin-top: 0.3rem;
+  }
+  .auth-form .auth-btn {
+    width: 100%; padding: 0.9rem;
+    background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+    border: none; border-radius: 12px;
+    color: var(--deep-navy); font-family: 'Kanit', sans-serif;
+    font-weight: 700; font-size: 1rem; cursor: pointer;
+    margin-top: 0.5rem; transition: opacity .2s, transform .1s;
+    box-shadow: 0 4px 24px rgba(201,168,76,0.35);
+  }
+  .auth-form .auth-btn:hover { opacity: 0.92; transform: translateY(-1px); }
+  .auth-form .auth-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .auth-form .auth-switch {
+    text-align: center; margin-top: 1.5rem;
+    font-size: 0.9rem; color: var(--text-muted);
+  }
+  .auth-form .auth-switch a {
+    color: var(--gold); text-decoration: none;
+    font-weight: 600;
+  }
+  .auth-form .auth-switch a:hover { text-decoration: underline; }
+  .auth-close {
+    position: absolute; top: 1rem; right: 1.2rem;
+    background: none; border: none; color: var(--text-muted);
+    font-size: 1.5rem; cursor: pointer;
+  }
+  .user-info {
+    display: flex; align-items: center; gap: 0.8rem;
+    color: var(--text); font-size: 0.9rem;
+  }
+  .user-avatar {
+    width: 32px; height: 32px;
+    background: var(--gold);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; color: var(--deep-navy);
+    font-size: 0.9rem;
+  }
+  .logout-btn {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: var(--text);
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: background .2s;
+  }
+  .logout-btn:hover { background: rgba(255,255,255,0.2); }
+
+  /* Decorative Thai pattern strip */
+  .thai-strip {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 101;
+    height: 4px;
+    background: repeating-linear-gradient(90deg, var(--thai-red) 0, var(--thai-red) 33%, white 33%, white 66%, #0A3B82 66%, #0A3B82 100%);
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--deep-navy); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  /* Image placeholder backgrounds */
+  .img-tour { background: linear-gradient(135deg, #1a3a4a, #0d2535); }
+  .img-car { background: linear-gradient(135deg, #1a2a1a, #0d1f0d); }
+  .img-massage { background: linear-gradient(135deg, #3a1a2a, #250d1a); }
+  .img-condo { background: linear-gradient(135deg, #1a1a3a, #0d0d25); }
+  .img-job { background: linear-gradient(135deg, #2a2a1a, #1f1f0d); }
+  .img-personal { background: linear-gradient(135deg, #2a1a1a, #1f0d0d); }
+</style>
+</head>
+<body>
+
+<div class="thai-strip"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo" onclick="showPage('home')">Ad<span>Sabai</span></div>
+  <div class="nav-links">
+    <a href="#how">How it works</a>
+    <a href="#pricing">Pricing</a>
+    <div id="nav-auth">
+      <a href="#" onclick="openAuthModal('login')">Login</a>
+      <a href="#" onclick="openAuthModal('register')">Register</a>
+    </div>
+    <div id="nav-user" style="display: none;">
+      <div class="user-info">
+        <a id="notif-bell" href="/notifications" title="Notifications" style="position:relative;display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:8px;background:var(--surface);border:1px solid var(--border);color:var(--text-muted);text-decoration:none;font-size:1.1rem;transition:border-color .2s,color .2s;" onmouseenter="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'" onmouseleave="this.style.borderColor='var(--border)';this.style.color='var(--text-muted)'">
+          🔔
+          <span id="notif-badge" style="display:none;position:absolute;top:-5px;right:-5px;background:#E85D8A;color:#fff;font-size:0.6rem;font-family:'Kanit',sans-serif;font-weight:700;line-height:1;padding:2px 4px;border-radius:999px;min-width:16px;text-align:center;"></span>
+        </a>
+        <a id="user-link" href="/account" class="user-info">
+          <div class="user-avatar" id="user-avatar">U</div>
+          <span id="user-name">User</span>
+        </a>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+      </div>
+    </div>
+  </div>
+  <div class="nav-cta">
+    <button class="btn-post" id="post-btn" onclick="handlePostClick()">+ Post Ad</button>
+    <button id="theme-toggle" onclick="toggleTheme()" title="Toggle light / dark mode">🌙</button>
+  </div>
+  <button class="hamburger" onclick="openMobileMenu()">☰</button>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+  <div class="mobile-menu-panel">
+    <button class="mobile-menu-close" onclick="closeMobileMenu()">✕</button>
+
+    <!-- Mobile auth: shown when logged out -->
+    <div id="mobile-auth" class="menu-section" style="display:flex; gap:0.75rem; padding-bottom:1rem;">
+      <button onclick="closeMobileMenu(); openAuthModal('login')" style="flex:1; padding:0.65rem; background:var(--surface); border:1px solid var(--border); border-radius:10px; color:var(--text); font-family:'Kanit',sans-serif; font-weight:600; font-size:0.9rem; cursor:pointer;">Login</button>
+      <button onclick="closeMobileMenu(); openAuthModal('register')" style="flex:1; padding:0.65rem; background:linear-gradient(135deg,var(--gold),var(--gold-dark)); border:none; border-radius:10px; color:var(--deep-navy); font-family:'Kanit',sans-serif; font-weight:700; font-size:0.9rem; cursor:pointer;">Register</button>
+    </div>
+
+    <!-- Mobile user: shown when logged in -->
+    <div id="mobile-user" class="menu-section" style="display:none; padding-bottom:1rem;">
+      <div style="display:flex; align-items:center; gap:0.75rem; margin-bottom:0.85rem;">
+        <div id="mobile-avatar" style="width:38px; height:38px; background:var(--gold); border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'Kanit',sans-serif; font-weight:700; color:var(--deep-navy); font-size:1rem; flex-shrink:0;">U</div>
+        <div>
+          <div id="mobile-name" style="font-family:'Kanit',sans-serif; font-weight:700; font-size:0.95rem; color:var(--text);">User</div>
+          <div style="font-size:0.75rem; color:var(--text-muted);">Logged in</div>
+        </div>
+      </div>
+      <div style="display:flex; gap:0.6rem;">
+        <a href="/account" onclick="closeMobileMenu()" style="flex:1; padding:0.6rem; background:rgba(201,168,76,0.12); border:1px solid rgba(201,168,76,0.3); border-radius:10px; color:var(--gold); font-family:'Kanit',sans-serif; font-weight:600; font-size:0.85rem; text-align:center; text-decoration:none;">My Account</a>
+        <button onclick="closeMobileMenu(); logout()" style="flex:1; padding:0.6rem; background:var(--surface); border:1px solid var(--border); border-radius:10px; color:var(--text-muted); font-family:'Kanit',sans-serif; font-weight:600; font-size:0.85rem; cursor:pointer;">Logout</button>
+      </div>
+    </div>
+
+    <div class="menu-section">
+      <a href="#how" onclick="closeMobileMenu()">How it works</a>
+      <a href="#pricing" onclick="closeMobileMenu()">Pricing</a>
+    </div>
+
+    <div class="menu-section">
+      <h3>Categories</h3>
+      <a class="category-item" href="/category/car-rental" style="text-decoration:none">🚗 Car Rental</a>
+      <a class="category-item" href="/category/tour-planning" style="text-decoration:none">🗺️ Tour Planning</a>
+      <a class="category-item" href="/category/accommodation" style="text-decoration:none">🏨 Accommodation</a>
+      <a class="category-item" href="/category/massage-spa" style="text-decoration:none">💆 Massage & Spa</a>
+      <a class="category-item" href="/category/jobs" style="text-decoration:none">💼 Jobs</a>
+      <a class="category-item" href="/category/personal-ads" style="text-decoration:none">💌 Personal Ads</a>
+      <a class="category-item" href="/category/leisure" style="text-decoration:none">🌴 Leisure</a>
+      <a class="category-item" href="/assets/thailand-ads-platform.html" style="text-decoration:none">⚡ Other Services</a>
+    </div>
+  </div>
+</div>
+
+<!-- HOME PAGE -->
+<div id="page-home">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-badge">Thailand's #1 Service Classifieds</div>
+    <h1>Find & Post Services<br>Across <em>Thailand</em></h1>
+    <p>From Phuket tours to Bangkok massage services, the ultimate marketplace for tourism, leisure and work in Thailand.</p>
+    <div class="search-bar">
+      <select id="searchCat">
+        <option value="">All Categories</option>
+        <option>🚗 Car Rental</option>
+        <option>🗺️ Tour Planning</option>
+        <option>🏨 Accommodation</option>
+        <option>💆 Massage & Spa</option>
+        <option>💼 Jobs</option>
+        <option>💌 Personal Ads</option>
+        <option>🌴 Leisure</option>
+      </select>
+      <input type="text" placeholder="Search services, locations..." id="searchInput">
+      <button onclick="doSearch()">Search</button>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><strong>2,480+</strong><span>Active Ads</span></div>
+      <div class="stat"><strong>48</strong><span>Provinces</span></div>
+      <div class="stat"><strong>12K+</strong><span>Monthly Visitors</span></div>
+    </div>
+  </section>
+
+  <!-- CATEGORIES -->
+  <div class="section">
+    <div class="section-header">
+      <h2 class="section-title">Browse by <span>Category</span></h2>
+    </div>
+    <div class="categories-grid" id="catGrid">
+      <a class="cat-card" style="--cat-color:#C9A84C;text-decoration:none;cursor:pointer" href="/category/car-rental">
+        <span class="cat-icon">🚗</span>
+        <div class="cat-name">Car Rental</div>
+        <div class="cat-count" id="catCount-car-rental">Browse →</div>
+      </a>
+      <a class="cat-card" style="--cat-color:#2ECC8A;text-decoration:none;cursor:pointer" href="/category/tour-planning">
+        <span class="cat-icon">🗺️</span>
+        <div class="cat-name">Tour Planning</div>
+        <div class="cat-count" id="catCount-tour-planning">Browse →</div>
+      </a>
+      <a class="cat-card" style="--cat-color:#5B9BD5;text-decoration:none;cursor:pointer" href="/category/accommodation">
+        <span class="cat-icon">🏨</span>
+        <div class="cat-name">Accommodation</div>
+        <div class="cat-count" id="catCount-accommodation">Browse →</div>
+      </a>
+      <a class="cat-card" style="--cat-color:#E85D8A;text-decoration:none;cursor:pointer" href="/category/massage-spa">
+        <span class="cat-icon">💆</span>
+        <div class="cat-name">Massage & Spa</div>
+        <div class="cat-count" id="catCount-massage-spa">Browse →</div>
+      </a>
+      <a class="cat-card" style="--cat-color:#F0A500;text-decoration:none;cursor:pointer" href="/category/jobs">
+        <span class="cat-icon">💼</span>
+        <div class="cat-name">Jobs</div>
+        <div class="cat-count" id="catCount-jobs">Browse →</div>
+      </a>
+      <a class="cat-card" style="--cat-color:#A84C9A;text-decoration:none;cursor:pointer" href="/category/personal-ads">
+        <span class="cat-icon">💌</span>
+        <div class="cat-name">Personal Ads</div>
+        <div class="cat-count" id="catCount-personal-ads">Browse →</div>
+      </a>
+      <a class="cat-card" style="--cat-color:#4CAF8A;text-decoration:none;cursor:pointer" href="/category/leisure">
+        <span class="cat-icon">🌴</span>
+        <div class="cat-name">Leisure</div>
+        <div class="cat-count" id="catCount-leisure">Browse →</div>
+      </a>
+      <a class="cat-card" style="--cat-color:#E05C4B;text-decoration:none;cursor:pointer" href="/assets/thailand-ads-platform.html">
+        <span class="cat-icon">⚡</span>
+        <div class="cat-name">Other Services</div>
+        <div class="cat-count">Browse →</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- ALL ADS -->
+  <div class="section" id="adsSection">
+    <div class="section-header">
+      <h2 class="section-title" id="adsTitle">All <span>Listings</span></h2>
+      <a href="/category/car-rental" class="see-all">Browse by Category →</a>
+    </div>
+    <div class="filter-bar" id="filterBar">
+      <div class="filter-chip active" onclick="setFilter(this,'all')">All</div>
+      <div class="filter-chip" onclick="setFilter(this,'Phuket')">Phuket</div>
+      <div class="filter-chip" onclick="setFilter(this,'Bangkok')">Bangkok</div>
+      <div class="filter-chip" onclick="setFilter(this,'Chiang Mai')">Chiang Mai</div>
+      <div class="filter-chip" onclick="setFilter(this,'Pattaya')">Pattaya</div>
+      <div class="filter-chip" onclick="setFilter(this,'Samui')">Koh Samui</div>
+      <div class="filter-chip" onclick="setFilter(this,'Krabi')">Krabi</div>
+      <select id="provinceFilter" class="province-select" onchange="setFilterFromDropdown(this)">
+        <option value="">More provinces ▾</option>
+        <option>Amnat Charoen</option><option>Ang Thong</option>
+        <option>Bueng Kan</option><option>Buri Ram</option>
+        <option>Chachoengsao</option><option>Chai Nat</option>
+        <option>Chaiyaphum</option><option>Chanthaburi</option>
+        <option>Chiang Rai</option><option>Chon Buri</option>
+        <option>Chumphon</option><option>Kalasin</option>
+        <option>Kamphaeng Phet</option><option>Kanchanaburi</option>
+        <option>Khon Kaen</option><option>Lampang</option>
+        <option>Lamphun</option><option>Loei</option>
+        <option>Lop Buri</option><option>Mae Hong Son</option>
+        <option>Maha Sarakham</option><option>Mukdahan</option>
+        <option>Nakhon Nayok</option><option>Nakhon Pathom</option>
+        <option>Nakhon Phanom</option><option>Nakhon Ratchasima</option>
+        <option>Nakhon Sawan</option><option>Nakhon Si Thammarat</option>
+        <option>Nan</option><option>Narathiwat</option>
+        <option>Nong Bua Lam Phu</option><option>Nong Khai</option>
+        <option>Nonthaburi</option><option>Pathum Thani</option>
+        <option>Pattani</option><option>Phang Nga</option>
+        <option>Phatthalung</option><option>Phayao</option>
+        <option>Phetchabun</option><option>Phetchaburi</option>
+        <option>Phichit</option><option>Phitsanulok</option>
+        <option>Phra Nakhon Si Ayutthaya</option><option>Phrae</option>
+        <option>Prachin Buri</option><option>Prachuap Khiri Khan</option>
+        <option>Ranong</option><option>Ratchaburi</option>
+        <option>Rayong</option><option>Roi Et</option>
+        <option>Sa Kaeo</option><option>Sakon Nakhon</option>
+        <option>Samut Prakan</option><option>Samut Sakhon</option>
+        <option>Samut Songkhram</option><option>Saraburi</option>
+        <option>Satun</option><option>Si Sa Ket</option>
+        <option>Sing Buri</option><option>Songkhla</option>
+        <option>Sukhothai</option><option>Suphan Buri</option>
+        <option>Surat Thani</option><option>Surin</option>
+        <option>Tak</option><option>Trang</option><option>Trat</option>
+        <option>Ubon Ratchathani</option><option>Udon Thani</option>
+        <option>Uthai Thani</option><option>Uttaradit</option>
+        <option>Yala</option><option>Yasothon</option>
+      </select>
+    </div>
+    <div class="ads-grid" id="adsGrid"></div>
+    <div id="adsPagination"></div>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <div class="how-section" id="how">
+    <div class="how-inner">
+      <div class="section-header">
+        <h2 class="section-title">How it <span>Works</span></h2>
+      </div>
+      <div class="how-steps">
+        <div class="how-step">
+          <div class="step-num">1</div>
+          <div class="step-title">Choose a Package</div>
+          <div class="step-desc">Select from Basic, Standard or Premium depending on visibility you want for your ad.</div>
+        </div>
+        <div class="how-step">
+          <div class="step-num">2</div>
+          <div class="step-title">Write Your Ad</div>
+          <div class="step-desc">Fill in the details: title, description, contact info, photos and category.</div>
+        </div>
+        <div class="how-step">
+          <div class="step-num">3</div>
+          <div class="step-title">Pay & Publish</div>
+          <div class="step-desc">Quick payment via bank transfer, PromptPay or card. Ad goes live within minutes.</div>
+        </div>
+        <div class="how-step">
+          <div class="step-num">4</div>
+          <div class="step-title">Get Customers</div>
+          <div class="step-desc">Tourists and locals find you. Manage inquiries directly by phone, LINE or WhatsApp.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRICING -->
+  <div class="section" id="pricing">
+    <div class="section-header">
+      <h2 class="section-title">Simple <span>Pricing</span></h2>
+    </div>
+    <p style="color:var(--text-muted);font-size:0.9rem;margin-bottom:0.5rem">All prices in Thai Baht. No hidden fees.</p>
+    <div class="pricing-grid">
+      <div class="price-card">
+        <div class="price-label" style="background:linear-gradient(135deg,#2ECC8A,#1aaa6e);color:#0f1623;">BETA FREE</div>
+        <div class="price-name">Basic</div>
+        <div class="price-amount"><s style="opacity:0.4;font-size:0.7em;">฿79</s> <span style="color:#2ECC8A;font-size:1em;">FREE</span> <small>/ ad</small></div>
+        <ul class="price-features">
+          <li>Listed for 14 days</li>
+          <li>1 photo</li>
+          <li>Standard placement</li>
+          <li>Phone / LINE contact</li>
+        </ul>
+        <button class="btn-select" onclick="goPostPkg('basic')">Post Basic Ad</button>
+      </div>
+      <div class="price-card featured">
+        <div class="price-label">POPULAR</div>
+        <div class="price-name">Standard</div>
+        <div class="price-amount">฿149 <small>/ ad</small></div>
+        <ul class="price-features">
+          <li>Listed for 21 days</li>
+          <li>Up to 3 photos</li>
+          <li>Higher in search results</li>
+          <li>Phone / LINE / WhatsApp</li>
+          <li>Location targeting</li>
+        </ul>
+        <button class="btn-select" onclick="goPostPkg('standard')">Post Standard Ad</button>
+      </div>
+      <div class="price-card">
+        <div class="price-name">Premium</div>
+        <div class="price-amount">฿200 <small>/ ad</small></div>
+        <ul class="price-features">
+          <li>Listed for 30 days</li>
+          <li>Up to 5 photos</li>
+          <li>Featured / top placement</li>
+          <li>Gold "Featured" badge</li>
+          <li>Priority support</li>
+          <li>Full contact & website</li>
+        </ul>
+        <button class="btn-select" onclick="goPostPkg('premium')">Post Premium Ad</button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /page-home -->
+
+<!-- POST AD MODAL -->
+<div class="modal-overlay" id="postModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+
+    <!-- Form -->
+    <div id="adForm">
+      <h2>Post Your Ad</h2>
+      <p class="modal-sub">Reach thousands of tourists & locals across Thailand</p>
+
+      <div class="form-group">
+        <label>Category *</label>
+        <select id="fCat" onchange="updatePkgPrice()">
+          <option value="">Select a category...</option>
+          <option>🚗 Car Rental</option>
+          <option>🗺️ Tour Planning</option>
+          <option>🏨 Accommodation / Condo</option>
+          <option>💆 Massage & Spa</option>
+          <option>💼 Job Posting</option>
+          <option>👤 Personal Ad</option>
+          <option>🌴 Leisure & Activities</option>
+          <option>⚡ Other Services</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Ad Title *</label>
+        <input type="text" id="fTitle" placeholder="e.g. Toyota Fortuner rental – Phuket area">
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Province / Location *</label>
+          <select id="fLoc">
+            <option>Bangkok</option>
+            <option>Phuket</option>
+            <option>Chiang Mai</option>
+            <option>Pattaya / Chonburi</option>
+            <option>Koh Samui / Surat Thani</option>
+            <option>Krabi</option>
+            <option>Hua Hin / Prachuap</option>
+            <option>Koh Phangan</option>
+            <option>Pai / Mae Hong Son</option>
+            <option>Other Province</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Price / Rate (฿)</label>
+          <input type="text" id="fPrice" placeholder="e.g. 1500/day or Free">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Description *</label>
+        <textarea id="fDesc" placeholder="Describe your service, availability, what's included..."></textarea>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Contact Name</label>
+          <input type="text" id="fName" placeholder="Your name or business">
+        </div>
+        <div class="form-group">
+          <label>Phone / LINE ID</label>
+          <input type="text" id="fPhone" placeholder="+66 or LINE ID">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Upload Images (max 3)</label>
+        <input type="file" id="fImages" accept="image/*" multiple onchange="handleImageUpload(event)">
+        <div id="imagePreview" class="image-preview-grid">
+          <div class="image-upload-hint">Select up to 3 photos and choose one cover image.</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Select Package *</label>
+        <div class="pkg-selector">
+          <div class="pkg-opt" id="pkg-basic" onclick="selectPkg('basic')">
+            <strong style="color:#2ECC8A">FREE</strong><span>Basic<br>14 days <span style="font-size:0.65em;background:#2ECC8A;color:#0f1623;border-radius:3px;padding:1px 4px;vertical-align:middle;">BETA</span></span>
+          </div>
+          <div class="pkg-opt active" id="pkg-standard" onclick="selectPkg('standard')">
+            <strong>฿149</strong><span>Standard<br>21 days ⭐</span>
+          </div>
+          <div class="pkg-opt" id="pkg-premium" onclick="selectPkg('premium')">
+            <strong>฿200</strong><span>Premium<br>30 days</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="payment-row" id="paymentRow">
+        <span>💳</span>
+        <span>Payment via <strong>PromptPay</strong>, Bank Transfer, or Credit Card</span>
+        <strong id="payTotal">฿149</strong>
+      </div>
+
+      <button class="btn-submit" onclick="submitAd()" id="submitAdBtn">Pay & Publish Ad →</button>
+    </div>
+
+    <!-- Success -->
+    <div class="success-msg" id="adSuccess">
+      <div class="check">🎉</div>
+      <h3>Ad Submitted!</h3>
+      <p>Your ad will be reviewed and published within <strong>30 minutes</strong>.<br>We'll notify you via the phone/LINE you provided.</p>
+      <br>
+      <button class="btn-submit" onclick="closeModal()" style="max-width:200px;margin:0 auto">Back to Browse</button>
+    </div>
+  </div>
+</div>
+
+<!-- AD DETAIL MODAL -->
+<div class="modal-overlay" id="detailModal">
+  <div class="modal modal-detail" style="max-width:620px">
+    <button class="modal-close" onclick="closeDetail()">✕</button>
+    <div id="detailContent"></div>
+  </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div id="lightbox" onclick="handleLightboxClick(event)">
+  <button id="lb-close" onclick="closeLightbox()">✕</button>
+  <button class="lb-nav" id="lb-prev" onclick="lightboxNav(-1)">‹</button>
+  <img id="lb-img" src="" alt="Photo preview">
+  <button class="lb-nav" id="lb-next" onclick="lightboxNav(1)">›</button>
+  <div id="lb-counter"></div>
+</div>
+
+<!-- AUTH MODALS -->
+<div class="auth-modal" id="loginModal">
+  <div class="auth-form">
+    <button class="auth-close" onclick="closeAuthModal()">✕</button>
+    <h2>Welcome Back</h2>
+    <p class="auth-sub">Sign in to post your ads</p>
+
+    <div class="form-group">
+      <label>Email or Mobile Number</label>
+      <input type="text" id="loginIdentifier" placeholder="your@email.com or +66 000 000 000" autocomplete="username">
+    </div>
+
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" id="loginPassword" placeholder="Your password" autocomplete="current-password">
+    </div>
+
+    <button class="auth-btn" onclick="login()" id="loginBtn">Sign In</button>
+
+    <div class="auth-switch">
+      Don't have an account? <a href="#" onclick="switchToRegister()">Create one</a>
+    </div>
+  </div>
+</div>
+
+<div class="auth-modal" id="registerModal">
+  <div class="auth-form">
+    <button class="auth-close" onclick="closeAuthModal()">✕</button>
+    <h2>Join AdSabai</h2>
+    <p class="auth-sub">Create your account to start posting ads</p>
+
+    <div class="form-group">
+      <label>Full Name</label>
+      <input type="text" id="registerName" placeholder="Your full name" autocomplete="name">
+    </div>
+
+    <div class="form-group">
+      <label>Email or Mobile Number</label>
+      <input type="text" id="registerIdentifier" placeholder="your@email.com or +66 000 000 000" autocomplete="username">
+      <span class="field-hint">Use either your email address or mobile number</span>
+    </div>
+
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" id="registerPassword" placeholder="Create a password (min. 6 characters)" autocomplete="new-password">
+    </div>
+
+    <div class="form-group">
+      <label>Confirm Password</label>
+      <input type="password" id="registerConfirmPassword" placeholder="Re-enter your password" autocomplete="new-password">
+    </div>
+
+    <button class="auth-btn" onclick="register()" id="registerBtn">Create Account</button>
+
+    <div class="auth-switch">
+      Already have an account? <a href="#" onclick="switchToLogin()">Sign in</a>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:2rem;margin-bottom:2rem;">
+      <div class="footer-col" style="flex:1 1 260px;max-width:320px;">
+        <div class="footer-logo">AdSabai</div>
+        <p style="font-size:0.8rem;color:var(--text-muted);margin-top:0.5rem;line-height:1.5">Thailand's premier classified ads platform for tourism and services.</p>
+      </div>
+      <div style="display:flex;gap:3rem;flex-wrap:wrap;justify-content:flex-end;">
+        <div class="footer-col">
+          <h4>Categories</h4>
+          <a href="/category/car-rental">Car Rental</a>
+          <a href="/category/tour-planning">Tour Planning</a>
+          <a href="/category/accommodation">Accommodation</a>
+          <a href="/category/massage-spa">Massage & Spa</a>
+          <a href="/category/jobs">Jobs</a>
+          <a href="/category/personal-ads">Personal Ads</a>
+          <a href="/category/leisure">Leisure</a>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <a href="/about">About Us</a>
+          <a href="/contact">Contact</a>
+          <a href="/terms">Terms of Service</a>
+          <a href="/privacy">Privacy Policy</a>
+          <a href="/business-policy">Business Policy</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 AdSabai. All rights reserved. | 🇹🇭 Made for Thailand</p>
+      <p>Line: @adsabai</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ── TOAST SYSTEM (defined first so every function below can use showToast) ──
+(function() {
+  const container = document.createElement('div');
+  container.id = 'toast-container';
+  document.body.appendChild(container);
+
+  const ICONS  = { success: '✓', error: '✕', warning: '⚠', info: 'ℹ' };
+  const LABELS = { success: 'Success', error: 'Error', warning: 'Warning', info: 'Info' };
+
+  function showToast(message, type) {
+    type = type || 'info';
+    const toast = document.createElement('div');
+    toast.className = 'toast ' + type;
+    toast.innerHTML =
+      '<span class="toast-icon">' + ICONS[type] + '</span>' +
+      '<div class="toast-body">' +
+        '<div class="toast-title">' + LABELS[type] + '</div>' +
+        '<div class="toast-msg">' + message + '</div>' +
+      '</div>' +
+      '<button class="toast-close" onclick="this.closest(\'.toast\').remove()">✕</button>' +
+      '<div class="toast-bar"></div>';
+    container.appendChild(toast);
+    const timer = setTimeout(function() {
+      toast.classList.add('hiding');
+      setTimeout(function() { toast.remove(); }, 260);
+    }, 3800);
+    toast.querySelector('.toast-close').addEventListener('click', function() { clearTimeout(timer); });
+  }
+
+  window.showToast = showToast;
+  // Override native alert so any missed call still uses the themed toast
+  window.alert = function(msg) { showToast(String(msg), 'info'); };
+})();
+
+// ── SAMPLE DATA (shown while real ads load) ──
+const sampleAds = [
+  {id:1, cat:'Car Rental', title:'Toyota Fortuner 4WD — Phuket Airport Pickup', desc:'Air-con, GPS included. Airport dropoff & pickup. Daily or weekly rates available.', location:'Phuket', price:'฿1,500/day', emoji:'🚗', featured:true, imgClass:'img-car', badge:'Car Rental', badgeColor:'#2ECC8A', contact:'+66 81 234 5678'},
+  {id:2, cat:'Tour Planning', title:'7-Day Northern Thailand Trekking Package', desc:'Chiang Mai to Pai trek including hill tribes, waterfalls, elephant sanctuary visit.', location:'Chiang Mai', price:'฿8,500/person', emoji:'🗺️', featured:true, imgClass:'img-tour', badge:'Tour', badgeColor:'#C9A84C', contact:'LINE: chiangmai_tours'},
+  {id:3, cat:'Massage & Spa', title:'Traditional Thai Massage — Sukhumvit Soi 11', desc:'Certified therapists. 1h / 2h sessions. Oil massage, foot massage, hot stone available.', location:'Bangkok', price:'฿350/hour', emoji:'💆', featured:false, imgClass:'img-massage', badge:'Massage', badgeColor:'#E85D8A', contact:'+66 89 876 5432'},
+  {id:4, cat:'Accommodation', title:'Beachfront Studio Condo — Kata Beach', desc:'Fully furnished, pool access, 200m from beach. Short-term & long-term available.', location:'Phuket', price:'฿18,000/month', emoji:'🏠', featured:true, imgClass:'img-condo', badge:'Condo', badgeColor:'#5B9BD5', contact:'LINE: kata_rentals'},
+  {id:5, cat:'Jobs', title:'English-Speaking Tour Guide Wanted — Krabi', desc:'Full-time guide for island hopping tours. Must have boat license. Accommodation provided.', location:'Krabi', price:'฿35,000/month', emoji:'💼', featured:false, imgClass:'img-job', badge:'Job', badgeColor:'#F0A500', contact:'+66 76 XXX XXXX'},
+  {id:6, cat:'Leisure', title:'ATV Adventure & Zipline — Koh Samui', desc:'Full day adventure package. ATV jungle trails + zipline + BBQ lunch included.', location:'Samui', price:'฿2,200/person', emoji:'🌴', featured:false, imgClass:'img-tour', badge:'Leisure', badgeColor:'#4CAF8A', contact:'WhatsApp: +66 80 XXX XXXX'},
+  {id:7, cat:'Tour Planning', title:'Phi Phi Island Speedboat Day Trip', desc:'Depart Phuket 8am. Visit Maya Bay, snorkelling, monkey beach. Lunch included.', location:'Phuket', price:'฿1,800/person', emoji:'⛵', featured:true, imgClass:'img-tour', badge:'Tour', badgeColor:'#C9A84C', contact:'LINE: phiphi_tours'},
+  {id:8, cat:'Massage & Spa', title:'Luxury Spa Package — Chiang Mai Old City', desc:'Herbal compress massage, aromatherapy facial. Private suite. Couple packages available.', location:'Chiang Mai', price:'฿1,200/2hrs', emoji:'🧖', featured:false, imgClass:'img-massage', badge:'Spa', badgeColor:'#E85D8A', contact:'+66 53 XXX XXXX'},
+  {id:9, cat:'Car Rental', title:'Honda PCX Scooter Rental — Pai', desc:'Well maintained, daily or weekly. Helmet, insurance included. Delivery to guesthouse.', location:'Pai', price:'฿350/day', emoji:'🛵', featured:false, imgClass:'img-car', badge:'Rental', badgeColor:'#2ECC8A', contact:'WhatsApp: +66 85 XXX XXXX'},
+  {id:10, cat:'Accommodation', title:'Boutique Guesthouse Room — Chiang Rai', desc:'Air-con private room, hot shower, free breakfast. Near Golden Triangle.', location:'Chiang Mai', price:'฿650/night', emoji:'🏡', featured:false, imgClass:'img-condo', badge:'Stay', badgeColor:'#5B9BD5', contact:'LINE: chiangraibnb'},
+  {id:11, cat:'Jobs', title:'Dive Instructor — PADI Certified — Koh Tao', desc:'Dive school seeking experienced instructor. Season April–November. Competitive package.', location:'Samui', price:'฿45,000/month', emoji:'🤿', featured:true, imgClass:'img-job', badge:'Job', badgeColor:'#F0A500', contact:'+66 77 XXX XXXX'},
+  {id:12, cat:'Personal Ads', title:'Yoga Instructor Available for Private Sessions', desc:'200hr certified. Hatha & Vinyasa. Can come to your hotel/villa. All levels welcome.', location:'Phuket', price:'฿800/session', emoji:'🧘', featured:false, imgClass:'img-personal', badge:'Personal', badgeColor:'#A84C9A', contact:'LINE: yoga_phuket'},
+];
+
+// Live data — starts as sample, replaced by real API ads
+let allAds = [...sampleAds];
+
+// Maps category string to a display colour
+function catColor(cat) {
+  const map = {
+    'car rental':'#2ECC8A', 'tour planning':'#C9A84C',
+    'accommodation':'#5B9BD5', 'massage & spa':'#E85D8A',
+    'jobs':'#F0A500', 'personal ads':'#A84C9A',
+    'leisure':'#4CAF8A', 'other services':'#E05C4B',
+  };
+  return map[(cat||'').toLowerCase()] || '#C9A84C';
+}
+
+// Maps category string to a fallback emoji
+function catEmoji(cat) {
+  const map = {
+    'car rental':'🚗', 'tour planning':'🗺️',
+    'accommodation':'🏨', 'massage & spa':'💆',
+    'jobs':'💼', 'personal ads':'💌',
+    'leisure':'🌴', 'other services':'⚡',
+  };
+  return map[(cat||'').toLowerCase()] || '📌';
+}
+
+// Converts an API ad record to the shape renderAds() expects
+function apiAdToLocal(ad) {
+  const cat = ad.category || 'other';
+  const contact = ad.phone || 'N/A';
+  const images = Array.isArray(ad.imageUrls) ? ad.imageUrls : [];
+  return {
+    id:         ad.id,
+    cat:        cat,
+    title:      ad.title,
+    desc:       ad.description,
+    location:   ad.location || 'Thailand',
+    price:      ad.price ? String(ad.price) : 'Contact for price',
+    featured:      ad.packageType === 'premium',
+    packageType:   ad.packageType || 'basic',
+    imgClass:   'img-default',
+    badge:      cat.charAt(0).toUpperCase() + cat.slice(1),
+    badgeColor: catColor(cat),
+    emoji:      catEmoji(cat),
+    contact:     contact,
+    website:     ad.website || '',
+    images:      images,
+    coverImage:  images[0] || '',
+    views:       ad.views       || 0,
+    ratingAvg:   ad.ratingAvg   || 0,
+    ratingCount: ad.ratingCount || 0,
+    createdAt:   ad.createdAt   || ad.publishedAt || null,
+  };
+}
+
+async function loadAdsFromAPI() {
+  try {
+    const res = await fetch('/api/ads');
+    if (!res.ok) throw new Error('API error ' + res.status);
+    const data = await res.json();
+    if (Array.isArray(data) && data.length > 0) {
+      allAds = data.map(apiAdToLocal);
+    }
+  } catch (err) {
+    console.warn('Could not load ads from API, showing sample data.', err);
+  }
+  filterAds();
+}
+
+let currentFilter = 'all';
+let currentCat = 'all';
+let selectedPkg = 'standard';
+const prices = { basic: 0, standard: 149, premium: 200 }; // basic: 0 = beta free
+let uploadedImages = [];
+const categoryEmoji = {
+  'Car Rental': '🚗',
+  'Tour Planning': '🗺️',
+  'Massage & Spa': '💆',
+  'Accommodation / Condo': '🏠',
+  'Job Posting': '💼',
+  'Personal Ad': '👤',
+  'Leisure & Activities': '🌴',
+  'Other Services': '⚡'
+};
+
+function getAdCoverImage(ad) {
+  return (ad.images && ad.images.length) ? (ad.coverImage || ad.images[0]) : '';
+}
+
+function renderImagePreview() {
+  const preview = document.getElementById('imagePreview');
+  if (!preview) return;
+  if (!uploadedImages.length) {
+    preview.innerHTML = '<div class="image-upload-hint">Select up to 3 photos and choose one cover image.</div>';
+    return;
+  }
+  preview.innerHTML = uploadedImages.map((img, index) => `
+    <div class="image-preview-item${img.isCover ? ' selected' : ''}">
+      <img src="${img.src}" alt="Ad image ${index + 1}">
+      <input type="radio" id="coverImage${index}" name="coverImage" ${img.isCover ? 'checked' : ''} onchange="selectCoverImage(${index})">
+      <label for="coverImage${index}">${img.isCover ? 'Cover image' : 'Set as cover'}</label>
+    </div>
+  `).join('');
+}
+
+function selectCoverImage(index) {
+  uploadedImages = uploadedImages.map((img, i) => ({ ...img, isCover: i === index }));
+  renderImagePreview();
+}
+
+function resetImageUpload() {
+  uploadedImages = [];
+  const fileInput = document.getElementById('fImages');
+  if (fileInput) fileInput.value = '';
+  renderImagePreview();
+}
+
+function handleImageUpload(e) {
+  const files = Array.from(e.target.files || []);
+  if (!files.length) {
+    resetImageUpload();
+    return;
+  }
+  if (files.length > 3) {
+    showToast('Max 3 images — only the first 3 were kept', 'warning');
+    files.splice(3);
+  }
+  const readers = files.map((file, index) => new Promise(resolve => {
+    const reader = new FileReader();
+    reader.onload = () => resolve({ src: reader.result, name: file.name, isCover: index === 0 });
+    reader.readAsDataURL(file);
+  }));
+  Promise.all(readers).then(images => {
+    uploadedImages = images;
+    renderImagePreview();
+  });
+}
+
+function renderAds(ads) {
+  const grid = document.getElementById('adsGrid');
+  if (!ads.length) {
+    grid.innerHTML = '<p style="color:var(--text-muted);grid-column:1/-1;padding:2rem 0">No ads found. Be the first to post in this category!</p>';
+    return;
+  }
+  grid.innerHTML = ads.map(ad => {
+    const coverImage = getAdCoverImage(ad);
+    const imageStyle = coverImage ? `background-image:url('${coverImage}');` : '';
+    const imageClasses = coverImage ? '' : ad.imgClass;
+    return `
+    <div class="ad-card" onclick="openDetail(${ad.id})">
+      <div class="ad-img-bg ${imageClasses}" style="height:180px;font-size:3.5rem;display:flex;align-items:center;justify-content:center;position:relative;${imageStyle}">
+        ${coverImage ? '' : ad.emoji}
+        <div class="ad-badge" style="--badge-bg:${ad.badgeColor};background:${ad.badgeColor}">${ad.badge}</div>
+        ${ad.featured ? '<div class="ad-featured-badge">⭐ Featured</div>' : ''}
+      </div>
+      <div class="ad-body">
+        <div class="ad-cat" style="display:flex;justify-content:space-between;align-items:center;gap:0.5rem">
+          <span>${ad.cat}</span>
+          ${ad.createdAt ? `<span style="font-size:0.71rem;color:var(--text-muted);white-space:nowrap;flex-shrink:0">🕐 ${timeAgo(ad.createdAt)}</span>` : ''}
+        </div>
+        <div class="ad-title">${ad.title}</div>
+        <div class="ad-desc">${ad.desc}</div>
+        <div class="ad-meta">
+          <span class="ad-location">${ad.location}</span>
+          <span class="ad-price">${ad.price}</span>
+        </div>
+        <div class="ad-stats">
+          <span>👁 ${ad.views} views</span>
+          ${ad.ratingCount > 0 ? `<span><span class="ad-stats-star">${renderStarBar(ad.ratingAvg)}</span> ${ad.ratingAvg.toFixed(1)} · ${ad.ratingCount} ${ad.ratingCount === 1 ? 'person' : 'persons'} rated</span>` : ''}
+        </div>
+        <div class="ad-actions">
+          <div class="ad-share-row">
+            <span class="ad-share-label">Share</span>
+            <div class="share-icons">
+              <button class="share-icon whatsapp" title="WhatsApp" onclick="shareAd(event, ${ad.id}, 'whatsapp')" aria-label="Share on WhatsApp">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 2.04c-5.49 0-9.96 4.47-9.96 9.96 0 1.75.46 3.4 1.25 4.84L2 22l5.3-1.41c1.37.75 2.92 1.14 4.56 1.14 5.49 0 9.96-4.47 9.96-9.96S17.49 2.04 12 2.04Zm5.43 13.1c-.23.65-1.34 1.24-1.83 1.31-.47.07-1.05.1-2.31-.44-2.28-.86-3.77-3.18-3.89-3.31-.12-.13-1.05-1.22-1.05-2.33 0-1.11.61-1.65.83-1.88.22-.23.48-.29.64-.29.16 0 .32 0 .46.01.14.01.33-.05.51.37.18.43.62 1.49.68 1.61.07.12.11.28.01.45-.1.17-.16.28-.31.44-.16.16-.33.35-.47.48-.14.13-.29.27-.1.53.19.26.84 1.38 1.81 2.24 1.25 1.12 2.29 1.47 2.67 1.64.38.17.6.14.82-.08.22-.22.92-1.07 1.16-1.44.24-.37.49-.31.82-.19.33.12 2.08.98 2.43 1.16.35.18.58.27.66.42.08.15.08.87-.15 1.52Z"/>
+                </svg>
+              </button>
+              <button class="share-icon line" title="LINE" onclick="shareAd(event, ${ad.id}, 'line')" aria-label="Share on LINE">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M4 2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H7.17L4 22V4a2 2 0 0 1 2-2Zm3.5 10.5c0-1.38 1.12-2.5 2.5-2.5h4c1.38 0 2.5 1.12 2.5 2.5V15c0 1.38-1.12 2.5-2.5 2.5h-4A2.5 2.5 0 0 1 7.5 15v-2.5Zm2.5-1c-.28 0-.5.22-.5.5v2c0 .28.22.5.5.5h4c.28 0 .5-.22.5-.5v-2c0-.28-.22-.5-.5-.5h-4Z"/>
+                </svg>
+              </button>
+              <button class="share-icon facebook" title="Facebook" onclick="shareAd(event, ${ad.id}, 'facebook')" aria-label="Share on Facebook">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M13.5 3H16V0h-3.5C9.57 0 7 2.49 7 5.6v2.9H4v4h3V24h4.2v-11.5h3.3l.5-4h-3.8V6.5c0-1.1.3-1.8 1.88-1.8Z"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:0.55rem;flex-wrap:wrap;">
+            <button class="ad-copy" onclick="copyAdLink(event, ${ad.id}); return false;" title="Copy link">📋</button>
+            <button class="ad-call" onclick="callAd(event || window.event, ${ad.id}); return false;">Call now</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  `}).join('');
+}
+
+const ADS_PER_PAGE = 12;
+let currentPage = 1;
+let currentFilteredAds = [];
+
+function pkgOrder(ad) {
+  if (ad.packageType === 'premium' || ad.featured) return 0;
+  if (ad.packageType === 'standard') return 1;
+  return 2;
+}
+function timeAgo(dateStr) {
+  if (!dateStr) return '';
+  const diff = Date.now() - new Date(dateStr).getTime();
+  const mins = Math.floor(diff / 60000);
+  if (mins < 1)  return 'Just now';
+  if (mins < 60) return mins + 'm ago';
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24)  return hrs + 'h ago';
+  const days = Math.floor(hrs / 24);
+  if (days < 7)  return days === 1 ? '1 day ago' : days + ' days ago';
+  return new Date(dateStr).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+
+function sortByPackage(ads) {
+  return [...ads].sort((a, b) => {
+    const tierDiff = pkgOrder(a) - pkgOrder(b);
+    if (tierDiff !== 0) return tierDiff;
+    // Within the same tier: newest first
+    return new Date(b.createdAt || 0) - new Date(a.createdAt || 0);
+  });
+}
+
+function renderCurrentPage() {
+  const start = (currentPage - 1) * ADS_PER_PAGE;
+  renderAds(currentFilteredAds.slice(start, start + ADS_PER_PAGE));
+  renderPagination(currentFilteredAds.length);
+}
+
+function goToPage(n) {
+  currentPage = n;
+  renderCurrentPage();
+  document.getElementById('adsSection').scrollIntoView({behavior:'smooth'});
+}
+
+function renderPagination(total) {
+  const container = document.getElementById('adsPagination');
+  if (!container) return;
+  const totalPages = Math.ceil(total / ADS_PER_PAGE);
+  if (totalPages <= 1) { container.innerHTML = ''; return; }
+
+  const range = [];
+  for (let i = 1; i <= totalPages; i++) {
+    if (i === 1 || i === totalPages || Math.abs(i - currentPage) <= 2) {
+      range.push(i);
+    } else if (range[range.length - 1] !== '…') {
+      range.push('…');
+    }
+  }
+
+  let html = '<div class="ads-pagination">';
+  if (currentPage > 1)
+    html += `<button onclick="goToPage(${currentPage - 1})" class="page-btn">‹ Prev</button>`;
+  range.forEach(p => {
+    if (p === '…') html += `<span class="page-ellipsis">…</span>`;
+    else html += `<button onclick="goToPage(${p})" class="page-btn${p === currentPage ? ' active' : ''}">${p}</button>`;
+  });
+  if (currentPage < totalPages)
+    html += `<button onclick="goToPage(${currentPage + 1})" class="page-btn page-next">Next ›</button>`;
+  html += '</div>';
+  container.innerHTML = html;
+}
+
+function filterAds() {
+  let ads = allAds;
+  if (currentCat !== 'all') ads = ads.filter(a => a.cat.toLowerCase() === currentCat.toLowerCase());
+  if (currentFilter !== 'all') ads = ads.filter(a => (a.location||'').toLowerCase().includes(currentFilter.toLowerCase()));
+  currentFilteredAds = sortByPackage(ads);
+  currentPage = 1;
+  renderCurrentPage();
+}
+
+function setFilter(el, loc) {
+  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  currentFilter = loc;
+  resetProvinceSelect();
+  filterAds();
+}
+function resetProvinceSelect() {
+  const sel = document.getElementById('provinceFilter');
+  if (!sel) return;
+  sel.value = '';
+  sel.classList.remove('active');
+}
+function setFilterFromDropdown(sel) {
+  const val = sel.value;
+  if (!val) return;
+  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+  sel.classList.add('active');
+  currentFilter = val;
+  filterAds();
+}
+
+function filterCat(cat) {
+  currentCat = cat;
+  document.getElementById('adsTitle').innerHTML = `${cat} <span>Listings</span>`;
+  filterAds();
+  document.getElementById('adsSection').scrollIntoView({behavior:'smooth'});
+}
+
+function clearFilter() {
+  currentCat = 'all';
+  currentFilter = 'all';
+  document.getElementById('adsTitle').innerHTML = 'All <span>Listings</span>';
+  document.querySelectorAll('.filter-chip').forEach((c,i) => c.classList.toggle('active', i===0));
+  resetProvinceSelect();
+  filterAds();
+}
+
+async function doSearch() {
+  const q = document.getElementById('searchInput').value.toLowerCase().trim();
+  const catVal = document.getElementById('searchCat').value;
+  // If a category is selected, navigate to the dedicated category page
+  const catSlugMap = {
+    'car rental': 'car-rental', 'tour planning': 'tour-planning',
+    'accommodation': 'accommodation', 'massage & spa': 'massage-spa',
+    'massage  spa': 'massage-spa', 'jobs': 'jobs',
+    'personal ads': 'personal-ads', 'leisure': 'leisure',
+  };
+  if (catVal) {
+    const key = catVal.toLowerCase().replace(/[^a-z& ]/g, '').trim();
+    const slug = catSlugMap[key] || Object.entries(catSlugMap).find(([k]) => key.includes(k))?.[1];
+    if (slug) { window.location.href = '/category/' + slug; return; }
+  }
+  if (!q) { filterAds(); return; }
+
+  // Fetch ALL active ads (not just premium) so search covers every package type
+  document.getElementById('adsTitle').innerHTML = `Searching…`;
+  document.getElementById('adsSection').scrollIntoView({behavior:'smooth'});
+  try {
+    const res = await fetch('/api/ads');
+    const data = await res.json();
+    const all = Array.isArray(data) ? data.map(apiAdToLocal) : allAds;
+    currentFilteredAds = sortByPackage(all.filter(a =>
+      a.title.toLowerCase().includes(q) ||
+      a.desc.toLowerCase().includes(q) ||
+      (a.location || '').toLowerCase().includes(q) ||
+      (a.cat || '').toLowerCase().includes(q)
+    ));
+  } catch (e) {
+    currentFilteredAds = sortByPackage(allAds.filter(a =>
+      a.title.toLowerCase().includes(q) ||
+      a.desc.toLowerCase().includes(q) ||
+      (a.location || '').toLowerCase().includes(q)
+    ));
+  }
+  currentPage = 1;
+  renderCurrentPage();
+  document.getElementById('adsTitle').innerHTML = `Search <span>Results</span>`;
+}
+
+// ── MODAL ──
+function openModal() {
+  if (!currentUser) {
+    openAuthModal('login');
+    return;
+  }
+  resetImageUpload();
+  document.getElementById('postModal').classList.add('open');
+  document.getElementById('adForm').style.display = '';
+  document.getElementById('adSuccess').style.display = 'none';
+}
+function openModalPkg(pkg) {
+  if (!currentUser) {
+    openAuthModal('login');
+    return;
+  }
+  selectPkg(pkg);
+  openModal();
+}
+function closeModal() {
+  document.getElementById('postModal').classList.remove('open');
+}
+
+function openMobileMenu() {
+  document.getElementById('mobileMenu').classList.add('open');
+}
+function closeMobileMenu() {
+  document.getElementById('mobileMenu').classList.remove('open');
+}
+
+function selectPkg(pkg) {
+  selectedPkg = pkg;
+  ['basic','standard','premium'].forEach(p => {
+    document.getElementById('pkg-'+p).classList.toggle('active', p===pkg);
+  });
+  const p = prices[pkg];
+  const isFree = p === 0;
+  document.getElementById('payTotal').textContent = isFree ? 'FREE' : '฿' + p;
+  document.getElementById('paymentRow').style.display = isFree ? 'none' : '';
+  document.getElementById('submitAdBtn').textContent = isFree ? 'Post Free Ad →' : 'Pay & Publish Ad →';
+}
+
+function updatePkgPrice() { /* dynamic per category if needed */ }
+
+function submitAd() {
+  const catRaw = document.getElementById('fCat').value;
+  const cat = catRaw.replace(/^[^A-Za-z0-9]+\s*/, '');
+  const title = document.getElementById('fTitle').value;
+  const desc = document.getElementById('fDesc').value;
+  const location = document.getElementById('fLoc').value;
+  const price = document.getElementById('fPrice').value || 'Contact for price';
+  const name = document.getElementById('fName').value;
+  const contact = document.getElementById('fPhone').value || name || 'No contact provided';
+  if (!cat || !title || !desc) {
+    showToast('Please fill in Category, Title and Description', 'error');
+    return;
+  }
+  const images = uploadedImages.map(img => img.src);
+  const coverImage = uploadedImages.find(img => img.isCover)?.src || '';
+  const newAd = {
+    id: sampleAds.length + 1,
+    cat,
+    title,
+    desc,
+    location,
+    price,
+    emoji: categoryEmoji[cat] || '📌',
+    featured: false,
+    imgClass: 'img-default',
+    badge: cat,
+    badgeColor: '#C9A84C',
+    contact,
+    images,
+    coverImage
+  };
+  allAds.unshift(newAd);
+  filterAds();
+  document.getElementById('adForm').style.display = 'none';
+  document.getElementById('adSuccess').style.display = 'block';
+  resetImageUpload();
+}
+
+// ── AD DETAIL ──
+function getAdLink(id) {
+  return window.location.href.split('#')[0] + '#ad-' + id;
+}
+function copyAdLink(e, id) {
+  e.stopPropagation();
+  const link = getAdLink(id);
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(link).then(() => {
+      showToast('Link copied to clipboard!', 'success');
+    }).catch(() => {
+      prompt('Copy this link:', link);
+    });
+  } else {
+    prompt('Copy this link:', link);
+  }
+}
+function shareAd(e, id, platform) {
+  e.stopPropagation();
+  const link = getAdLink(id);
+  const encodedLink = encodeURIComponent(link);
+  let url = '';
+  if (platform === 'whatsapp') {
+    url = `https://wa.me/?text=${encodedLink}`;
+  } else if (platform === 'line') {
+    url = `https://social-plugins.line.me/lineit/share?url=${encodedLink}`;
+  } else if (platform === 'facebook') {
+    url = `https://www.facebook.com/sharer/sharer.php?u=${encodedLink}`;
+  }
+  if (url) window.open(url, '_blank');
+}
+function callAd(e, id) {
+  e = e || window.event;
+  if (e.stopPropagation) e.stopPropagation();
+  if (e.preventDefault) e.preventDefault();
+  const ad = allAds.find(a => a.id === id);
+  if (!ad) return;
+  const phone = ad.contact.match(/\+?\d[\d\s\-()]+/);
+  if (phone) {
+    const tel = phone[0].replace(/[^+0-9]/g, '');
+    window.location.href = `tel:${tel}`;
+  } else {
+    showToast('Contact: ' + ad.contact, 'info');
+  }
+}
+
+function renderAdImageSection(ad) {
+  const cover = getAdCoverImage(ad);
+  _lbImages = ad.images || [];
+  if (cover) {
+    return `
+      <div class="detail-image-grid">
+        ${ad.images.map((src, index) => `
+          <div class="detail-thumb${src === cover ? ' cover-thumb' : ''}"
+               style="background-image:url('${src}')"
+               onclick="openLightbox(${index})"
+               title="View full size">
+            ${src === cover ? '<span class="cover-pill">Cover</span>' : ''}
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }
+  return `
+    <div class="ad-img-bg ${ad.imgClass}" style="height:220px;font-size:5rem;display:flex;align-items:center;justify-content:center;border-radius:12px;margin-bottom:1.2rem;position:relative">
+      ${ad.emoji}
+      <div class="ad-badge" style="background:${ad.badgeColor}">${ad.badge}</div>
+      ${ad.featured ? '<div class="ad-featured-badge">⭐ Featured</div>' : ''}
+    </div>
+  `;
+}
+
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+function linkify(str) {
+  const escaped = escapeHtml(str);
+  return escaped.replace(
+    /(https?:\/\/[^\s<>"]+|www\.[^\s<>"]+)/g,
+    function(url) {
+      const href = url.startsWith('http') ? url : 'https://' + url;
+      return '<a href="' + href + '" target="_blank" rel="noopener noreferrer" style="color:var(--gold);text-decoration:underline;word-break:break-all;">' + url + '</a>';
+    }
+  );
+}
+
+/* ── Rating identity — works for guests and logged-in users alike ── */
+function getRaterId() {
+  if (currentUser && currentUser.id) return 'u_' + currentUser.id;
+  let id = localStorage.getItem('ratingId');
+  if (!id) {
+    id = 'g_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+    localStorage.setItem('ratingId', id);
+  }
+  return id;
+}
+
+/* ── Star helpers ── */
+function renderStarBar(avg) {
+  let s = '';
+  for (let i = 1; i <= 5; i++) {
+    s += (i <= Math.round(avg)) ? '★' : '☆';
+  }
+  return s;
+}
+
+function renderRatingSection(ad) {
+  const existing = userRatings[ad.id] || 0;
+  const stars = [1,2,3,4,5].map(n =>
+    `<button onclick="submitRating(${ad.id},${n})"
+       onmouseover="highlightStars(this,${n},${ad.id})"
+       onmouseout="unhighlightStars(${ad.id},${existing})"
+       style="font-size:1.9rem;background:none;border:none;cursor:pointer;color:${n<=existing?'var(--gold)':'var(--border)'};transition:color 0.12s,transform 0.1s;line-height:1;padding:0 2px;"
+       title="${n} star${n>1?'s':''}">★</button>`
+  ).join('');
+  return `<div style="border-top:1px solid var(--border);padding-top:0.9rem;margin-top:0.75rem">
+    <div style="font-size:0.72rem;color:var(--text-muted);letter-spacing:0.08em;margin-bottom:0.5rem">RATE THIS AD</div>
+    <div id="starRow_${ad.id}" style="display:flex;align-items:center;gap:0;margin-bottom:0.4rem">${stars}</div>
+    <div id="ratingMsg_${ad.id}" style="font-size:0.8rem;min-height:1.1rem;">
+      ${existing
+        ? `<span style="color:var(--gold);font-weight:600">✓ Your rating: ${existing} / 5</span>`
+        : `<span style="color:var(--text-muted)">Tap a star to rate</span>`}
+    </div>
+  </div>`;
+}
+
+function highlightStars(el, n, adId) {
+  const row = document.getElementById('starRow_' + adId);
+  if (!row) return;
+  row.querySelectorAll('button').forEach((btn, i) => {
+    btn.style.color     = i < n ? 'var(--gold)' : 'var(--border)';
+    btn.style.transform = i < n ? 'scale(1.2)'  : 'none';
+  });
+}
+
+function unhighlightStars(adId, existing) {
+  const row = document.getElementById('starRow_' + adId);
+  if (!row) return;
+  row.querySelectorAll('button').forEach((btn, i) => {
+    btn.style.color     = (i + 1) <= existing ? 'var(--gold)' : 'var(--border)';
+    btn.style.transform = 'none';
+  });
+}
+
+async function submitRating(adId, value) {
+  const ad = allAds.find(a => a.id === adId);
+
+  // ── Optimistic update: fill stars gold immediately ──
+  const prevRating = userRatings[adId];
+  userRatings[adId] = value;
+  unhighlightStars(adId, value);
+  const msgEl = document.getElementById('ratingMsg_' + adId);
+  if (msgEl) msgEl.innerHTML = '<span style="color:var(--gold);font-weight:600">⏳ Saving…</span>';
+
+  try {
+    const res = await fetch('/api/ads/' + adId + '/rate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ value, raterId: getRaterId() }),
+    });
+    const data = await res.json();
+
+    if (!res.ok) {
+      // Revert on failure
+      userRatings[adId] = prevRating;
+      unhighlightStars(adId, prevRating || 0);
+      if (msgEl) msgEl.innerHTML = `<span style="color:#f47a8a">❌ ${data.error || 'Could not save rating — please try again.'}</span>`;
+      return;
+    }
+
+    // Confirmed — update aggregates
+    if (ad) { ad.ratingAvg = data.ratingAvg; ad.ratingCount = data.ratingCount; }
+    if (msgEl) msgEl.innerHTML = `<span style="color:var(--gold);font-weight:600">✓ Your rating: ${value} / 5</span>`;
+
+    const statEl = document.getElementById('adRatingStat');
+    if (statEl && ad && ad.ratingCount > 0) {
+      statEl.innerHTML = `<span class="ad-stats-star">${renderStarBar(ad.ratingAvg)}</span> ${ad.ratingAvg.toFixed(1)} · ${ad.ratingCount} ${ad.ratingCount === 1 ? 'person' : 'persons'} rated`;
+    }
+    filterAds();
+  } catch(e) {
+    userRatings[adId] = prevRating;
+    unhighlightStars(adId, prevRating || 0);
+    if (msgEl) msgEl.innerHTML = '<span style="color:#f47a8a">❌ Network error — please try again.</span>';
+  }
+}
+
+function openDetail(id) {
+  const ad = allAds.find(a => a.id === id);
+  if (!ad) return;
+
+  // Optimistic view increment shown immediately
+  ad.views = (ad.views || 0) + 1;
+
+  document.getElementById('detailContent').innerHTML = `
+    ${renderAdImageSection(ad)}
+    <div class="ad-cat">${escapeHtml(ad.cat)} · ${escapeHtml(ad.location)}</div>
+    <h2 style="font-family:Kanit,sans-serif;font-size:1.3rem;font-weight:700;margin:0.4rem 0 0.5rem">${escapeHtml(ad.title)}</h2>
+    <div style="display:flex;align-items:center;gap:0.75rem;font-size:0.78rem;color:var(--text-muted);margin-bottom:1rem;flex-wrap:wrap;">
+      <span>👁 <span id="adViewCount">${ad.views}</span> views</span>
+      <span id="adRatingStat">${ad.ratingCount > 0
+        ? `<span class="ad-stats-star">${renderStarBar(ad.ratingAvg)}</span> ${ad.ratingAvg.toFixed(1)} · ${ad.ratingCount} ${ad.ratingCount === 1 ? 'person' : 'persons'} rated`
+        : 'No ratings yet'
+      }</span>
+    </div>
+    <p style="color:var(--text-muted);font-size:0.9rem;line-height:1.6;margin-bottom:1.2rem;white-space:pre-wrap;">${linkify(ad.desc)}</p>
+    <div style="display:flex;justify-content:space-between;align-items:center;background:var(--surface);padding:1rem;border-radius:12px;margin-bottom:1.2rem">
+      <div>
+        <div style="font-size:0.75rem;color:var(--text-muted)">PRICE</div>
+        <div style="font-family:Kanit,sans-serif;font-size:1.5rem;font-weight:800;color:var(--gold)">${escapeHtml(ad.price)}</div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-size:0.75rem;color:var(--text-muted)">LOCATION</div>
+        <div style="font-weight:600">📍 ${linkify(ad.location)}</div>
+      </div>
+    </div>
+    <div style="background:var(--surface);padding:1rem;border-radius:12px;margin-bottom:1.2rem">
+      <div style="font-size:0.75rem;color:var(--text-muted);margin-bottom:0.4rem">CONTACT</div>
+      <div style="font-weight:600">📞 ${escapeHtml(ad.contact)}</div>
+      ${ad.website ? `<div style="margin-top:0.5rem;font-weight:600">🌐 ${linkify(ad.website)}</div>` : ''}
+    </div>
+    <div id="adRatingSection">${renderRatingSection(ad)}</div>
+    <button class="ad-call" style="width:100%;margin-top:1rem;" onclick="callAd(event || window.event, ${ad.id}); return false;">📞 Call Now</button>
+  `;
+  document.getElementById('detailModal').classList.add('open');
+
+  // Confirm view count with server
+  fetch('/api/ads/' + id + '/view', { method: 'POST' })
+    .then(r => r.json())
+    .then(data => {
+      if (data.views) {
+        ad.views = data.views;
+        const el = document.getElementById('adViewCount');
+        if (el) el.textContent = data.views;
+      }
+    }).catch(() => {});
+
+  // Load this browser's existing rating (works for guests and logged-in users)
+  if (userRatings[id] === undefined) {
+    fetch('/api/ads/' + id + '/rate?raterId=' + encodeURIComponent(getRaterId()))
+      .then(r => r.json())
+      .then(data => {
+        if (data.rating !== null) {
+          userRatings[id] = data.rating;
+          const sec = document.getElementById('adRatingSection');
+          if (sec) sec.innerHTML = renderRatingSection(ad);
+        }
+      }).catch(() => {});
+  }
+}
+function closeDetail() {
+  document.getElementById('detailModal').classList.remove('open');
+}
+
+// Close modals on backdrop click
+document.getElementById('postModal').addEventListener('click', e => { if(e.target===e.currentTarget) closeModal(); });
+document.getElementById('detailModal').addEventListener('click', e => { if(e.target===e.currentTarget) closeDetail(); });
+
+// ── INIT ──
+// Show sample ads immediately, then replace with real data from the API
+filterAds();
+loadAdsFromAPI();
+
+// Allow pressing Enter in the search box
+document.getElementById('searchInput').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') doSearch();
+});
+
+// Enter key search
+document.getElementById('searchInput').addEventListener('keydown', e => { if(e.key==='Enter') doSearch(); });
+
+// ── AUTHENTICATION ──
+let currentUser = null;
+let userRatings = {}; // { [adId]: value } — tracks current user's submitted ratings
+
+// ── THEME TOGGLE ──
+function initTheme() {
+  const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+  const btn = document.getElementById('theme-toggle');
+  if (btn) btn.textContent = isLight ? '☀️' : '🌙';
+}
+function toggleTheme() {
+  const html = document.documentElement;
+  const btn  = document.getElementById('theme-toggle');
+  const isLight = html.getAttribute('data-theme') === 'light';
+  if (isLight) {
+    html.removeAttribute('data-theme');
+    localStorage.setItem('adSabaiTheme', 'dark');
+    if (btn) btn.textContent = '🌙';
+  } else {
+    html.setAttribute('data-theme', 'light');
+    localStorage.setItem('adSabaiTheme', 'light');
+    if (btn) btn.textContent = '☀️';
+  }
+}
+
+// Check if user is logged in on page load
+function initAuth() {
+  const savedUser = localStorage.getItem('adSabaiUser');
+  const token = localStorage.getItem('token');
+  if (savedUser && token) {
+    currentUser = JSON.parse(savedUser);
+    // Backfill the 'user' key that the Next.js app reads for instant loading
+    if (!localStorage.getItem('user')) {
+      fetch('/api/auth/me', { headers: { Authorization: 'Bearer ' + token } })
+        .then(function(r) { return r.ok ? r.json() : null; })
+        .then(function(data) {
+          if (data && data.user) {
+            localStorage.setItem('user', JSON.stringify({
+              id: String(data.user.id),
+              name: data.user.name,
+              email: data.user.email
+            }));
+          }
+        })
+        .catch(function() {});
+    }
+  } else {
+    currentUser = null;
+    localStorage.removeItem('adSabaiUser');
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
+  }
+  updateAuthUI();
+}
+
+// Fetch unread notification count and update the bell badge
+async function fetchUnreadCount() {
+  const token = localStorage.getItem('token');
+  if (!token) return;
+  try {
+    const res = await fetch('/api/notifications', { headers: { Authorization: 'Bearer ' + token } });
+    if (!res.ok) return;
+    const notifs = await res.json();
+    const unread = notifs.filter(function(n) { return !n.read; }).length;
+    const badge = document.getElementById('notif-badge');
+    if (!badge) return;
+    if (unread > 0) {
+      badge.textContent = unread > 99 ? '99+' : String(unread);
+      badge.style.display = 'block';
+    } else {
+      badge.style.display = 'none';
+    }
+  } catch (e) { /* ignore */ }
+}
+
+// Update UI based on authentication state
+function updateAuthUI() {
+  const navAuth = document.getElementById('nav-auth');
+  const navUser = document.getElementById('nav-user');
+  const postBtn = document.getElementById('post-btn');
+  const mobileAuth = document.getElementById('mobile-auth');
+  const mobileUser = document.getElementById('mobile-user');
+
+  if (currentUser) {
+    const initial = currentUser.name.charAt(0).toUpperCase();
+    // Desktop nav
+    navAuth.style.display = 'none';
+    navUser.style.display = 'flex';
+    document.getElementById('user-name').textContent = currentUser.name;
+    document.getElementById('user-avatar').textContent = initial;
+    postBtn.classList.remove('disabled');
+    // Mobile menu
+    mobileAuth.style.display = 'none';
+    mobileUser.style.display = 'block';
+    document.getElementById('mobile-name').textContent = currentUser.name;
+    document.getElementById('mobile-avatar').textContent = initial;
+    // Fetch unread notification count
+    fetchUnreadCount();
+  } else {
+    // Desktop nav
+    navAuth.style.display = 'flex';
+    navUser.style.display = 'none';
+    // Mobile menu
+    mobileAuth.style.display = 'flex';
+    mobileUser.style.display = 'none';
+  }
+}
+
+// Navigate to the Next.js post-ad form for a specific package
+function goPostPkg(pkg) {
+  if (!currentUser) { openAuthModal('login'); return; }
+  window.location.href = '/ads/' + pkg;
+}
+
+// Handle post button click
+function handlePostClick() {
+  if (currentUser) {
+    window.location.href = '/account';
+  } else {
+    openAuthModal('login');
+  }
+}
+
+// Open auth modal
+function openAuthModal(type) {
+  const loginModal = document.getElementById('loginModal');
+  const registerModal = document.getElementById('registerModal');
+
+  if (type === 'login') {
+    loginModal.classList.add('open');
+    registerModal.classList.remove('open');
+  } else {
+    registerModal.classList.add('open');
+    loginModal.classList.remove('open');
+  }
+}
+
+// Close auth modal
+function closeAuthModal() {
+  document.getElementById('loginModal').classList.remove('open');
+  document.getElementById('registerModal').classList.remove('open');
+}
+
+// Switch between login and register
+function switchToRegister() {
+  closeAuthModal();
+  setTimeout(() => openAuthModal('register'), 100);
+}
+
+function switchToLogin() {
+  closeAuthModal();
+  setTimeout(() => openAuthModal('login'), 100);
+}
+
+// Detect whether a string is an email address
+function looksLikeEmail(val) {
+  return val.includes('@');
+}
+
+// Login function
+async function login() {
+  const identifier = document.getElementById('loginIdentifier').value.trim();
+  const password = document.getElementById('loginPassword').value;
+
+  if (!identifier || !password) {
+    showToast('Please fill in all fields', 'error');
+    return;
+  }
+
+  const isEmail = looksLikeEmail(identifier);
+  const payload = isEmail
+    ? { email: identifier, password }
+    : { phone: identifier, password };
+
+  try {
+    const response = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await response.json();
+    if (!response.ok) {
+      showToast(data.error || 'Invalid email or password', 'error');
+      return;
+    }
+
+    currentUser = { name: data.user.name, email: data.user.email };
+    localStorage.setItem('adSabaiUser', JSON.stringify(currentUser));
+    localStorage.setItem('user', JSON.stringify({ id: String(data.user.id), name: data.user.name, email: data.user.email }));
+    localStorage.setItem('token', data.token);
+    updateAuthUI();
+    closeAuthModal();
+    showToast('Welcome back, ' + data.user.name + '!', 'success');
+  } catch (error) {
+    console.error(error);
+    showToast('Unable to login. Please try again later.', 'error');
+  }
+}
+
+// Register function
+async function register() {
+  const name       = document.getElementById('registerName').value.trim();
+  const identifier = document.getElementById('registerIdentifier').value.trim();
+  const password   = document.getElementById('registerPassword').value;
+  const confirmPassword = document.getElementById('registerConfirmPassword').value;
+
+  if (!name || !identifier || !password || !confirmPassword) {
+    showToast('Please fill in all required fields', 'error');
+    return;
+  }
+
+  if (password !== confirmPassword) {
+    showToast('Passwords do not match', 'error');
+    return;
+  }
+
+  if (password.length < 6) {
+    showToast('Password must be at least 6 characters', 'error');
+    return;
+  }
+
+  const isEmail = looksLikeEmail(identifier);
+  const payload = {
+    name,
+    email: isEmail ? identifier : null,
+    phone: isEmail ? null : identifier,
+    password,
+  };
+
+  try {
+    const response = await fetch('/api/auth/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await response.json();
+    if (!response.ok) {
+      showToast(data.error || 'Unable to create account', 'error');
+      return;
+    }
+
+    currentUser = { name: data.user.name, email: data.user.email };
+    localStorage.setItem('adSabaiUser', JSON.stringify(currentUser));
+    localStorage.setItem('user', JSON.stringify({ id: String(data.user.id), name: data.user.name, email: data.user.email }));
+    localStorage.setItem('token', data.token);
+    updateAuthUI();
+    closeAuthModal();
+    showToast('Account created! Welcome, ' + data.user.name + '!', 'success');
+  } catch (error) {
+    console.error(error);
+    showToast('Unable to register. Please try again later.', 'error');
+  }
+}
+
+// Logout function
+function logout() {
+  currentUser = null;
+  localStorage.removeItem('adSabaiUser');
+  localStorage.removeItem('user');
+  localStorage.removeItem('token');
+  updateAuthUI();
+  showToast('You have been logged out', 'info');
+}
+
+// ── LIGHTBOX ─────────────────────────────────────────────────────────
+let _lbImages = [];
+let _lbIndex  = 0;
+let _lbTouchX = null;
+
+function openLightbox(index) {
+  if (!_lbImages.length) return;
+  _lbIndex = index;
+  _updateLightbox();
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function lightboxNav(dir) {
+  _lbIndex = (_lbIndex + dir + _lbImages.length) % _lbImages.length;
+  _updateLightbox();
+}
+
+function _updateLightbox() {
+  const img = document.getElementById('lb-img');
+  img.style.opacity = '0';
+  img.src = _lbImages[_lbIndex];
+  img.onload = function() { img.style.opacity = '1'; };
+  document.getElementById('lb-counter').textContent = (_lbIndex + 1) + ' / ' + _lbImages.length;
+  const showNav = _lbImages.length > 1;
+  document.getElementById('lb-prev').style.display = showNav ? '' : 'none';
+  document.getElementById('lb-next').style.display = showNav ? '' : 'none';
+}
+
+function handleLightboxClick(e) {
+  if (e.target === document.getElementById('lightbox')) closeLightbox();
+}
+
+// Keyboard navigation
+document.addEventListener('keydown', function(e) {
+  if (!document.getElementById('lightbox').classList.contains('open')) return;
+  if (e.key === 'Escape')      closeLightbox();
+  if (e.key === 'ArrowLeft')   lightboxNav(-1);
+  if (e.key === 'ArrowRight')  lightboxNav(1);
+});
+
+// Touch swipe support
+document.getElementById('lightbox').addEventListener('touchstart', function(e) {
+  _lbTouchX = e.touches[0].clientX;
+}, { passive: true });
+document.getElementById('lightbox').addEventListener('touchend', function(e) {
+  if (_lbTouchX === null) return;
+  const dx = e.changedTouches[0].clientX - _lbTouchX;
+  if (Math.abs(dx) > 40) lightboxNav(dx < 0 ? 1 : -1);
+  _lbTouchX = null;
+}, { passive: true });
+
+// Close auth modals on backdrop click
+document.getElementById('loginModal').addEventListener('click', e => { if(e.target===e.currentTarget) closeAuthModal(); });
+document.getElementById('registerModal').addEventListener('click', e => { if(e.target===e.currentTarget) closeAuthModal(); });
+
+// Initialize authentication and theme on page load
+initTheme();
+initAuth();
+
+</script>
+</body>
+</html>

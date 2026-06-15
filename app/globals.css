@@ -1,0 +1,246 @@
+@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700;800&family=Sarabun:wght@300;400;500&display=swap');
+@import "tailwindcss";
+
+:root {
+  --gold: #C9A84C;
+  --gold-light: #F0D078;
+  --gold-dark: #9A7A30;
+  --thai-red: #A8192E;
+  --thai-teal: #006B6B;
+  --deep-navy: #0D1B2A;
+  --navy: #162032;
+  --card-bg: #1A2740;
+  --border: rgba(201,168,76,0.18);
+  --text: #F4EFE0;
+  --text-muted: #9BA8B8;
+  --accent-green: #2ECC8A;
+  --accent-pink: #E85D8A;
+  --surface: #1E2D42;
+  --nav-bg: rgba(13,27,42,0.98);
+}
+
+/* ── LIGHT THEME ── */
+html[data-theme="light"] {
+  --deep-navy: #F9F6EE;
+  --navy:      #EDE8DC;
+  --card-bg:   #FFFFFF;
+  --border:    rgba(0,0,0,0.10);
+  --text:      #1A1207;
+  --text-muted:#6B6258;
+  --surface:   #F2EDE0;
+  --nav-bg:    rgba(249,246,238,0.97);
+}
+
+/* Explicit overrides so Tailwind v4 reprocessing can't swallow the variable cascade */
+html[data-theme="light"] body {
+  background-color: #F9F6EE !important;
+  color: #1A1207 !important;
+}
+
+/* Cards, surface containers */
+html[data-theme="light"] .thai-card,
+html[data-theme="light"] .thai-surface {
+  background: #FFFFFF;
+  border-color: rgba(0,0,0,0.10);
+}
+
+/* Muted text */
+html[data-theme="light"] .thai-gold {
+  color: var(--gold);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Sarabun', sans-serif;
+  background: var(--deep-navy);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+  padding-top: 56px;
+}
+
+/* Thai-themed styling utilities */
+.thai-gradient {
+  background: linear-gradient(135deg, var(--gold-light), var(--gold));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.thai-gold {
+  color: var(--gold);
+}
+
+.thai-surface {
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+
+.thai-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+}
+
+.thai-btn {
+  background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+  color: var(--deep-navy);
+  font-family: 'Kanit', sans-serif;
+  font-weight: 700;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.thai-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(201,168,76,0.3);
+}
+
+.thai-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: var(--text-muted);
+}
+
+.modern-icon {
+  width: 76px;
+  height: 76px;
+  border-radius: 22px;
+  display: grid;
+  place-items: center;
+  margin: 0 auto 1rem;
+  background: linear-gradient(145deg, rgba(240,208,120,0.95), rgba(201,168,76,0.95));
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.18);
+  border: 1px solid rgba(255,255,255,0.14);
+}
+
+.modern-icon svg {
+  width: 40px;
+  height: 40px;
+  filter: drop-shadow(0 12px 14px rgba(0,0,0,0.18));
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Navigation responsive ── */
+.nav-auth-desktop { display: flex; align-items: center; gap: 2rem; }
+.nav-auth-mobile  { display: none;  align-items: center; gap: 0.6rem; }
+
+@media (max-width: 640px) {
+  .nav-auth-desktop { display: none; }
+  .nav-auth-mobile  { display: flex; }
+}
+
+/* ════════════════════════════════════════
+   GLOBAL MOBILE-FIRST IMPROVEMENTS
+   ════════════════════════════════════════ */
+
+/* Smooth scrolling & touch feel */
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Remove blue tap highlight on mobile */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Prevent iOS auto-zoom on input focus — inputs must be ≥ 16px */
+input, textarea, select {
+  font-size: 16px !important;
+}
+
+/* Minimum 44×44 touch targets for interactive elements */
+button, [role="button"] {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Safe-area padding for notched iPhones */
+body {
+  padding-left:  env(safe-area-inset-left,  0px);
+  padding-right: env(safe-area-inset-right, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Focus ring — visible on keyboard, hidden on touch */
+:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+:focus:not(:focus-visible) { outline: none; }
+
+/* ── Responsive page-level helpers ── */
+
+/* Page wrapper used by inner Next.js pages */
+.page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1.25rem 5rem;
+}
+@media (max-width: 640px) {
+  .page-container { padding: 1.25rem 1rem 4rem; }
+}
+
+/* Two-col → one-col on mobile */
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+@media (max-width: 560px) {
+  .grid-2 { grid-template-columns: 1fr; }
+}
+
+/* Responsive ad grid (matches homepage) */
+.ads-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+}
+@media (max-width: 900px) { .ads-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) { .ads-grid { grid-template-columns: 1fr; } }
+
+/* Stack action rows on small screens */
+@media (max-width: 480px) {
+  .mobile-stack {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+  .mobile-stack > * { width: 100%; text-align: center; }
+}
+
+/* Readable body text on mobile */
+@media (max-width: 640px) {
+  body { font-size: 15px; }
+}
+
+/* Sticky bottom CTA bar on mobile — opt-in with class */
+.sticky-bottom-cta {
+  display: none;
+}
+@media (max-width: 640px) {
+  .sticky-bottom-cta {
+    display: flex;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    padding: 0.85rem 1rem;
+    padding-bottom: calc(0.85rem + env(safe-area-inset-bottom, 0px));
+    background: var(--nav-bg);
+    border-top: 1px solid var(--border);
+    backdrop-filter: blur(12px);
+    z-index: 90;
+    gap: 0.75rem;
+  }
+}
+

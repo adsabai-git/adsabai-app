@@ -1,0 +1,109 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ─────────────────────────────────────────────────────────
+// USERS
+// ─────────────────────────────────────────────────────────
+model User {
+  id         Int       @id @default(autoincrement())
+  name       String
+  email      String    @unique
+  password   String
+  phone      String?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  ads        Ad[]
+  payments   Payment[]
+  inquiries  Inquiry[]
+}
+
+// ─────────────────────────────────────────────────────────
+// ADS
+// ─────────────────────────────────────────────────────────
+model Ad {
+  id          Int       @id @default(autoincrement())
+  title       String
+  description String
+  category    String
+  location    String?
+  price       String?
+  packageType String              // basic | standard | premium
+  phone       String?
+  website     String?
+  imageUrls   String    @default("[]")  // JSON array of public URLs
+
+  // Status lifecycle
+  status      String    @default("active")  // active | expired | deleted | draft
+  views       Int       @default(0)
+  expiresAt   DateTime?                     // set on create from package duration
+  publishedAt DateTime  @default(now())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  user        User      @relation(fields: [userId], references: [id])
+  userId      Int
+
+  payment     Payment?
+  inquiries   Inquiry[]
+
+  @@index([userId])
+  @@index([status])
+  @@index([category])
+  @@index([packageType])
+  @@index([expiresAt])
+}
+
+// ─────────────────────────────────────────────────────────
+// PAYMENTS  — one payment record per ad
+// ─────────────────────────────────────────────────────────
+model Payment {
+  id              Int       @id @default(autoincrement())
+  amount          Float
+  currency        String    @default("THB")
+  packageType     String                    // basic | standard | premium
+  status          String    @default("pending")  // pending | completed | failed | refunded
+  method          String?                   // promptpay | bank_transfer | credit_card
+  referenceNumber String?
+  paidAt          DateTime?
+  createdAt       DateTime  @default(now())
+
+  ad              Ad        @relation(fields: [adId], references: [id], onDelete: Cascade)
+  adId            Int       @unique         // one-to-one with Ad
+
+  user            User      @relation(fields: [userId], references: [id])
+  userId          Int
+
+  @@index([userId])
+  @@index([status])
+}
+
+// ─────────────────────────────────────────────────────────
+// INQUIRIES  — contact messages from viewers to ad owner
+// ─────────────────────────────────────────────────────────
+model Inquiry {
+  id          Int      @id @default(autoincrement())
+  message     String
+  senderName  String?
+  senderEmail String?
+  senderPhone String?
+  status      String   @default("new")  // new | read | replied
+  createdAt   DateTime @default(now())
+
+  ad          Ad       @relation(fields: [adId], references: [id], onDelete: Cascade)
+  adId        Int
+
+  user        User?    @relation(fields: [userId], references: [id])
+  userId      Int?                       // null = guest inquiry
+
+  @@index([adId])
+  @@index([userId])
+  @@index([status])
+}
