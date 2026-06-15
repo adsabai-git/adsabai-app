@@ -47,7 +47,8 @@ export async function POST(request: Request) {
     .single();
 
   if (error || !user) {
-    return NextResponse.json({ error: 'Registration failed.' }, { status: 500 });
+    console.error('Register insert error:', error);
+    return NextResponse.json({ error: error?.message || 'Registration failed.' }, { status: 500 });
   }
 
   const token = createToken(user.id);

@@ -28,11 +28,11 @@ export default function Login() {
   const handleSubmit = async (e: { preventDefault(): void }) => {
     e.preventDefault();
     setError('');
-    const success = await login(identifier, password);
-    if (success) {
+    const result = await login(identifier, password);
+    if (result.ok) {
       router.push('/account');
     } else {
-      setError('Invalid email or password. Please try again.');
+      setError(result.error || 'Login failed. Please try again.');
     }
   };
 

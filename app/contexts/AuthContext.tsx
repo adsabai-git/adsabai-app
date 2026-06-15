@@ -15,8 +15,8 @@ interface User {
 
 interface AuthContextType {
   user: User | null;
-  login: (identifier: string, password: string) => Promise<boolean>;
-  register: (identifier: string, password: string, name: string) => Promise<boolean>;
+  login: (identifier: string, password: string) => Promise<{ ok: boolean; error?: string }>;
+  register: (identifier: string, password: string, name: string) => Promise<{ ok: boolean; error?: string }>;
   updateProfile: (name: string, identifier: string, password?: string) => Promise<boolean>;
   logout: () => void;
   isLoading: boolean;
@@ -112,7 +112,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     verify();
   }, []);
 
-  const login = async (identifier: string, password: string): Promise<boolean> => {
+  const login = async (identifier: string, password: string): Promise<{ ok: boolean; error?: string }> => {
     setIsLoading(true);
     try {
       const isEmail = identifier.includes('@');
@@ -123,12 +123,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         body: JSON.stringify(body),
       });
 
+      const data = await response.json();
       if (!response.ok) {
         setIsLoading(false);
-        return false;
+        return { ok: false, error: data.error || 'Login failed.' };
       }
 
-      const data = await response.json();
       const userData: User = {
         id: data.user.id.toString(),
         email: data.user.email ?? null,
@@ -140,14 +140,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       localStorage.setItem('user', JSON.stringify(userData));
       localStorage.setItem('token', data.token);
       setIsLoading(false);
-      return true;
-    } catch (error) {
+      return { ok: true };
+    } catch {
       setIsLoading(false);
-      return false;
+      return { ok: false, error: 'Network error. Please check your connection.' };
     }
   };
 
-  const register = async (identifier: string, password: string, name: string): Promise<boolean> => {
+  const register = async (identifier: string, password: string, name: string): Promise<{ ok: boolean; error?: string }> => {
     setIsLoading(true);
     try {
       const isEmail = identifier.includes('@');
@@ -160,12 +160,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         body: JSON.stringify(body),
       });
 
+      const data = await response.json();
       if (!response.ok) {
         setIsLoading(false);
-        return false;
+        return { ok: false, error: data.error || 'Registration failed.' };
       }
 
-      const data = await response.json();
       const userData: User = {
         id: data.user.id.toString(),
         email: data.user.email ?? null,
@@ -177,10 +177,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       localStorage.setItem('user', JSON.stringify(userData));
       localStorage.setItem('token', data.token);
       setIsLoading(false);
-      return true;
-    } catch (error) {
+      return { ok: true };
+    } catch {
       setIsLoading(false);
-      return false;
+      return { ok: false, error: 'Network error. Please check your connection.' };
     }
   };
 

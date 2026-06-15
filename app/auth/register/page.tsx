@@ -55,11 +55,11 @@ export default function Register() {
       return;
     }
 
-    const success = await register(identifier, password, name);
-    if (success) {
+    const result = await register(identifier, password, name);
+    if (result.ok) {
       router.push('/account');
     } else {
-      setError('Registration failed. Email or mobile number may already be in use.');
+      setError(result.error || 'Registration failed.');
     }
   };
 
