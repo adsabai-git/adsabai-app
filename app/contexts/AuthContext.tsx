@@ -15,8 +15,8 @@ interface User {
 
 interface AuthContextType {
   user: User | null;
-  login: (email: string, password: string) => Promise<boolean>;
-  register: (email: string, password: string, name: string) => Promise<boolean>;
+  login: (identifier: string, password: string) => Promise<boolean>;
+  register: (identifier: string, password: string, name: string) => Promise<boolean>;
   updateProfile: (name: string, identifier: string, password?: string) => Promise<boolean>;
   logout: () => void;
   isLoading: boolean;
@@ -112,15 +112,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     verify();
   }, []);
 
-  const login = async (email: string, password: string): Promise<boolean> => {
+  const login = async (identifier: string, password: string): Promise<boolean> => {
     setIsLoading(true);
     try {
+      const isEmail = identifier.includes('@');
+      const body = isEmail ? { email: identifier, password } : { phone: identifier, password };
       const response = await fetch('/api/auth/login', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
       });
 
       if (!response.ok) {
@@ -147,15 +147,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
-  const register = async (email: string, password: string, name: string): Promise<boolean> => {
+  const register = async (identifier: string, password: string, name: string): Promise<boolean> => {
     setIsLoading(true);
     try {
+      const isEmail = identifier.includes('@');
+      const body = isEmail
+        ? { name, email: identifier, password }
+        : { name, phone: identifier, password };
       const response = await fetch('/api/auth/register', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password, name }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
       });
 
       if (!response.ok) {

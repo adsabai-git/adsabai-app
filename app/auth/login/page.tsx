@@ -19,16 +19,16 @@ const inputStyle: React.CSSProperties = {
 };
 
 export default function Login() {
-  const [email,    setEmail]    = useState('');
-  const [password, setPassword] = useState('');
-  const [error,    setError]    = useState('');
+  const [identifier, setIdentifier] = useState('');
+  const [password,   setPassword]   = useState('');
+  const [error,      setError]      = useState('');
   const { login, isLoading } = useAuth();
   const router = useRouter();
 
   const handleSubmit = async (e: { preventDefault(): void }) => {
     e.preventDefault();
     setError('');
-    const success = await login(email, password);
+    const success = await login(identifier, password);
     if (success) {
       router.push('/account');
     } else {
@@ -98,16 +98,16 @@ export default function Login() {
                 letterSpacing: '0.05em',
                 color: 'var(--text)',
               }}>
-                Email Address
+                Email or Mobile Number
               </label>
               <input
-                id="email"
-                type="email"
+                id="identifier"
+                type="text"
                 autoComplete="email"
                 required
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                placeholder="your@email.com"
+                value={identifier}
+                onChange={e => setIdentifier(e.target.value)}
+                placeholder="your@email.com or +66 812 345 678"
                 style={inputStyle}
                 onFocus={e => { e.currentTarget.style.borderColor = 'var(--gold)'; }}
                 onBlur={e  => { e.currentTarget.style.borderColor = 'var(--border)'; }}

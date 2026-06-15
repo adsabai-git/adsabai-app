@@ -35,7 +35,7 @@ const onBlur = (e: { currentTarget: HTMLInputElement }) => {
 
 export default function Register() {
   const [name,            setName]            = useState('');
-  const [email,           setEmail]           = useState('');
+  const [identifier,      setIdentifier]      = useState('');
   const [password,        setPassword]        = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error,           setError]           = useState('');
@@ -55,11 +55,11 @@ export default function Register() {
       return;
     }
 
-    const success = await register(email, password, name);
+    const success = await register(identifier, password, name);
     if (success) {
       router.push('/account');
     } else {
-      setError('Registration failed. Email may already be in use.');
+      setError('Registration failed. Email or mobile number may already be in use.');
     }
   };
 
@@ -134,19 +134,22 @@ export default function Register() {
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-              <label htmlFor="email" style={labelStyle}>Email Address</label>
+              <label htmlFor="identifier" style={labelStyle}>Email or Mobile Number</label>
               <input
-                id="email"
-                type="email"
+                id="identifier"
+                type="text"
                 autoComplete="email"
                 required
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                placeholder="your@email.com"
+                value={identifier}
+                onChange={e => setIdentifier(e.target.value)}
+                placeholder="your@email.com or +66 812 345 678"
                 style={inputStyle}
                 onFocus={onFocus}
                 onBlur={onBlur}
               />
+              <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                You can register with an email address or mobile number
+              </p>
             </div>
 
             <div style={{ height: '1px', background: 'var(--border)' }} />
