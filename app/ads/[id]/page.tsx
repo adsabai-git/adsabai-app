@@ -23,11 +23,28 @@ function categorySlug(name: string) {
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const { data: ad } = await supabaseAdmin.from('Ad').select('title, description').eq('id', Number(id)).single();
+  const { data: ad } = await supabaseAdmin.from('Ad').select('title, description, imageUrls').eq('id', Number(id)).single();
   if (!ad) return {};
+  const a = ad as any;
+  const pageUrl = `https://adsabai.com/ads/${id}`;
+  const image = Array.isArray(a.imageUrls) && a.imageUrls.length > 0 ? a.imageUrls[0] : 'https://adsabai.com/og-default.png';
   return {
-    title: `${(ad as any).title} – AdSabai`,
-    description: ((ad as any).description as string).slice(0, 160),
+    title: `${a.title} – AdSabai`,
+    description: (a.description as string).slice(0, 160),
+    openGraph: {
+      title: `${a.title} – AdSabai`,
+      description: (a.description as string).slice(0, 160),
+      url: pageUrl,
+      siteName: 'AdSabai',
+      images: [{ url: image, width: 800, height: 600 }],
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${a.title} – AdSabai`,
+      description: (a.description as string).slice(0, 160),
+      images: [image],
+    },
   };
 }
 

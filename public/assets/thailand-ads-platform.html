@@ -2127,7 +2127,7 @@ function submitAd() {
 
 // ── AD DETAIL ──
 function getAdLink(id) {
-  return window.location.href.split('#')[0] + '#ad-' + id;
+  return window.location.origin + '/ads/' + id;
 }
 function copyAdLink(e, id) {
   e.stopPropagation();
@@ -2146,9 +2146,11 @@ function shareAd(e, id, platform) {
   e.stopPropagation();
   const link = getAdLink(id);
   const encodedLink = encodeURIComponent(link);
+  const ad = allAds.find(a => a.id === id);
+  const title = ad ? encodeURIComponent(ad.title + ' – AdSabai') : 'AdSabai';
   let url = '';
   if (platform === 'whatsapp') {
-    url = `https://wa.me/?text=${encodedLink}`;
+    url = `https://wa.me/?text=${title}%0A${encodedLink}`;
   } else if (platform === 'line') {
     url = `https://social-plugins.line.me/lineit/share?url=${encodedLink}`;
   } else if (platform === 'facebook') {
