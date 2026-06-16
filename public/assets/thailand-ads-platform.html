@@ -1894,7 +1894,9 @@ function pkgOrder(ad) {
 }
 function timeAgo(dateStr) {
   if (!dateStr) return '';
-  const diff = Date.now() - new Date(dateStr).getTime();
+  // Force UTC: Supabase returns timestamps without 'Z'; browsers parse those as local time
+  const utc = dateStr.endsWith('Z') || dateStr.includes('+') ? dateStr : dateStr + 'Z';
+  const diff = Date.now() - new Date(utc).getTime();
   const mins = Math.floor(diff / 60000);
   if (mins < 1)  return 'Just now';
   if (mins < 60) return mins + 'm ago';

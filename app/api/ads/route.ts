@@ -20,11 +20,14 @@ export async function GET(request: Request) {
 
   const parsed = (ads as any[]).map((ad) => {
     const { User: user, ...rest } = ad;
+    // Ensure timestamps have Z suffix so browsers parse them as UTC, not local time
+    const createdAt = rest.createdAt && !rest.createdAt.endsWith('Z') ? rest.createdAt + 'Z' : rest.createdAt;
     return {
       ...rest,
+      createdAt,
       user,
       imageUrls: typeof rest.imageUrls === 'string' ? JSON.parse(rest.imageUrls || '[]') : rest.imageUrls || [],
-      expiresAt: getExpiresAt(rest.createdAt, rest.packageType).toISOString(),
+      expiresAt: getExpiresAt(createdAt, rest.packageType).toISOString(),
     };
   });
 
