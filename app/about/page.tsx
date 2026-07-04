@@ -34,14 +34,7 @@ export default function AboutPage() {
         padding: '3.5rem 1.5rem 3rem',
         textAlign: 'center',
       }}>
-        <div style={{
-          fontFamily: "'Kanit', sans-serif", fontWeight: 800, fontSize: '1.5rem',
-          background: 'linear-gradient(135deg, var(--gold-light), var(--gold))',
-          WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
-          marginBottom: '0.5rem',
-        }}>
-          Ad<span style={{ color: 'var(--thai-red)', WebkitTextFillColor: 'var(--thai-red)' }}>Sabai</span>
-        </div>
+        <img src="/AdSabai_Logo_Vector.svg" alt="AdSabai" height="36" style={{ display: 'block', margin: '0 auto 0.5rem' }} />
         <h1 style={{
           fontFamily: "'Kanit', sans-serif", fontWeight: 800,
           fontSize: 'clamp(2rem, 5vw, 3rem)', marginBottom: '1rem',

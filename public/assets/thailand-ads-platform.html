@@ -67,6 +67,15 @@
   html[data-theme="light"] #lightbox {
     background: rgba(249,246,238,0.97);
   }
+  html[data-theme="light"] #lb-close {
+    background: rgba(0,0,0,0.12);
+    border-color: rgba(0,0,0,0.2);
+    color: #1a1e2e;
+  }
+  html[data-theme="light"] #lb-close:hover {
+    background: rgba(168,25,46,0.15);
+    color: #e84b6a;
+  }
 
   /* ── THEME TOGGLE BUTTON ── */
   #theme-toggle {
@@ -82,6 +91,28 @@
     flex-shrink: 0;
   }
   #theme-toggle:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+    background: rgba(201,168,76,0.08);
+  }
+  /* ── LANG TOGGLE BUTTON ── */
+  #lang-toggle {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 0.7rem;
+    font-family: 'Kanit', sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    height: 34px;
+    padding: 0 0.55rem;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: border-color .2s, color .2s, background .2s;
+    flex-shrink: 0;
+  }
+  #lang-toggle:hover {
     border-color: var(--gold);
     color: var(--gold);
     background: rgba(201,168,76,0.08);
@@ -116,16 +147,11 @@
     gap: 1.5rem;
   }
   .nav-logo {
-    font-family: 'Kanit', sans-serif;
-    font-weight: 800; font-size: 1.25rem;
-    background: linear-gradient(135deg, var(--gold-light), var(--gold));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    letter-spacing: -0.5px;
     cursor: pointer;
     flex-shrink: 0;
-    white-space: nowrap;
+    display: flex;
+    align-items: center;
   }
-  .nav-logo span { color: var(--thai-red); -webkit-text-fill-color: var(--thai-red); }
   .nav-links {
     display: flex; gap: 1.5rem; align-items: center;
     margin-left: auto;
@@ -630,10 +656,14 @@
     position: relative;
   }
   .modal-close {
-    position: absolute; top: 1rem; right: 1.2rem;
-    background: none; border: none; color: var(--text-muted);
-    font-size: 1.5rem; cursor: pointer;
+    position: absolute; top: 0.75rem; right: 0.75rem;
+    background: rgba(0,0,0,0.15); border: 1px solid rgba(0,0,0,0.12);
+    color: var(--text); font-size: 1.1rem; cursor: pointer;
+    width: 36px; height: 36px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s; z-index: 10;
   }
+  .modal-close:hover { background: rgba(168,25,46,0.15); color: #e84b6a; border-color: rgba(168,25,46,0.3); }
   /* ── Ad detail modal — always light/white ── */
   .modal-detail {
     background: #ffffff !important;
@@ -645,7 +675,8 @@
     --navy:       #ffffff;
     color: #1a1e2e;
   }
-  .modal-detail .modal-close { color: #6b7280; }
+  .modal-detail { padding-top: 3.5rem !important; }
+  .modal-detail .modal-close { background: rgba(0,0,0,0.07); border-color: rgba(0,0,0,0.12); color: #1a1e2e; }
   .modal-detail .ad-cat      { color: var(--gold); }
   .modal-detail .ad-call     { color: var(--deep-navy); }
   .modal h2 { font-family: 'Kanit', sans-serif; font-size: 1.4rem; font-weight: 700; margin-bottom: 0.3rem; }
@@ -818,9 +849,9 @@
   .footer-col h4 { font-family: 'Kanit', sans-serif; font-weight: 700; margin-bottom: 0.8rem; color: var(--gold); font-size: 0.9rem; }
   .footer-col a { display: block; color: var(--text-muted); text-decoration: none; font-size: 0.83rem; margin-bottom: 0.4rem; transition: color .2s; }
   .footer-col a:hover { color: var(--text); }
-  .footer-bottom { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; border-top: 1px solid var(--border); padding-top: 1.5rem; }
+  .footer-bottom { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; padding-top: 1rem; }
   .footer-bottom p { font-size: 0.78rem; color: var(--text-muted); }
-  .footer-logo { font-family: 'Kanit', sans-serif; font-weight: 800; font-size: 1.2rem; background: linear-gradient(135deg, var(--gold-light), var(--gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .footer-logo { display: block; }
 
   /* ── AD STATS (views & star rating on cards) ── */
   .ad-stats { display:flex; align-items:center; gap:0.65rem; padding-top:0.45rem; border-top:1px solid var(--border); margin-top:0.5rem; font-size:0.74rem; color:var(--text-muted); flex-wrap:wrap; }
@@ -1117,13 +1148,13 @@
 
 <!-- NAV -->
 <nav>
-  <div class="nav-logo" onclick="showPage('home')">Ad<span>Sabai</span></div>
+  <div class="nav-logo" onclick="showPage('home')"><img src="/AdSabai_Logo_Vector.svg" alt="AdSabai" style="height:28px;display:block;"></div>
   <div class="nav-links">
-    <a href="#how">How it works</a>
-    <a href="#pricing">Pricing</a>
+    <a href="#how" data-i18n="how_it_works">How it works</a>
+    <a href="#pricing" data-i18n="pricing">Pricing</a>
     <div id="nav-auth">
-      <a href="#" onclick="openAuthModal('login')">Login</a>
-      <a href="#" onclick="openAuthModal('register')">Register</a>
+      <a href="#" onclick="openAuthModal('login')" data-i18n="login">Login</a>
+      <a href="#" onclick="openAuthModal('register')" data-i18n="register">Register</a>
     </div>
     <div id="nav-user" style="display: none;">
       <div class="user-info">
@@ -1135,12 +1166,13 @@
           <div class="user-avatar" id="user-avatar">U</div>
           <span id="user-name">User</span>
         </a>
-        <button class="logout-btn" onclick="logout()">Logout</button>
+        <button class="logout-btn" onclick="logout()" data-i18n="logout">Logout</button>
       </div>
     </div>
   </div>
   <div class="nav-cta">
-    <button class="btn-post" id="post-btn" onclick="handlePostClick()">+ Post Ad</button>
+    <button class="btn-post" id="post-btn" onclick="handlePostClick()" data-i18n="post_ad">+ Post Ad</button>
+    <button id="lang-toggle" onclick="toggleLang()" title="Switch language">EN</button>
     <button id="theme-toggle" onclick="toggleTheme()" title="Toggle light / dark mode">🌙</button>
   </div>
   <button class="hamburger" onclick="openMobileMenu()">☰</button>
@@ -1152,8 +1184,8 @@
 
     <!-- Mobile auth: shown when logged out -->
     <div id="mobile-auth" class="menu-section" style="display:flex; gap:0.75rem; padding-bottom:1rem;">
-      <button onclick="closeMobileMenu(); openAuthModal('login')" style="flex:1; padding:0.65rem; background:var(--surface); border:1px solid var(--border); border-radius:10px; color:var(--text); font-family:'Kanit',sans-serif; font-weight:600; font-size:0.9rem; cursor:pointer;">Login</button>
-      <button onclick="closeMobileMenu(); openAuthModal('register')" style="flex:1; padding:0.65rem; background:linear-gradient(135deg,var(--gold),var(--gold-dark)); border:none; border-radius:10px; color:var(--deep-navy); font-family:'Kanit',sans-serif; font-weight:700; font-size:0.9rem; cursor:pointer;">Register</button>
+      <button onclick="closeMobileMenu(); openAuthModal('login')" style="flex:1; padding:0.65rem; background:var(--surface); border:1px solid var(--border); border-radius:10px; color:var(--text); font-family:'Kanit',sans-serif; font-weight:600; font-size:0.9rem; cursor:pointer;" data-i18n="login">Login</button>
+      <button onclick="closeMobileMenu(); openAuthModal('register')" style="flex:1; padding:0.65rem; background:linear-gradient(135deg,var(--gold),var(--gold-dark)); border:none; border-radius:10px; color:var(--deep-navy); font-family:'Kanit',sans-serif; font-weight:700; font-size:0.9rem; cursor:pointer;" data-i18n="register">Register</button>
     </div>
 
     <!-- Mobile user: shown when logged in -->
@@ -1162,30 +1194,30 @@
         <div id="mobile-avatar" style="width:38px; height:38px; background:var(--gold); border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'Kanit',sans-serif; font-weight:700; color:var(--deep-navy); font-size:1rem; flex-shrink:0;">U</div>
         <div>
           <div id="mobile-name" style="font-family:'Kanit',sans-serif; font-weight:700; font-size:0.95rem; color:var(--text);">User</div>
-          <div style="font-size:0.75rem; color:var(--text-muted);">Logged in</div>
+          <div style="font-size:0.75rem; color:var(--text-muted);" data-i18n="logged_in">Logged in</div>
         </div>
       </div>
       <div style="display:flex; gap:0.6rem;">
-        <a href="/account" onclick="closeMobileMenu()" style="flex:1; padding:0.6rem; background:rgba(201,168,76,0.12); border:1px solid rgba(201,168,76,0.3); border-radius:10px; color:var(--gold); font-family:'Kanit',sans-serif; font-weight:600; font-size:0.85rem; text-align:center; text-decoration:none;">My Account</a>
-        <button onclick="closeMobileMenu(); logout()" style="flex:1; padding:0.6rem; background:var(--surface); border:1px solid var(--border); border-radius:10px; color:var(--text-muted); font-family:'Kanit',sans-serif; font-weight:600; font-size:0.85rem; cursor:pointer;">Logout</button>
+        <a href="/account" onclick="closeMobileMenu()" style="flex:1; padding:0.6rem; background:rgba(201,168,76,0.12); border:1px solid rgba(201,168,76,0.3); border-radius:10px; color:var(--gold); font-family:'Kanit',sans-serif; font-weight:600; font-size:0.85rem; text-align:center; text-decoration:none;" data-i18n="my_account">My Account</a>
+        <button onclick="closeMobileMenu(); logout()" style="flex:1; padding:0.6rem; background:var(--surface); border:1px solid var(--border); border-radius:10px; color:var(--text-muted); font-family:'Kanit',sans-serif; font-weight:600; font-size:0.85rem; cursor:pointer;" data-i18n="logout">Logout</button>
       </div>
     </div>
 
     <div class="menu-section">
-      <a href="#how" onclick="closeMobileMenu()">How it works</a>
-      <a href="#pricing" onclick="closeMobileMenu()">Pricing</a>
+      <a href="#how" onclick="closeMobileMenu()" data-i18n="how_it_works">How it works</a>
+      <a href="#pricing" onclick="closeMobileMenu()" data-i18n="pricing">Pricing</a>
     </div>
 
     <div class="menu-section">
-      <h3>Categories</h3>
-      <a class="category-item" href="/category/car-rental" style="text-decoration:none">🚗 Car Rental</a>
-      <a class="category-item" href="/category/tour-planning" style="text-decoration:none">🗺️ Tour Planning</a>
-      <a class="category-item" href="/category/accommodation" style="text-decoration:none">🏨 Accommodation</a>
-      <a class="category-item" href="/category/massage-spa" style="text-decoration:none">💆 Massage & Spa</a>
-      <a class="category-item" href="/category/jobs" style="text-decoration:none">💼 Jobs</a>
-      <a class="category-item" href="/category/personal-ads" style="text-decoration:none">💌 Personal Ads</a>
-      <a class="category-item" href="/category/leisure" style="text-decoration:none">🌴 Leisure</a>
-      <a class="category-item" href="/assets/thailand-ads-platform.html" style="text-decoration:none">⚡ Other Services</a>
+      <h3 data-i18n="categories">Categories</h3>
+      <a class="category-item" href="/category/car-rental" style="text-decoration:none" data-i18n="mobile_cat_car_rental">🚗 Car Rental</a>
+      <a class="category-item" href="/category/tour-planning" style="text-decoration:none" data-i18n="mobile_cat_tour_planning">🗺️ Tour Planning</a>
+      <a class="category-item" href="/category/accommodation" style="text-decoration:none" data-i18n="mobile_cat_accommodation">🏨 Accommodation</a>
+      <a class="category-item" href="/category/massage-spa" style="text-decoration:none" data-i18n="mobile_cat_massage_spa">💆 Massage & Spa</a>
+      <a class="category-item" href="/category/jobs" style="text-decoration:none" data-i18n="mobile_cat_jobs">💼 Jobs</a>
+      <a class="category-item" href="/category/personal-ads" style="text-decoration:none" data-i18n="mobile_cat_personal_ads">💌 Personal Ads</a>
+      <a class="category-item" href="/category/leisure" style="text-decoration:none" data-i18n="mobile_cat_leisure">🌴 Leisure</a>
+      <a class="category-item" href="/category/other-services" style="text-decoration:none" data-i18n="mobile_cat_other">⚡ Other Services</a>
     </div>
   </div>
 </div>
@@ -1196,12 +1228,12 @@
   <!-- HERO -->
   <section class="hero">
     <div class="hero-bg"></div>
-    <div class="hero-badge">Thailand's #1 Service Classifieds</div>
-    <h1>Find & Post Services<br>Across <em>Thailand</em></h1>
-    <p>From Phuket tours to Bangkok massage services, the ultimate marketplace for tourism, leisure and work in Thailand.</p>
+    <div class="hero-badge" data-i18n="hero_badge">Thailand's #1 Service Classifieds</div>
+    <h1 data-i18n="hero_title">Find & Post Services<br>Across <em>Thailand</em></h1>
+    <p data-i18n="hero_desc">From Phuket tours to Bangkok massage services, the ultimate marketplace for tourism, leisure and work in Thailand.</p>
     <div class="search-bar">
       <select id="searchCat">
-        <option value="">All Categories</option>
+        <option value="" data-i18n="all_categories">All Categories</option>
         <option>🚗 Car Rental</option>
         <option>🗺️ Tour Planning</option>
         <option>🏨 Accommodation</option>
@@ -1209,62 +1241,63 @@
         <option>💼 Jobs</option>
         <option>💌 Personal Ads</option>
         <option>🌴 Leisure</option>
+        <option>⚡ Other Services</option>
       </select>
-      <input type="text" placeholder="Search services, locations..." id="searchInput">
-      <button onclick="doSearch()">Search</button>
+      <input type="text" placeholder="Search services, locations..." id="searchInput" data-i18n-ph="search_placeholder">
+      <button onclick="doSearch()" data-i18n="search_btn">Search</button>
     </div>
     <div class="hero-stats">
-      <div class="stat"><strong>2,480+</strong><span>Active Ads</span></div>
-      <div class="stat"><strong>48</strong><span>Provinces</span></div>
-      <div class="stat"><strong>12K+</strong><span>Monthly Visitors</span></div>
+      <div class="stat"><strong>2,480+</strong><span data-i18n="stat_ads">Active Ads</span></div>
+      <div class="stat"><strong>48</strong><span data-i18n="stat_provinces">Provinces</span></div>
+      <div class="stat"><strong>12K+</strong><span data-i18n="stat_visitors">Monthly Visitors</span></div>
     </div>
   </section>
 
   <!-- CATEGORIES -->
   <div class="section">
     <div class="section-header">
-      <h2 class="section-title">Browse by <span>Category</span></h2>
+      <h2 class="section-title" data-i18n="browse_by_cat">Browse by <span>Category</span></h2>
     </div>
     <div class="categories-grid" id="catGrid">
       <a class="cat-card" style="--cat-color:#C9A84C;text-decoration:none;cursor:pointer" href="/category/car-rental">
         <span class="cat-icon">🚗</span>
-        <div class="cat-name">Car Rental</div>
-        <div class="cat-count" id="catCount-car-rental">Browse →</div>
+        <div class="cat-name" data-i18n="cat_car_rental">Car Rental</div>
+        <div class="cat-count" id="catCount-car-rental" data-i18n="browse_arrow">Browse →</div>
       </a>
       <a class="cat-card" style="--cat-color:#2ECC8A;text-decoration:none;cursor:pointer" href="/category/tour-planning">
         <span class="cat-icon">🗺️</span>
-        <div class="cat-name">Tour Planning</div>
-        <div class="cat-count" id="catCount-tour-planning">Browse →</div>
+        <div class="cat-name" data-i18n="cat_tour_planning">Tour Planning</div>
+        <div class="cat-count" id="catCount-tour-planning" data-i18n="browse_arrow">Browse →</div>
       </a>
       <a class="cat-card" style="--cat-color:#5B9BD5;text-decoration:none;cursor:pointer" href="/category/accommodation">
         <span class="cat-icon">🏨</span>
-        <div class="cat-name">Accommodation</div>
-        <div class="cat-count" id="catCount-accommodation">Browse →</div>
+        <div class="cat-name" data-i18n="cat_accommodation">Accommodation</div>
+        <div class="cat-count" id="catCount-accommodation" data-i18n="browse_arrow">Browse →</div>
       </a>
       <a class="cat-card" style="--cat-color:#E85D8A;text-decoration:none;cursor:pointer" href="/category/massage-spa">
         <span class="cat-icon">💆</span>
-        <div class="cat-name">Massage & Spa</div>
-        <div class="cat-count" id="catCount-massage-spa">Browse →</div>
+        <div class="cat-name" data-i18n="cat_massage_spa">Massage & Spa</div>
+        <div class="cat-count" id="catCount-massage-spa" data-i18n="browse_arrow">Browse →</div>
       </a>
       <a class="cat-card" style="--cat-color:#F0A500;text-decoration:none;cursor:pointer" href="/category/jobs">
         <span class="cat-icon">💼</span>
-        <div class="cat-name">Jobs</div>
-        <div class="cat-count" id="catCount-jobs">Browse →</div>
+        <div class="cat-name" data-i18n="cat_jobs">Jobs</div>
+        <div class="cat-count" id="catCount-jobs" data-i18n="browse_arrow">Browse →</div>
       </a>
       <a class="cat-card" style="--cat-color:#A84C9A;text-decoration:none;cursor:pointer" href="/category/personal-ads">
         <span class="cat-icon">💌</span>
-        <div class="cat-name">Personal Ads</div>
-        <div class="cat-count" id="catCount-personal-ads">Browse →</div>
+        <div class="cat-name" data-i18n="cat_personal_ads">Personal Ads</div>
+        <div class="cat-count" id="catCount-personal-ads" data-i18n="browse_arrow">Browse →</div>
       </a>
       <a class="cat-card" style="--cat-color:#4CAF8A;text-decoration:none;cursor:pointer" href="/category/leisure">
         <span class="cat-icon">🌴</span>
-        <div class="cat-name">Leisure</div>
-        <div class="cat-count" id="catCount-leisure">Browse →</div>
+        <div class="cat-name" data-i18n="cat_leisure">Leisure</div>
+        <div class="cat-count" id="catCount-leisure" data-i18n="browse_arrow">Browse →</div>
       </a>
-      <a class="cat-card" style="--cat-color:#E05C4B;text-decoration:none;cursor:pointer" href="/assets/thailand-ads-platform.html">
+      <a class="cat-card" style="--cat-color:#E05C4B;text-decoration:none;cursor:pointer" href="/category/other-services">
         <span class="cat-icon">⚡</span>
-        <div class="cat-name">Other Services</div>
-        <div class="cat-count">Browse →</div>
+        <div class="cat-name" data-i18n="cat_other">Other Services</div>
+        <div class="cat-count" id="catCount-other-services" data-i18n="browse_arrow">Browse →</div>
       </a>
     </div>
   </div>
@@ -1272,11 +1305,10 @@
   <!-- ALL ADS -->
   <div class="section" id="adsSection">
     <div class="section-header">
-      <h2 class="section-title" id="adsTitle">All <span>Listings</span></h2>
-      <a href="/category/car-rental" class="see-all">Browse by Category →</a>
+      <h2 class="section-title" id="adsTitle" data-i18n="all_listings">All <span>Listings</span></h2>
     </div>
     <div class="filter-bar" id="filterBar">
-      <div class="filter-chip active" onclick="setFilter(this,'all')">All</div>
+      <div class="filter-chip active" onclick="setFilter(this,'all')" data-i18n="filter_all">All</div>
       <div class="filter-chip" onclick="setFilter(this,'Phuket')">Phuket</div>
       <div class="filter-chip" onclick="setFilter(this,'Bangkok')">Bangkok</div>
       <div class="filter-chip" onclick="setFilter(this,'Chiang Mai')">Chiang Mai</div>
@@ -1284,7 +1316,7 @@
       <div class="filter-chip" onclick="setFilter(this,'Samui')">Koh Samui</div>
       <div class="filter-chip" onclick="setFilter(this,'Krabi')">Krabi</div>
       <select id="provinceFilter" class="province-select" onchange="setFilterFromDropdown(this)">
-        <option value="">More provinces ▾</option>
+        <option value="" data-i18n="more_provinces">More provinces</option>
         <option>Amnat Charoen</option><option>Ang Thong</option>
         <option>Bueng Kan</option><option>Buri Ram</option>
         <option>Chachoengsao</option><option>Chai Nat</option>
@@ -1331,28 +1363,28 @@
   <div class="how-section" id="how">
     <div class="how-inner">
       <div class="section-header">
-        <h2 class="section-title">How it <span>Works</span></h2>
+        <h2 class="section-title" data-i18n="how_title">How it <span>Works</span></h2>
       </div>
       <div class="how-steps">
         <div class="how-step">
           <div class="step-num">1</div>
-          <div class="step-title">Choose a Package</div>
-          <div class="step-desc">Select from Basic, Standard or Premium depending on visibility you want for your ad.</div>
+          <div class="step-title" data-i18n="step1_title">Choose a Package</div>
+          <div class="step-desc" data-i18n="step1_desc">Select from Basic, Standard or Premium depending on visibility you want for your ad.</div>
         </div>
         <div class="how-step">
           <div class="step-num">2</div>
-          <div class="step-title">Write Your Ad</div>
-          <div class="step-desc">Fill in the details: title, description, contact info, photos and category.</div>
+          <div class="step-title" data-i18n="step2_title">Write Your Ad</div>
+          <div class="step-desc" data-i18n="step2_desc">Fill in the details: title, description, contact info, photos and category.</div>
         </div>
         <div class="how-step">
           <div class="step-num">3</div>
-          <div class="step-title">Pay & Publish</div>
-          <div class="step-desc">Quick payment via bank transfer, PromptPay or card. Ad goes live within minutes.</div>
+          <div class="step-title" data-i18n="step3_title">Pay & Publish</div>
+          <div class="step-desc" data-i18n="step3_desc">Quick payment via bank transfer, PromptPay or card. Ad goes live within minutes.</div>
         </div>
         <div class="how-step">
           <div class="step-num">4</div>
-          <div class="step-title">Get Customers</div>
-          <div class="step-desc">Tourists and locals find you. Manage inquiries directly by phone, LINE or WhatsApp.</div>
+          <div class="step-title" data-i18n="step4_title">Get Customers</div>
+          <div class="step-desc" data-i18n="step4_desc">Tourists and locals find you. Manage inquiries directly by phone, LINE or WhatsApp.</div>
         </div>
       </div>
     </div>
@@ -1361,47 +1393,47 @@
   <!-- PRICING -->
   <div class="section" id="pricing">
     <div class="section-header">
-      <h2 class="section-title">Simple <span>Pricing</span></h2>
+      <h2 class="section-title" data-i18n="pricing_title">Simple <span>Pricing</span></h2>
     </div>
-    <p style="color:var(--text-muted);font-size:0.9rem;margin-bottom:0.5rem">All prices in Thai Baht. No hidden fees.</p>
+    <p style="color:var(--text-muted);font-size:0.9rem;margin-bottom:0.5rem" data-i18n="pricing_sub">All prices in Thai Baht. No hidden fees.</p>
     <div class="pricing-grid">
       <div class="price-card">
         <div class="price-label" style="background:linear-gradient(135deg,#2ECC8A,#1aaa6e);color:#0f1623;">BETA FREE</div>
         <div class="price-name">Basic</div>
         <div class="price-amount"><s style="opacity:0.4;font-size:0.7em;">฿79</s> <span style="color:#2ECC8A;font-size:1em;">FREE</span> <small>/ ad</small></div>
         <ul class="price-features">
-          <li>Listed for 14 days</li>
-          <li>1 photo</li>
-          <li>Standard placement</li>
-          <li>Phone / LINE contact</li>
+          <li data-i18n="feat_14days">Listed for 14 days</li>
+          <li data-i18n="feat_1photo">1 photo</li>
+          <li data-i18n="feat_standard_placement">Standard placement</li>
+          <li data-i18n="feat_phone_line">Phone / LINE contact</li>
         </ul>
-        <button class="btn-select" onclick="goPostPkg('basic')">Post Basic Ad</button>
+        <button class="btn-select" onclick="goPostPkg('basic')" data-i18n="btn_post_basic">Post Basic Ad</button>
       </div>
       <div class="price-card featured">
         <div class="price-label">POPULAR</div>
         <div class="price-name">Standard</div>
         <div class="price-amount">฿149 <small>/ ad</small></div>
         <ul class="price-features">
-          <li>Listed for 21 days</li>
-          <li>Up to 3 photos</li>
-          <li>Higher in search results</li>
-          <li>Phone / LINE / WhatsApp</li>
-          <li>Location targeting</li>
+          <li data-i18n="feat_21days">Listed for 21 days</li>
+          <li data-i18n="feat_3photos">Up to 3 photos</li>
+          <li data-i18n="feat_higher_search">Higher in search results</li>
+          <li data-i18n="feat_phone_line_wa">Phone / LINE / WhatsApp</li>
+          <li data-i18n="feat_location">Location targeting</li>
         </ul>
-        <button class="btn-select" onclick="goPostPkg('standard')">Post Standard Ad</button>
+        <button class="btn-select" onclick="goPostPkg('standard')" data-i18n="btn_post_standard">Post Standard Ad</button>
       </div>
       <div class="price-card">
         <div class="price-name">Premium</div>
         <div class="price-amount">฿200 <small>/ ad</small></div>
         <ul class="price-features">
-          <li>Listed for 30 days</li>
-          <li>Up to 5 photos</li>
-          <li>Featured / top placement</li>
-          <li>Gold "Featured" badge</li>
-          <li>Priority support</li>
-          <li>Full contact & website</li>
+          <li data-i18n="feat_30days">Listed for 30 days</li>
+          <li data-i18n="feat_5photos">Up to 5 photos</li>
+          <li data-i18n="feat_featured_top">Featured / top placement</li>
+          <li data-i18n="feat_badge">Gold "Featured" badge</li>
+          <li data-i18n="feat_priority">Priority support</li>
+          <li data-i18n="feat_full_contact">Full contact & website</li>
         </ul>
-        <button class="btn-select" onclick="goPostPkg('premium')">Post Premium Ad</button>
+        <button class="btn-select" onclick="goPostPkg('premium')" data-i18n="btn_post_premium">Post Premium Ad</button>
       </div>
     </div>
   </div>
@@ -1415,13 +1447,13 @@
 
     <!-- Form -->
     <div id="adForm">
-      <h2>Post Your Ad</h2>
-      <p class="modal-sub">Reach thousands of tourists & locals across Thailand</p>
+      <h2 data-i18n="post_ad_title">Post Your Ad</h2>
+      <p class="modal-sub" data-i18n="post_ad_sub">Reach thousands of tourists & locals across Thailand</p>
 
       <div class="form-group">
-        <label>Category *</label>
+        <label data-i18n="label_category">Category *</label>
         <select id="fCat" onchange="updatePkgPrice()">
-          <option value="">Select a category...</option>
+          <option value="" data-i18n="select_cat_opt">Select a category...</option>
           <option>🚗 Car Rental</option>
           <option>🗺️ Tour Planning</option>
           <option>🏨 Accommodation / Condo</option>
@@ -1434,13 +1466,13 @@
       </div>
 
       <div class="form-group">
-        <label>Ad Title *</label>
+        <label data-i18n="label_ad_title">Ad Title *</label>
         <input type="text" id="fTitle" placeholder="e.g. Toyota Fortuner rental – Phuket area">
       </div>
 
       <div class="form-row">
         <div class="form-group">
-          <label>Province / Location *</label>
+          <label data-i18n="label_location">Province / Location *</label>
           <select id="fLoc">
             <option>Bangkok</option>
             <option>Phuket</option>
@@ -1455,29 +1487,29 @@
           </select>
         </div>
         <div class="form-group">
-          <label>Price / Rate (฿)</label>
+          <label data-i18n="label_price">Price / Rate (฿)</label>
           <input type="text" id="fPrice" placeholder="e.g. 1500/day or Free">
         </div>
       </div>
 
       <div class="form-group">
-        <label>Description *</label>
+        <label data-i18n="label_description">Description *</label>
         <textarea id="fDesc" placeholder="Describe your service, availability, what's included..."></textarea>
       </div>
 
       <div class="form-row">
         <div class="form-group">
-          <label>Contact Name</label>
+          <label data-i18n="label_contact_name">Contact Name</label>
           <input type="text" id="fName" placeholder="Your name or business">
         </div>
         <div class="form-group">
-          <label>Phone / LINE ID</label>
+          <label data-i18n="label_phone_line_id">Phone / LINE ID</label>
           <input type="text" id="fPhone" placeholder="+66 or LINE ID">
         </div>
       </div>
 
       <div class="form-group">
-        <label>Upload Images (max 3)</label>
+        <label data-i18n="label_images">Upload Images (max 3)</label>
         <input type="file" id="fImages" accept="image/*" multiple onchange="handleImageUpload(event)">
         <div id="imagePreview" class="image-preview-grid">
           <div class="image-upload-hint">Select up to 3 photos and choose one cover image.</div>
@@ -1485,7 +1517,7 @@
       </div>
 
       <div class="form-group">
-        <label>Select Package *</label>
+        <label data-i18n="label_package">Select Package *</label>
         <div class="pkg-selector">
           <div class="pkg-opt" id="pkg-basic" onclick="selectPkg('basic')">
             <strong style="color:#2ECC8A">FREE</strong><span>Basic<br>14 days <span style="font-size:0.65em;background:#2ECC8A;color:#0f1623;border-radius:3px;padding:1px 4px;vertical-align:middle;">BETA</span></span>
@@ -1501,20 +1533,20 @@
 
       <div class="payment-row" id="paymentRow">
         <span>💳</span>
-        <span>Payment via <strong>PromptPay</strong>, Bank Transfer, or Credit Card</span>
+        <span data-i18n="payment_text">Payment via <strong>PromptPay</strong>, Bank Transfer, or Credit Card</span>
         <strong id="payTotal">฿149</strong>
       </div>
 
-      <button class="btn-submit" onclick="submitAd()" id="submitAdBtn">Pay & Publish Ad →</button>
+      <button class="btn-submit" onclick="submitAd()" id="submitAdBtn" data-i18n="btn_pay_publish">Pay & Publish Ad →</button>
     </div>
 
     <!-- Success -->
     <div class="success-msg" id="adSuccess">
       <div class="check">🎉</div>
-      <h3>Ad Submitted!</h3>
-      <p>Your ad will be reviewed and published within <strong>30 minutes</strong>.<br>We'll notify you via the phone/LINE you provided.</p>
+      <h3 data-i18n="ad_submitted">Ad Submitted!</h3>
+      <p data-i18n="ad_submitted_desc">Your ad will be reviewed and published within <strong>30 minutes</strong>.<br>We'll notify you via the phone/LINE you provided.</p>
       <br>
-      <button class="btn-submit" onclick="closeModal()" style="max-width:200px;margin:0 auto">Back to Browse</button>
+      <button class="btn-submit" onclick="closeModal()" style="max-width:200px;margin:0 auto" data-i18n="btn_back_browse">Back to Browse</button>
     </div>
   </div>
 </div>
@@ -1540,23 +1572,27 @@
 <div class="auth-modal" id="loginModal">
   <div class="auth-form">
     <button class="auth-close" onclick="closeAuthModal()">✕</button>
-    <h2>Welcome Back</h2>
-    <p class="auth-sub">Sign in to post your ads</p>
+    <h2 data-i18n="login_title">Welcome Back</h2>
+    <p class="auth-sub" data-i18n="login_sub">Sign in to post your ads</p>
 
     <div class="form-group">
-      <label>Email or Mobile Number</label>
-      <input type="text" id="loginIdentifier" placeholder="your@email.com or +66 000 000 000" autocomplete="username">
+      <label data-i18n="label_email_phone">Email or Mobile Number</label>
+      <input type="text" id="loginIdentifier" placeholder="your@email.com or +66 000 000 000" autocomplete="username" data-i18n-ph="login_ph_id">
     </div>
 
     <div class="form-group">
-      <label>Password</label>
-      <input type="password" id="loginPassword" placeholder="Your password" autocomplete="current-password">
+      <label data-i18n="label_password">Password</label>
+      <input type="password" id="loginPassword" placeholder="Your password" autocomplete="current-password" data-i18n-ph="label_password_ph">
     </div>
 
-    <button class="auth-btn" onclick="login()" id="loginBtn">Sign In</button>
+    <button class="auth-btn" onclick="login()" id="loginBtn" data-i18n="btn_signin">Sign In</button>
+
+    <div style="text-align:center;margin-top:0.75rem;">
+      <a href="/auth/forgot-password" data-i18n="forgot_pw" style="font-size:0.85rem;color:var(--gold);text-decoration:none;font-family:'Kanit',sans-serif;font-weight:600;">Forgot password?</a>
+    </div>
 
     <div class="auth-switch">
-      Don't have an account? <a href="#" onclick="switchToRegister()">Create one</a>
+      <span data-i18n="no_account">Don't have an account?</span> <a href="#" onclick="switchToRegister()" data-i18n="create_one">Create one</a>
     </div>
   </div>
 </div>
@@ -1564,34 +1600,33 @@
 <div class="auth-modal" id="registerModal">
   <div class="auth-form">
     <button class="auth-close" onclick="closeAuthModal()">✕</button>
-    <h2>Join AdSabai</h2>
-    <p class="auth-sub">Create your account to start posting ads</p>
+    <h2 data-i18n="register_title">Join AdSabai</h2>
+    <p class="auth-sub" data-i18n="register_sub">Create your account to start posting ads</p>
 
     <div class="form-group">
-      <label>Full Name</label>
-      <input type="text" id="registerName" placeholder="Your full name" autocomplete="name">
+      <label data-i18n="label_fullname">Full Name</label>
+      <input type="text" id="registerName" placeholder="Your full name" autocomplete="name" data-i18n-ph="register_ph_name">
     </div>
 
     <div class="form-group">
-      <label>Email or Mobile Number</label>
-      <input type="text" id="registerIdentifier" placeholder="your@email.com or +66 000 000 000" autocomplete="username">
-      <span class="field-hint">Use either your email address or mobile number</span>
+      <label data-i18n="label_email_phone">Email or Mobile Number</label>
+      <input type="text" id="registerIdentifier" placeholder="your@email.com or +66 000 000 000" autocomplete="username" data-i18n-ph="register_ph_id">
     </div>
 
     <div class="form-group">
-      <label>Password</label>
-      <input type="password" id="registerPassword" placeholder="Create a password (min. 6 characters)" autocomplete="new-password">
+      <label data-i18n="label_password">Password</label>
+      <input type="password" id="registerPassword" placeholder="Create a password (min. 6 characters)" autocomplete="new-password" data-i18n-ph="register_ph_pw">
     </div>
 
     <div class="form-group">
-      <label>Confirm Password</label>
-      <input type="password" id="registerConfirmPassword" placeholder="Re-enter your password" autocomplete="new-password">
+      <label data-i18n="label_confirm_pw">Confirm Password</label>
+      <input type="password" id="registerConfirmPassword" placeholder="Re-enter your password" autocomplete="new-password" data-i18n-ph="register_ph_confirm">
     </div>
 
-    <button class="auth-btn" onclick="register()" id="registerBtn">Create Account</button>
+    <button class="auth-btn" onclick="register()" id="registerBtn" data-i18n="btn_create_account">Create Account</button>
 
     <div class="auth-switch">
-      Already have an account? <a href="#" onclick="switchToLogin()">Sign in</a>
+      <span data-i18n="already_account">Already have an account?</span> <a href="#" onclick="switchToLogin()" data-i18n="sign_in_link">Sign in</a>
     </div>
   </div>
 </div>
@@ -1601,33 +1636,38 @@
   <div class="footer-inner">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:2rem;margin-bottom:2rem;">
       <div class="footer-col" style="flex:1 1 260px;max-width:320px;">
-        <div class="footer-logo">AdSabai</div>
-        <p style="font-size:0.8rem;color:var(--text-muted);margin-top:0.5rem;line-height:1.5">Thailand's premier classified ads platform for tourism and services.</p>
+        <div class="footer-logo"><img src="/AdSabai_Logo_Vector.svg" alt="AdSabai" style="height:24px;display:block;"></div>
+        <p style="font-size:0.8rem;color:var(--text-muted);margin-top:0.5rem;line-height:1.5" data-i18n="footer_desc">Thailand's premier classified ads platform for tourism and services.</p>
       </div>
-      <div style="display:flex;gap:3rem;flex-wrap:wrap;justify-content:flex-end;">
+      <div style="display:flex;gap:3rem;flex-wrap:wrap;justify-content:flex-end;align-items:flex-start;">
         <div class="footer-col">
-          <h4>Categories</h4>
-          <a href="/category/car-rental">Car Rental</a>
-          <a href="/category/tour-planning">Tour Planning</a>
-          <a href="/category/accommodation">Accommodation</a>
-          <a href="/category/massage-spa">Massage & Spa</a>
-          <a href="/category/jobs">Jobs</a>
-          <a href="/category/personal-ads">Personal Ads</a>
-          <a href="/category/leisure">Leisure</a>
+          <h4 data-i18n="footer_categories">Categories</h4>
+          <a href="/category/car-rental" data-i18n="cat_car_rental">Car Rental</a>
+          <a href="/category/tour-planning" data-i18n="cat_tour_planning">Tour Planning</a>
+          <a href="/category/accommodation" data-i18n="cat_accommodation">Accommodation</a>
+          <a href="/category/massage-spa" data-i18n="cat_massage_spa">Massage & Spa</a>
+          <a href="/category/jobs" data-i18n="cat_jobs">Jobs</a>
+          <a href="/category/personal-ads" data-i18n="cat_personal_ads">Personal Ads</a>
+          <a href="/category/leisure" data-i18n="cat_leisure">Leisure</a>
+          <a href="/category/other-services" data-i18n="cat_other">Other Services</a>
         </div>
         <div class="footer-col">
-          <h4>Company</h4>
-          <a href="/about">About Us</a>
-          <a href="/contact">Contact</a>
-          <a href="/terms">Terms of Service</a>
-          <a href="/privacy">Privacy Policy</a>
-          <a href="/business-policy">Business Policy</a>
+          <h4 data-i18n="footer_company">Company</h4>
+          <a href="/about" data-i18n="footer_about">About Us</a>
+          <a href="/contact" data-i18n="footer_contact">Contact</a>
+          <a href="/terms" data-i18n="footer_terms">Terms of Service</a>
+          <a href="/privacy" data-i18n="footer_privacy">Privacy Policy</a>
+          <a href="/business-policy" data-i18n="footer_business">Business Policy</a>
+        </div>
+        <div class="footer-col" style="text-align:center;">
+          <h4>LINE</h4>
+          <img src="/AdSabai_Line_QR.jpeg" alt="LINE QR Code" style="width:90px;height:90px;border-radius:8px;display:block;margin:0 auto 0.4rem;">
+          <span style="font-size:0.78rem;color:var(--text-muted);font-family:'Kanit',sans-serif;">@adsabai</span>
         </div>
       </div>
     </div>
     <div class="footer-bottom">
-      <p>© 2025 AdSabai. All rights reserved. | 🇹🇭 Made for Thailand</p>
-      <p>Line: @adsabai</p>
+      <p data-i18n="footer_copyright">© 2025 AdSabai. All rights reserved. | 🇹🇭 Made for Thailand &nbsp;·&nbsp; LINE: @adsabai</p>
     </div>
   </div>
 </footer>
@@ -1666,6 +1706,182 @@
   // Override native alert so any missed call still uses the themed toast
   window.alert = function(msg) { showToast(String(msg), 'info'); };
 })();
+
+// ── I18N SYSTEM ──
+var i18n = {
+  en: {
+    how_it_works:'How it works', pricing:'Pricing', login:'Login', register:'Register',
+    logout:'Logout', post_ad:'+ Post Ad', my_account:'My Account', logged_in:'Logged in',
+    categories:'Categories',
+    hero_badge:"Thailand's #1 Service Classifieds",
+    hero_title:'Find & Post Services<br>Across <em>Thailand</em>',
+    hero_desc:'From Phuket tours to Bangkok massage services, the ultimate marketplace for tourism, leisure and work in Thailand.',
+    search_placeholder:'Search services, locations...', search_btn:'Search',
+    all_categories:'All Categories',
+    stat_ads:'Active Ads', stat_provinces:'Provinces', stat_visitors:'Monthly Visitors',
+    browse_by_cat:'Browse by <span>Category</span>', browse_arrow:'Browse →',
+    cat_car_rental:'Car Rental', cat_tour_planning:'Tour Planning', cat_accommodation:'Accommodation',
+    cat_massage_spa:'Massage & Spa', cat_jobs:'Jobs', cat_personal_ads:'Personal Ads',
+    cat_leisure:'Leisure', cat_other:'Other Services',
+    mobile_cat_car_rental:'🚗 Car Rental', mobile_cat_tour_planning:'🗺️ Tour Planning',
+    mobile_cat_accommodation:'🏨 Accommodation', mobile_cat_massage_spa:'💆 Massage & Spa',
+    mobile_cat_jobs:'💼 Jobs', mobile_cat_personal_ads:'💌 Personal Ads',
+    mobile_cat_leisure:'🌴 Leisure', mobile_cat_other:'⚡ Other Services',
+    all_listings:'All <span>Listings</span>', browse_by_cat_link:'Browse by Category →',
+    filter_all:'All', more_provinces:'More provinces',
+    how_title:'How it <span>Works</span>',
+    step1_title:'Choose a Package', step1_desc:'Select from Basic, Standard or Premium depending on visibility you want for your ad.',
+    step2_title:'Write Your Ad', step2_desc:'Fill in the details: title, description, contact info, photos and category.',
+    step3_title:'Pay & Publish', step3_desc:'Quick payment via bank transfer, PromptPay or card. Ad goes live within minutes.',
+    step4_title:'Get Customers', step4_desc:'Tourists and locals find you. Manage inquiries directly by phone, LINE or WhatsApp.',
+    pricing_title:'Simple <span>Pricing</span>', pricing_sub:'All prices in Thai Baht. No hidden fees.',
+    feat_14days:'Listed for 14 days', feat_21days:'Listed for 21 days', feat_30days:'Listed for 30 days',
+    feat_1photo:'1 photo', feat_3photos:'Up to 3 photos', feat_5photos:'Up to 5 photos',
+    feat_standard_placement:'Standard placement', feat_higher_search:'Higher in search results',
+    feat_featured_top:'Featured / top placement', feat_phone_line:'Phone / LINE contact',
+    feat_phone_line_wa:'Phone / LINE / WhatsApp', feat_location:'Location targeting',
+    feat_badge:'Gold "Featured" badge', feat_priority:'Priority support', feat_full_contact:'Full contact & website',
+    btn_post_basic:'Post Basic Ad', btn_post_standard:'Post Standard Ad', btn_post_premium:'Post Premium Ad',
+    login_title:'Welcome Back', login_sub:'Sign in to post your ads',
+    label_email_phone:'Email or Mobile Number', label_password:'Password', label_password_ph:'Your password',
+    login_ph_id:'your@email.com or +66 000 000 000',
+    btn_signin:'Sign In', forgot_pw:'Forgot password?', no_account:"Don't have an account?", create_one:'Create one',
+    register_title:'Join AdSabai', register_sub:'Create your account to start posting ads',
+    label_fullname:'Full Name', label_confirm_pw:'Confirm Password',
+    register_ph_name:'Your full name', register_ph_id:'your@email.com or +66 000 000 000',
+    register_ph_pw:'Create a password (min. 6 characters)', register_ph_confirm:'Re-enter your password',
+    btn_create_account:'Create Account', already_account:'Already have an account?', sign_in_link:'Sign in',
+    post_ad_title:'Post Your Ad', post_ad_sub:'Reach thousands of tourists & locals across Thailand',
+    label_category:'Category *', select_cat_opt:'Select a category...',
+    label_ad_title:'Ad Title *', label_location:'Province / Location *',
+    label_price:'Price / Rate (฿)', label_description:'Description *',
+    label_contact_name:'Contact Name', label_phone_line_id:'Phone / LINE ID',
+    label_images:'Upload Images (max 3)', label_package:'Select Package *',
+    payment_text:'Payment via <strong>PromptPay</strong>, Bank Transfer, or Credit Card',
+    btn_pay_publish:'Pay & Publish Ad →',
+    ad_submitted:'Ad Submitted!', ad_submitted_desc:'Your ad will be reviewed and published within <strong>30 minutes</strong>.<br>We\'ll notify you via the phone/LINE you provided.',
+    btn_back_browse:'Back to Browse',
+    footer_desc:"Thailand's premier classified ads platform for tourism and services.",
+    footer_categories:'Categories', footer_company:'Company',
+    footer_about:'About Us', footer_contact:'Contact', footer_terms:'Terms of Service',
+    footer_privacy:'Privacy Policy', footer_business:'Business Policy',
+    footer_copyright:'© 2025 AdSabai. All rights reserved. | 🇹🇭 Made for Thailand',
+    share_label:'Share', call_now:'Call now', just_now:'Just now',
+    min_ago:'m ago', hr_ago:'h ago', day_ago:'day ago', days_ago:'days ago',
+    prev:'‹ Prev', next:'Next ›', searching:'Searching…',
+    search_results:'Search <span>Results</span>',
+    contact_for_price:'Contact for price', featured_badge:'⭐ Featured',
+    views_label:'views', persons_rated:'persons rated', person_rated:'person rated',
+    no_ads:'No ads found. Be the first to post in this category!',
+    listings_suffix:'<span>Listings</span>',
+    img_cover:'Cover image', img_set_cover:'Set as cover',
+    img_hint:'Select up to 3 photos and choose one cover image.',
+    post_free:'Post Free Ad →', fill_required:'Please fill in Category, Title and Description',
+    max_images:'Max 3 images — only the first 3 were kept',
+    copied:'Link copied to clipboard!',
+  },
+  th: {
+    how_it_works:'วิธีการใช้งาน', pricing:'ราคา', login:'เข้าสู่ระบบ', register:'สมัครสมาชิก',
+    logout:'ออกจากระบบ', post_ad:'+ ลงประกาศ', my_account:'บัญชีของฉัน', logged_in:'เข้าสู่ระบบแล้ว',
+    categories:'หมวดหมู่',
+    hero_badge:'อันดับ 1 ในไทยด้านประกาศบริการ',
+    hero_title:'ค้นหาและลงประกาศบริการ<br>ทั่ว<em>ประเทศไทย</em>',
+    hero_desc:'จากทัวร์ภูเก็ตถึงนวดแผนไทยกรุงเทพฯ ตลาดที่ดีที่สุดสำหรับการท่องเที่ยว กิจกรรมและงานในไทย',
+    search_placeholder:'ค้นหาบริการ, สถานที่...', search_btn:'ค้นหา',
+    all_categories:'ทุกหมวด',
+    stat_ads:'ประกาศที่ใช้งาน', stat_provinces:'จังหวัด', stat_visitors:'ผู้เยี่ยมชม/เดือน',
+    browse_by_cat:'เลือกตาม<span>หมวดหมู่</span>', browse_arrow:'ดูเพิ่มเติม →',
+    cat_car_rental:'เช่ารถ', cat_tour_planning:'จัดทัวร์', cat_accommodation:'ที่พัก',
+    cat_massage_spa:'นวดและสปา', cat_jobs:'งาน', cat_personal_ads:'ประกาศส่วนตัว',
+    cat_leisure:'กิจกรรมยามว่าง', cat_other:'บริการอื่นๆ',
+    mobile_cat_car_rental:'🚗 เช่ารถ', mobile_cat_tour_planning:'🗺️ จัดทัวร์',
+    mobile_cat_accommodation:'🏨 ที่พัก', mobile_cat_massage_spa:'💆 นวดและสปา',
+    mobile_cat_jobs:'💼 งาน', mobile_cat_personal_ads:'💌 ประกาศส่วนตัว',
+    mobile_cat_leisure:'🌴 กิจกรรมยามว่าง', mobile_cat_other:'⚡ บริการอื่นๆ',
+    all_listings:'ประกาศ<span>ทั้งหมด</span>', browse_by_cat_link:'เลือกตามหมวดหมู่ →',
+    filter_all:'ทั้งหมด', more_provinces:'จังหวัดอื่นๆ',
+    how_title:'วิธี<span>การใช้งาน</span>',
+    step1_title:'เลือกแพ็คเกจ', step1_desc:'เลือก Basic, Standard หรือ Premium ตามความต้องการในการมองเห็นประกาศของคุณ',
+    step2_title:'เขียนประกาศ', step2_desc:'กรอกรายละเอียด: ชื่อ, คำอธิบาย, ข้อมูลติดต่อ, รูปภาพและหมวดหมู่',
+    step3_title:'ชำระเงินและเผยแพร่', step3_desc:'ชำระเงินรวดเร็วผ่านโอนเงิน, PromptPay หรือบัตรเครดิต ประกาศเผยแพร่ภายในไม่กี่นาที',
+    step4_title:'รับลูกค้า', step4_desc:'นักท่องเที่ยวและคนท้องถิ่นจะพบคุณ จัดการสอบถามโดยตรงผ่านโทรศัพท์, LINE หรือ WhatsApp',
+    pricing_title:'ราคา<span>ที่เข้าใจง่าย</span>', pricing_sub:'ราคาทั้งหมดเป็นบาท ไม่มีค่าใช้จ่ายซ่อนเร้น',
+    feat_14days:'ลงประกาศ 14 วัน', feat_21days:'ลงประกาศ 21 วัน', feat_30days:'ลงประกาศ 30 วัน',
+    feat_1photo:'1 รูปภาพ', feat_3photos:'สูงสุด 3 รูปภาพ', feat_5photos:'สูงสุด 5 รูปภาพ',
+    feat_standard_placement:'การจัดวางมาตรฐาน', feat_higher_search:'อยู่ด้านบนในผลการค้นหา',
+    feat_featured_top:'แสดงเด่น / อันดับต้น', feat_phone_line:'ติดต่อทางโทรศัพท์/LINE',
+    feat_phone_line_wa:'โทรศัพท์/LINE/WhatsApp', feat_location:'กำหนดพื้นที่',
+    feat_badge:'ป้าย "แนะนำ" สีทอง', feat_priority:'บริการสนับสนุนพิเศษ', feat_full_contact:'ข้อมูลติดต่อและเว็บไซต์ครบ',
+    btn_post_basic:'ลงประกาศ Basic', btn_post_standard:'ลงประกาศ Standard', btn_post_premium:'ลงประกาศ Premium',
+    login_title:'ยินดีต้อนรับกลับ', login_sub:'เข้าสู่ระบบเพื่อลงประกาศ',
+    label_email_phone:'อีเมลหรือเบอร์โทรศัพท์', label_password:'รหัสผ่าน', label_password_ph:'รหัสผ่านของคุณ',
+    login_ph_id:'your@email.com หรือ +66 000 000 000',
+    btn_signin:'เข้าสู่ระบบ', forgot_pw:'ลืมรหัสผ่าน?', no_account:'ยังไม่มีบัญชี?', create_one:'สมัครสมาชิก',
+    register_title:'สมัครสมาชิก AdSabai', register_sub:'สร้างบัญชีเพื่อเริ่มลงประกาศ',
+    label_fullname:'ชื่อ-นามสกุล', label_confirm_pw:'ยืนยันรหัสผ่าน',
+    register_ph_name:'ชื่อ-นามสกุลของคุณ', register_ph_id:'your@email.com หรือ +66 000 000 000',
+    register_ph_pw:'สร้างรหัสผ่าน (ขั้นต่ำ 6 ตัว)', register_ph_confirm:'ยืนยันรหัสผ่านอีกครั้ง',
+    btn_create_account:'สร้างบัญชี', already_account:'มีบัญชีแล้ว?', sign_in_link:'เข้าสู่ระบบ',
+    post_ad_title:'ลงประกาศของคุณ', post_ad_sub:'เข้าถึงนักท่องเที่ยวและคนไทยนับพัน',
+    label_category:'หมวดหมู่ *', select_cat_opt:'เลือกหมวดหมู่...',
+    label_ad_title:'ชื่อประกาศ *', label_location:'จังหวัด/สถานที่ *',
+    label_price:'ราคา/อัตรา (฿)', label_description:'รายละเอียด *',
+    label_contact_name:'ชื่อผู้ติดต่อ', label_phone_line_id:'โทรศัพท์/LINE ID',
+    label_images:'อัปโหลดรูปภาพ (สูงสุด 3 รูป)', label_package:'เลือกแพ็คเกจ *',
+    payment_text:'ชำระผ่าน <strong>PromptPay</strong>, โอนเงิน หรือบัตรเครดิต',
+    btn_pay_publish:'ชำระเงินและเผยแพร่ →',
+    ad_submitted:'ลงประกาศสำเร็จ!', ad_submitted_desc:'ประกาศของคุณจะได้รับการตรวจสอบและเผยแพร่ภายใน <strong>30 นาที</strong><br>เราจะแจ้งให้คุณทราบผ่านโทรศัพท์/LINE ที่ให้ไว้',
+    btn_back_browse:'กลับไปดูประกาศ',
+    footer_desc:'แพลตฟอร์มประกาศชั้นนำของไทยสำหรับการท่องเที่ยวและบริการ',
+    footer_categories:'หมวดหมู่', footer_company:'บริษัท',
+    footer_about:'เกี่ยวกับเรา', footer_contact:'ติดต่อเรา', footer_terms:'ข้อกำหนดการใช้งาน',
+    footer_privacy:'นโยบายความเป็นส่วนตัว', footer_business:'นโยบายธุรกิจ',
+    footer_copyright:'© 2025 AdSabai สงวนลิขสิทธิ์ | 🇹🇭 Made for Thailand',
+    share_label:'แชร์', call_now:'โทรเลย', just_now:'เมื่อกี้',
+    min_ago:'นาทีที่แล้ว', hr_ago:'ชม.ที่แล้ว', day_ago:'วันที่แล้ว', days_ago:'วันที่แล้ว',
+    prev:'‹ ก่อนหน้า', next:'ถัดไป ›', searching:'กำลังค้นหา…',
+    search_results:'<span>ผลการค้นหา</span>',
+    contact_for_price:'ติดต่อสอบถามราคา', featured_badge:'⭐ แนะนำ',
+    views_label:'ครั้ง', persons_rated:'คนให้คะแนน', person_rated:'คนให้คะแนน',
+    no_ads:'ไม่พบประกาศ เป็นคนแรกที่ลงในหมวดนี้!',
+    listings_suffix:'<span>รายการ</span>',
+    img_cover:'ภาพหน้าปก', img_set_cover:'ตั้งเป็นหน้าปก',
+    img_hint:'เลือกสูงสุด 3 รูปภาพและเลือกรูปหน้าปก',
+    post_free:'ลงประกาศฟรี →', fill_required:'กรุณากรอกหมวดหมู่ ชื่อประกาศ และรายละเอียด',
+    max_images:'สูงสุด 3 รูป — เก็บเฉพาะ 3 รูปแรก',
+    copied:'คัดลอกลิงก์แล้ว!',
+  }
+};
+
+var currentLang = (function() {
+  try { return localStorage.getItem('adSabaiLang') || 'th'; } catch(e) { return 'th'; }
+})();
+
+function _t(key) {
+  var d = i18n[currentLang];
+  return (d && d[key] !== undefined) ? d[key] : (i18n.en[key] || key);
+}
+
+function applyLang(lang) {
+  document.querySelectorAll('[data-i18n]').forEach(function(el) {
+    var val = (i18n[lang] || {})[el.getAttribute('data-i18n')];
+    if (val !== undefined) el.innerHTML = val;
+  });
+  document.querySelectorAll('[data-i18n-ph]').forEach(function(el) {
+    var val = (i18n[lang] || {})[el.getAttribute('data-i18n-ph')];
+    if (val !== undefined) el.placeholder = val;
+  });
+  var btn = document.getElementById('lang-toggle');
+  if (btn) btn.textContent = lang === 'en' ? 'TH' : 'EN';
+  document.documentElement.lang = lang === 'th' ? 'th' : 'en';
+}
+
+function toggleLang() {
+  currentLang = currentLang === 'en' ? 'th' : 'en';
+  try { localStorage.setItem('adSabaiLang', currentLang); } catch(e) {}
+  applyLang(currentLang);
+  renderCurrentPage();
+}
 
 // ── SAMPLE DATA (shown while real ads load) ──
 const sampleAds = [
@@ -1719,7 +1935,7 @@ function apiAdToLocal(ad) {
     title:      ad.title,
     desc:       ad.description,
     location:   ad.location || 'Thailand',
-    price:      ad.price ? String(ad.price) : 'Contact for price',
+    price:      ad.price ? String(ad.price) : _t('contact_for_price'),
     featured:      ad.packageType === 'premium',
     packageType:   ad.packageType || 'basic',
     imgClass:   'img-default',
@@ -1775,14 +1991,14 @@ function renderImagePreview() {
   const preview = document.getElementById('imagePreview');
   if (!preview) return;
   if (!uploadedImages.length) {
-    preview.innerHTML = '<div class="image-upload-hint">Select up to 3 photos and choose one cover image.</div>';
+    preview.innerHTML = '<div class="image-upload-hint">' + _t('img_hint') + '</div>';
     return;
   }
   preview.innerHTML = uploadedImages.map((img, index) => `
     <div class="image-preview-item${img.isCover ? ' selected' : ''}">
       <img src="${img.src}" alt="Ad image ${index + 1}">
       <input type="radio" id="coverImage${index}" name="coverImage" ${img.isCover ? 'checked' : ''} onchange="selectCoverImage(${index})">
-      <label for="coverImage${index}">${img.isCover ? 'Cover image' : 'Set as cover'}</label>
+      <label for="coverImage${index}">${img.isCover ? _t('img_cover') : _t('img_set_cover')}</label>
     </div>
   `).join('');
 }
@@ -1806,7 +2022,7 @@ function handleImageUpload(e) {
     return;
   }
   if (files.length > 3) {
-    showToast('Max 3 images — only the first 3 were kept', 'warning');
+    showToast(_t('max_images'), 'warning');
     files.splice(3);
   }
   const readers = files.map((file, index) => new Promise(resolve => {
@@ -1823,7 +2039,7 @@ function handleImageUpload(e) {
 function renderAds(ads) {
   const grid = document.getElementById('adsGrid');
   if (!ads.length) {
-    grid.innerHTML = '<p style="color:var(--text-muted);grid-column:1/-1;padding:2rem 0">No ads found. Be the first to post in this category!</p>';
+    grid.innerHTML = '<p style="color:var(--text-muted);grid-column:1/-1;padding:2rem 0">' + _t('no_ads') + '</p>';
     return;
   }
   grid.innerHTML = ads.map(ad => {
@@ -1835,7 +2051,7 @@ function renderAds(ads) {
       <div class="ad-img-bg ${imageClasses}" style="height:180px;font-size:3.5rem;display:flex;align-items:center;justify-content:center;position:relative;${imageStyle}">
         ${coverImage ? '' : ad.emoji}
         <div class="ad-badge" style="--badge-bg:${ad.badgeColor};background:${ad.badgeColor}">${ad.badge}</div>
-        ${ad.featured ? '<div class="ad-featured-badge">⭐ Featured</div>' : ''}
+        ${ad.featured ? '<div class="ad-featured-badge">' + _t('featured_badge') + '</div>' : ''}
       </div>
       <div class="ad-body">
         <div class="ad-cat" style="display:flex;justify-content:space-between;align-items:center;gap:0.5rem">
@@ -1849,12 +2065,12 @@ function renderAds(ads) {
           <span class="ad-price">${ad.price}</span>
         </div>
         <div class="ad-stats">
-          <span>👁 ${ad.views} views</span>
-          ${ad.ratingCount > 0 ? `<span><span class="ad-stats-star">${renderStarBar(ad.ratingAvg)}</span> ${ad.ratingAvg.toFixed(1)} · ${ad.ratingCount} ${ad.ratingCount === 1 ? 'person' : 'persons'} rated</span>` : ''}
+          <span>👁 ${ad.views} ${_t('views_label')}</span>
+          ${ad.ratingCount > 0 ? `<span><span class="ad-stats-star">${renderStarBar(ad.ratingAvg)}</span> ${ad.ratingAvg.toFixed(1)} · ${ad.ratingCount} ${ad.ratingCount === 1 ? _t('person_rated') : _t('persons_rated')}</span>` : ''}
         </div>
         <div class="ad-actions">
           <div class="ad-share-row">
-            <span class="ad-share-label">Share</span>
+            <span class="ad-share-label">${_t('share_label')}</span>
             <div class="share-icons">
               <button class="share-icon whatsapp" title="WhatsApp" onclick="shareAd(event, ${ad.id}, 'whatsapp')" aria-label="Share on WhatsApp">
                 <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -1875,7 +2091,7 @@ function renderAds(ads) {
           </div>
           <div style="display:flex;align-items:center;gap:0.55rem;flex-wrap:wrap;">
             <button class="ad-copy" onclick="copyAdLink(event, ${ad.id}); return false;" title="Copy link">📋</button>
-            <button class="ad-call" onclick="callAd(event || window.event, ${ad.id}); return false;">Call now</button>
+            <button class="ad-call" onclick="callAd(event || window.event, ${ad.id}); return false;">${_t('call_now')}</button>
           </div>
         </div>
       </div>
@@ -1898,13 +2114,14 @@ function timeAgo(dateStr) {
   const utc = dateStr.endsWith('Z') || dateStr.includes('+') ? dateStr : dateStr + 'Z';
   const diff = Date.now() - new Date(utc).getTime();
   const mins = Math.floor(diff / 60000);
-  if (mins < 1)  return 'Just now';
-  if (mins < 60) return mins + 'm ago';
+  if (mins < 1)  return _t('just_now');
+  if (mins < 60) return mins + _t('min_ago');
   const hrs = Math.floor(mins / 60);
-  if (hrs < 24)  return hrs + 'h ago';
+  if (hrs < 24)  return hrs + _t('hr_ago');
   const days = Math.floor(hrs / 24);
-  if (days < 7)  return days === 1 ? '1 day ago' : days + ' days ago';
-  return new Date(dateStr).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+  if (days < 7)  return days + _t('days_ago');
+  const locale = currentLang === 'th' ? 'th-TH' : 'en-GB';
+  return new Date(utc).toLocaleDateString(locale, { day: 'numeric', month: 'short', year: 'numeric' });
 }
 
 function sortByPackage(ads) {
@@ -1945,13 +2162,13 @@ function renderPagination(total) {
 
   let html = '<div class="ads-pagination">';
   if (currentPage > 1)
-    html += `<button onclick="goToPage(${currentPage - 1})" class="page-btn">‹ Prev</button>`;
+    html += `<button onclick="goToPage(${currentPage - 1})" class="page-btn">${_t('prev')}</button>`;
   range.forEach(p => {
     if (p === '…') html += `<span class="page-ellipsis">…</span>`;
     else html += `<button onclick="goToPage(${p})" class="page-btn${p === currentPage ? ' active' : ''}">${p}</button>`;
   });
   if (currentPage < totalPages)
-    html += `<button onclick="goToPage(${currentPage + 1})" class="page-btn page-next">Next ›</button>`;
+    html += `<button onclick="goToPage(${currentPage + 1})" class="page-btn page-next">${_t('next')}</button>`;
   html += '</div>';
   container.innerHTML = html;
 }
@@ -1989,7 +2206,7 @@ function setFilterFromDropdown(sel) {
 
 function filterCat(cat) {
   currentCat = cat;
-  document.getElementById('adsTitle').innerHTML = `${cat} <span>Listings</span>`;
+  document.getElementById('adsTitle').innerHTML = cat + ' ' + _t('listings_suffix');
   filterAds();
   document.getElementById('adsSection').scrollIntoView({behavior:'smooth'});
 }
@@ -1997,7 +2214,7 @@ function filterCat(cat) {
 function clearFilter() {
   currentCat = 'all';
   currentFilter = 'all';
-  document.getElementById('adsTitle').innerHTML = 'All <span>Listings</span>';
+  document.getElementById('adsTitle').innerHTML = _t('all_listings');
   document.querySelectorAll('.filter-chip').forEach((c,i) => c.classList.toggle('active', i===0));
   resetProvinceSelect();
   filterAds();
@@ -2021,7 +2238,7 @@ async function doSearch() {
   if (!q) { filterAds(); return; }
 
   // Fetch ALL active ads (not just premium) so search covers every package type
-  document.getElementById('adsTitle').innerHTML = `Searching…`;
+  document.getElementById('adsTitle').innerHTML = _t('searching');
   document.getElementById('adsSection').scrollIntoView({behavior:'smooth'});
   try {
     const res = await fetch('/api/ads');
@@ -2042,7 +2259,7 @@ async function doSearch() {
   }
   currentPage = 1;
   renderCurrentPage();
-  document.getElementById('adsTitle').innerHTML = `Search <span>Results</span>`;
+  document.getElementById('adsTitle').innerHTML = _t('search_results');
 }
 
 // ── MODAL ──
@@ -2084,7 +2301,7 @@ function selectPkg(pkg) {
   const isFree = p === 0;
   document.getElementById('payTotal').textContent = isFree ? 'FREE' : '฿' + p;
   document.getElementById('paymentRow').style.display = isFree ? 'none' : '';
-  document.getElementById('submitAdBtn').textContent = isFree ? 'Post Free Ad →' : 'Pay & Publish Ad →';
+  document.getElementById('submitAdBtn').textContent = isFree ? _t('post_free') : _t('btn_pay_publish');
 }
 
 function updatePkgPrice() { /* dynamic per category if needed */ }
@@ -2099,7 +2316,7 @@ function submitAd() {
   const name = document.getElementById('fName').value;
   const contact = document.getElementById('fPhone').value || name || 'No contact provided';
   if (!cat || !title || !desc) {
-    showToast('Please fill in Category, Title and Description', 'error');
+    showToast(_t('fill_required'), 'error');
     return;
   }
   const images = uploadedImages.map(img => img.src);
@@ -2136,7 +2353,7 @@ function copyAdLink(e, id) {
   const link = getAdLink(id);
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(link).then(() => {
-      showToast('Link copied to clipboard!', 'success');
+      showToast(_t('copied'), 'success');
     }).catch(() => {
       prompt('Copy this link:', link);
     });
@@ -2391,6 +2608,8 @@ document.getElementById('postModal').addEventListener('click', e => { if(e.targe
 document.getElementById('detailModal').addEventListener('click', e => { if(e.target===e.currentTarget) closeDetail(); });
 
 // ── INIT ──
+// Apply saved language before first render
+applyLang(currentLang);
 // Show sample ads immediately, then replace with real data from the API
 filterAds();
 loadAdsFromAPI();

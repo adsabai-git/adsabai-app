@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
+import { useLang } from '../../contexts/LangContext';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
@@ -23,6 +24,7 @@ export default function Login() {
   const [password,   setPassword]   = useState('');
   const [error,      setError]      = useState('');
   const { login, isLoading } = useAuth();
+  const { t } = useLang();
   const router = useRouter();
 
   const handleSubmit = async (e: { preventDefault(): void }) => {
@@ -32,7 +34,7 @@ export default function Login() {
     if (result.ok) {
       router.push('/account');
     } else {
-      setError(result.error || 'Login failed. Please try again.');
+      setError(result.error || t('err_login_failed'));
     }
   };
 
@@ -49,17 +51,8 @@ export default function Login() {
 
         {/* Brand */}
         <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-          <Link href="/" style={{ textDecoration: 'none' }}>
-            <span style={{
-              fontFamily: "'Kanit', sans-serif",
-              fontWeight: 800,
-              fontSize: '1.6rem',
-              background: 'linear-gradient(135deg, var(--gold-light), var(--gold))',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-            }}>
-              ThaiPost<span style={{ color: 'var(--thai-red)', WebkitTextFillColor: 'var(--thai-red)' }}>Ad</span>
-            </span>
+          <Link href="/">
+            <img src="/AdSabai_Logo_Vector.svg" alt="AdSabai" height="38" style={{ display: 'block', margin: '0 auto' }} />
           </Link>
         </div>
 
@@ -81,24 +74,24 @@ export default function Login() {
               color: 'var(--text)',
               marginBottom: '0.4rem',
             }}>
-              Welcome Back
+              {t('login_welcome')}
             </h1>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>
-              Sign in to manage your listings
+              {t('login_subtitle')}
             </p>
           </div>
 
           <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-              <label htmlFor="email" style={{
+              <label htmlFor="identifier" style={{
                 fontFamily: "'Kanit', sans-serif",
                 fontWeight: 600,
                 fontSize: '0.8rem',
                 letterSpacing: '0.05em',
                 color: 'var(--text)',
               }}>
-                Email or Mobile Number
+                {t('login_identifier')}
               </label>
               <input
                 id="identifier"
@@ -107,7 +100,7 @@ export default function Login() {
                 required
                 value={identifier}
                 onChange={e => setIdentifier(e.target.value)}
-                placeholder="your@email.com or +66 812 345 678"
+                placeholder={t('login_ph_id')}
                 style={inputStyle}
                 onFocus={e => { e.currentTarget.style.borderColor = 'var(--gold)'; }}
                 onBlur={e  => { e.currentTarget.style.borderColor = 'var(--border)'; }}
@@ -122,7 +115,7 @@ export default function Login() {
                 letterSpacing: '0.05em',
                 color: 'var(--text)',
               }}>
-                Password
+                {t('login_password')}
               </label>
               <input
                 id="password"
@@ -131,11 +124,17 @@ export default function Login() {
                 required
                 value={password}
                 onChange={e => setPassword(e.target.value)}
-                placeholder="••••••••"
+                placeholder={t('login_ph_pw')}
                 style={inputStyle}
                 onFocus={e => { e.currentTarget.style.borderColor = 'var(--gold)'; }}
                 onBlur={e  => { e.currentTarget.style.borderColor = 'var(--border)'; }}
               />
+            </div>
+
+            <div style={{ textAlign: 'right', marginTop: '-0.4rem' }}>
+              <Link href="/auth/forgot-password" style={{ fontSize: '0.83rem', color: 'var(--gold)', textDecoration: 'none', fontFamily: "'Kanit', sans-serif", fontWeight: 600 }}>
+                {t('login_forgot') || 'Forgot password?'}
+              </Link>
             </div>
 
             {error && (
@@ -164,17 +163,17 @@ export default function Login() {
                 marginTop: '0.25rem',
               }}
             >
-              {isLoading ? 'Signing in…' : 'Sign In'}
+              {isLoading ? t('login_loading') : t('login_btn')}
             </button>
 
             <p style={{ textAlign: 'center', fontSize: '0.875rem', color: 'var(--text-muted)' }}>
-              Don&apos;t have an account?{' '}
+              {t('login_no_account')}{' '}
               <Link href="/auth/register" style={{
                 color: 'var(--gold)',
                 fontWeight: 600,
                 textDecoration: 'none',
               }}>
-                Create one now
+                {t('login_create')}
               </Link>
             </p>
 

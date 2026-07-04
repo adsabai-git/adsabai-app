@@ -10,6 +10,7 @@ const CATEGORIES = {
   'jobs':          { name: 'Jobs',          emoji: '💼', color: '#F0A500', desc: 'Full-time, part-time and freelance jobs across all sectors' },
   'personal-ads':  { name: 'Personal Ads',  emoji: '💌', color: '#A84C9A', desc: 'Language exchange, social events and personal connections' },
   'leisure':       { name: 'Leisure',       emoji: '🌴', color: '#4CAF8A', desc: 'Muay Thai, cooking classes, activities and entertainment' },
+  'other-services': { name: 'Other Services', emoji: '⚡', color: '#E05C4B', desc: 'Other services and listings across Thailand' },
 } as const;
 
 const PER_PAGE = 12;

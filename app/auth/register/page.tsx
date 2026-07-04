@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
+import { useLang } from '../../contexts/LangContext';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
@@ -18,14 +19,6 @@ const inputStyle: React.CSSProperties = {
   transition: 'border-color 0.2s',
 };
 
-const labelStyle: React.CSSProperties = {
-  fontFamily: "'Kanit', sans-serif",
-  fontWeight: 600,
-  fontSize: '0.8rem',
-  letterSpacing: '0.05em',
-  color: 'var(--text)',
-};
-
 const onFocus = (e: { currentTarget: HTMLInputElement }) => {
   e.currentTarget.style.borderColor = 'var(--gold)';
 };
@@ -40,6 +33,7 @@ export default function Register() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error,           setError]           = useState('');
   const { register, isLoading } = useAuth();
+  const { t } = useLang();
   const router = useRouter();
 
   const handleSubmit = async (e: { preventDefault(): void }) => {
@@ -47,11 +41,11 @@ export default function Register() {
     setError('');
 
     if (password !== confirmPassword) {
-      setError('Passwords do not match.');
+      setError(t('err_passwords_no_match'));
       return;
     }
     if (password.length < 6) {
-      setError('Password must be at least 6 characters.');
+      setError(t('err_pw_too_short'));
       return;
     }
 
@@ -59,8 +53,16 @@ export default function Register() {
     if (result.ok) {
       router.push('/account');
     } else {
-      setError(result.error || 'Registration failed.');
+      setError(result.error || t('err_register_failed'));
     }
+  };
+
+  const labelStyle: React.CSSProperties = {
+    fontFamily: "'Kanit', sans-serif",
+    fontWeight: 600,
+    fontSize: '0.8rem',
+    letterSpacing: '0.05em',
+    color: 'var(--text)',
   };
 
   return (
@@ -76,17 +78,8 @@ export default function Register() {
 
         {/* Brand */}
         <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-          <Link href="/" style={{ textDecoration: 'none' }}>
-            <span style={{
-              fontFamily: "'Kanit', sans-serif",
-              fontWeight: 800,
-              fontSize: '1.6rem',
-              background: 'linear-gradient(135deg, var(--gold-light), var(--gold))',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-            }}>
-              ThaiPost<span style={{ color: 'var(--thai-red)', WebkitTextFillColor: 'var(--thai-red)' }}>Ad</span>
-            </span>
+          <Link href="/">
+            <img src="/AdSabai_Logo_Vector.svg" alt="AdSabai" height="38" style={{ display: 'block', margin: '0 auto' }} />
           </Link>
         </div>
 
@@ -108,17 +101,17 @@ export default function Register() {
               color: 'var(--text)',
               marginBottom: '0.4rem',
             }}>
-              Create Account
+              {t('register_welcome')}
             </h1>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>
-              Join AdSabai and start posting today
+              {t('register_subtitle')}
             </p>
           </div>
 
           <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-              <label htmlFor="name" style={labelStyle}>Full Name</label>
+              <label htmlFor="name" style={labelStyle}>{t('register_name')}</label>
               <input
                 id="name"
                 type="text"
@@ -126,7 +119,7 @@ export default function Register() {
                 required
                 value={name}
                 onChange={e => setName(e.target.value)}
-                placeholder="Your full name"
+                placeholder={t('register_ph_name')}
                 style={inputStyle}
                 onFocus={onFocus}
                 onBlur={onBlur}
@@ -134,7 +127,7 @@ export default function Register() {
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-              <label htmlFor="identifier" style={labelStyle}>Email or Mobile Number</label>
+              <label htmlFor="identifier" style={labelStyle}>{t('register_identifier')}</label>
               <input
                 id="identifier"
                 type="text"
@@ -142,20 +135,17 @@ export default function Register() {
                 required
                 value={identifier}
                 onChange={e => setIdentifier(e.target.value)}
-                placeholder="your@email.com or +66 812 345 678"
+                placeholder={t('register_ph_id')}
                 style={inputStyle}
                 onFocus={onFocus}
                 onBlur={onBlur}
               />
-              <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                You can register with an email address or mobile number
-              </p>
             </div>
 
             <div style={{ height: '1px', background: 'var(--border)' }} />
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-              <label htmlFor="password" style={labelStyle}>Password</label>
+              <label htmlFor="password" style={labelStyle}>{t('register_password')}</label>
               <input
                 id="password"
                 type="password"
@@ -163,18 +153,15 @@ export default function Register() {
                 required
                 value={password}
                 onChange={e => setPassword(e.target.value)}
-                placeholder="••••••••"
+                placeholder={t('register_ph_pw')}
                 style={inputStyle}
                 onFocus={onFocus}
                 onBlur={onBlur}
               />
-              <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                Minimum 6 characters
-              </p>
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-              <label htmlFor="confirmPassword" style={labelStyle}>Confirm Password</label>
+              <label htmlFor="confirmPassword" style={labelStyle}>{t('register_confirm')}</label>
               <input
                 id="confirmPassword"
                 type="password"
@@ -182,7 +169,7 @@ export default function Register() {
                 required
                 value={confirmPassword}
                 onChange={e => setConfirmPassword(e.target.value)}
-                placeholder="••••••••"
+                placeholder={t('register_ph_confirm')}
                 style={inputStyle}
                 onFocus={onFocus}
                 onBlur={onBlur}
@@ -215,17 +202,17 @@ export default function Register() {
                 marginTop: '0.25rem',
               }}
             >
-              {isLoading ? 'Creating Account…' : 'Create Account'}
+              {isLoading ? t('register_loading') : t('register_btn')}
             </button>
 
             <p style={{ textAlign: 'center', fontSize: '0.875rem', color: 'var(--text-muted)' }}>
-              Already have an account?{' '}
+              {t('register_has_account')}{' '}
               <Link href="/auth/login" style={{
                 color: 'var(--gold)',
                 fontWeight: 600,
                 textDecoration: 'none',
               }}>
-                Sign in here
+                {t('register_signin')}
               </Link>
             </p>
 

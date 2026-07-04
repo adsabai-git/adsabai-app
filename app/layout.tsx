@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { AuthProvider } from "./contexts/AuthContext";
+import { LangProvider } from "./contexts/LangContext";
 import Navigation from "./components/Navigation";
 
 export const metadata: Metadata = {
@@ -25,10 +26,12 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: `(function(){try{var t=localStorage.getItem('adSabaiTheme');if(t!=='dark')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();` }} />
       </head>
       <body>
-        <AuthProvider>
-          <Navigation />
-          {children}
-        </AuthProvider>
+        <LangProvider>
+          <AuthProvider>
+            <Navigation />
+            {children}
+          </AuthProvider>
+        </LangProvider>
       </body>
     </html>
   );

@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import ProtectedRoute from '../../components/ProtectedRoute';
 import { useAuth } from '../../contexts/AuthContext';
+import { useLang } from '../../contexts/LangContext';
 import { daysRemaining, isExpired, AD_PACKAGES } from '../../../lib/ad-packages';
 import PaymentModal from '../../components/PaymentModal';
 import PublishToast from '../../components/PublishToast';
@@ -23,16 +24,19 @@ interface Ad {
   user: { id: number; name: string; email: string };
 }
 
-const packageMeta: Record<string, { label: string; color: string; bg: string }> = {
-  basic:    { label: 'Basic',    color: 'var(--gold)',         bg: 'rgba(201,168,76,0.12)' },
-  standard: { label: 'Standard', color: 'var(--accent-green)', bg: 'rgba(46,204,138,0.1)' },
-  premium:  { label: 'Premium',  color: '#4DD9D9',             bg: 'rgba(0,107,107,0.15)' },
+const packageMeta: Record<string, { color: string; bg: string }> = {
+  basic:    { color: 'var(--gold)',         bg: 'rgba(201,168,76,0.12)' },
+  standard: { color: 'var(--accent-green)', bg: 'rgba(46,204,138,0.1)' },
+  premium:  { color: '#4DD9D9',             bg: 'rgba(0,107,107,0.15)' },
 };
 
+const BETA_FREE_BASIC = false;
 
-function ConfirmDialog({ title, message, onConfirm, onCancel }: {
+function ConfirmDialog({ title, message, cancelLabel, confirmLabel, onConfirm, onCancel }: {
   title: string;
   message: string;
+  cancelLabel: string;
+  confirmLabel: string;
   onConfirm: () => void;
   onCancel: () => void;
 }) {
@@ -69,7 +73,7 @@ function ConfirmDialog({ title, message, onConfirm, onCancel }: {
             onMouseOver={e => { e.currentTarget.style.borderColor = 'var(--gold)'; e.currentTarget.style.color = 'var(--gold)'; }}
             onMouseOut={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.color = 'var(--text-muted)'; }}
           >
-            Cancel
+            {cancelLabel}
           </button>
           <button
             onClick={onConfirm}
@@ -82,7 +86,7 @@ function ConfirmDialog({ title, message, onConfirm, onCancel }: {
             onMouseOver={e => { e.currentTarget.style.background = 'rgba(168,25,46,0.28)'; }}
             onMouseOut={e => { e.currentTarget.style.background = 'rgba(168,25,46,0.15)'; }}
           >
-            Yes, Delete
+            {confirmLabel}
           </button>
         </div>
       </div>
@@ -90,20 +94,18 @@ function ConfirmDialog({ title, message, onConfirm, onCancel }: {
   );
 }
 
-const BETA_FREE_BASIC = false; // renewals always charge
+function RenewModal({ ad, onClose, onRenewed, t }: { ad: Ad; onClose: () => void; onRenewed: () => void; t: (k: string) => string }) {
+  const [selected, setSelected] = useState<string | null>(null);
+  const [showPay,  setShowPay]  = useState(false);
+  const [renewing, setRenewing] = useState(false);
+  const [error,    setError]    = useState('');
+  const [success,  setSuccess]  = useState(false);
 
-const RENEW_PACKAGES = [
-  { type: 'basic',    price: BETA_FREE_BASIC ? 0 : AD_PACKAGES.basic.price,    days: AD_PACKAGES.basic.durationDays,    label: 'Basic',    desc: '1 photo · 14 days',        badge: BETA_FREE_BASIC ? 'FREE' : '฿79',  color: '#9BA8B8', bg: 'rgba(155,168,184,0.1)' },
-  { type: 'standard', price: AD_PACKAGES.standard.price, days: AD_PACKAGES.standard.durationDays, label: 'Standard', desc: '3 photos · 21 days',        badge: '฿149', color: 'var(--accent-green)', bg: 'rgba(46,204,138,0.1)' },
-  { type: 'premium',  price: AD_PACKAGES.premium.price,  days: AD_PACKAGES.premium.durationDays,  label: 'Premium',  desc: '5 photos · 30 days · Featured', badge: '฿200', color: '#C9A84C', bg: 'rgba(201,168,76,0.1)' },
-] as const;
-
-function RenewModal({ ad, onClose, onRenewed }: { ad: Ad; onClose: () => void; onRenewed: () => void }) {
-  const [selected, setSelected]     = useState<string | null>(null);
-  const [showPay,  setShowPay]      = useState(false);
-  const [renewing, setRenewing]     = useState(false);
-  const [error,    setError]        = useState('');
-  const [success,  setSuccess]      = useState(false);
+  const RENEW_PACKAGES = [
+    { type: 'basic',    price: BETA_FREE_BASIC ? 0 : AD_PACKAGES.basic.price,    days: AD_PACKAGES.basic.durationDays,    label: t('pkg_basic'),    desc: t('renew_basic_desc'),    badge: BETA_FREE_BASIC ? 'FREE' : '฿79',  color: '#9BA8B8', bg: 'rgba(155,168,184,0.1)' },
+    { type: 'standard', price: AD_PACKAGES.standard.price, days: AD_PACKAGES.standard.durationDays, label: t('pkg_standard'), desc: t('renew_standard_desc'), badge: '฿149', color: 'var(--accent-green)', bg: 'rgba(46,204,138,0.1)' },
+    { type: 'premium',  price: AD_PACKAGES.premium.price,  days: AD_PACKAGES.premium.durationDays,  label: t('pkg_premium'),  desc: t('renew_premium_desc'),  badge: '฿200', color: '#C9A84C', bg: 'rgba(201,168,76,0.1)' },
+  ] as const;
 
   async function doRenew(pkgType: string, chargeId?: string) {
     setRenewing(true); setError('');
@@ -115,7 +117,7 @@ function RenewModal({ ad, onClose, onRenewed }: { ad: Ad; onClose: () => void; o
         body: JSON.stringify({ packageType: pkgType, chargeId }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Renewal failed');
+      if (!res.ok) throw new Error(data.error || t('renew_failed'));
       setSuccess(true);
       setTimeout(() => { onRenewed(); onClose(); }, 1800);
     } catch (e) {
@@ -157,7 +159,7 @@ function RenewModal({ ad, onClose, onRenewed }: { ad: Ad; onClose: () => void; o
         {/* Header */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.5rem' }}>
           <div>
-            <p style={{ fontFamily: "'Kanit',sans-serif", fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: '0.3rem' }}>Renew Listing</p>
+            <p style={{ fontFamily: "'Kanit',sans-serif", fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: '0.3rem' }}>{t('renew_label')}</p>
             <h3 style={{ fontFamily: "'Kanit',sans-serif", fontWeight: 800, fontSize: '1.1rem', color: 'var(--text)', margin: 0, lineHeight: 1.3 }}>
               {ad.title.length > 48 ? ad.title.slice(0, 48) + '…' : ad.title}
             </h3>
@@ -169,16 +171,15 @@ function RenewModal({ ad, onClose, onRenewed }: { ad: Ad; onClose: () => void; o
         {success ? (
           <div style={{ textAlign: 'center', padding: '1.5rem 0' }}>
             <div style={{ fontSize: '3rem', marginBottom: '0.75rem' }}>✅</div>
-            <p style={{ fontFamily: "'Kanit',sans-serif", fontWeight: 700, fontSize: '1.05rem', color: 'var(--accent-green)' }}>Ad Renewed!</p>
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>Your listing is now live and sorted as the latest.</p>
+            <p style={{ fontFamily: "'Kanit',sans-serif", fontWeight: 700, fontSize: '1.05rem', color: 'var(--accent-green)' }}>{t('renew_success')}</p>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>{t('renew_success_sub')}</p>
           </div>
         ) : (
           <>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: '1.25rem' }}>
-              Choose a plan to renew. The listing date resets to today so your ad appears as a new listing.
+              {t('renew_intro')}
             </p>
 
-            {/* Package cards */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem', marginBottom: '1.25rem' }}>
               {RENEW_PACKAGES.map(pkg => (
                 <button
@@ -211,7 +212,7 @@ function RenewModal({ ad, onClose, onRenewed }: { ad: Ad; onClose: () => void; o
 
             {renewing && (
               <p style={{ textAlign: 'center', color: 'var(--gold)', fontFamily: "'Kanit',sans-serif", fontSize: '0.88rem' }}>
-                ⏳ Renewing your ad…
+                {t('renewing')}
               </p>
             )}
             {error && (
@@ -251,6 +252,7 @@ function pgBtn(active: boolean): React.CSSProperties {
 
 export default function ManageAdsPage() {
   const { user } = useAuth();
+  const { t } = useLang();
   const [ads, setAds] = useState<Ad[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -260,7 +262,6 @@ export default function ManageAdsPage() {
   const [showRenewToast, setShowRenewToast] = useState(false);
   const [page, setPage] = useState(1);
 
-  // If deleting reduces the last page to empty, step back one page
   useEffect(() => {
     const totalPages = Math.max(1, Math.ceil(ads.length / PAGE_SIZE));
     if (page > totalPages) setPage(totalPages);
@@ -277,14 +278,14 @@ export default function ManageAdsPage() {
         setAds(data.filter((ad) => ad.user.id.toString() === user.id.toString()));
       } catch (err) {
         console.error('Failed to load ads:', err);
-        setError('Failed to load your ads. Please try again.');
+        setError(t('err_fetch_ads'));
       } finally {
         setLoading(false);
       }
     };
 
     loadAds();
-  }, [user]);
+  }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const confirmDelete = (id: number) => setConfirmId(id);
 
@@ -307,7 +308,7 @@ export default function ManageAdsPage() {
     setDeletingId(id);
     try {
       const token = localStorage.getItem('token');
-      if (!token) throw new Error('Unauthorized');
+      if (!token) throw new Error(t('err_unauthorized'));
 
       const response = await fetch(`/api/ads/${id}`, {
         method: 'DELETE',
@@ -316,12 +317,12 @@ export default function ManageAdsPage() {
 
       if (!response.ok) {
         const data = await response.json();
-        throw new Error(data?.error || 'Failed to delete ad.');
+        throw new Error(data?.error || t('err_delete_ad'));
       }
 
       setAds((prev) => prev.filter((ad) => ad.id !== id));
     } catch (err) {
-      setError((err as Error).message || 'Unable to delete this ad.');
+      setError((err as Error).message || t('err_delete_generic'));
     } finally {
       setDeletingId(null);
     }
@@ -336,8 +337,10 @@ export default function ManageAdsPage() {
     <ProtectedRoute>
       {confirmId !== null && (
         <ConfirmDialog
-          title="Delete Ad"
-          message="Are you sure you want to delete this ad? This action cannot be undone."
+          title={t('confirm_delete_title')}
+          message={t('confirm_delete_msg')}
+          cancelLabel={t('confirm_cancel')}
+          confirmLabel={t('confirm_yes_delete')}
           onConfirm={handleDelete}
           onCancel={() => setConfirmId(null)}
         />
@@ -347,6 +350,7 @@ export default function ManageAdsPage() {
           ad={renewAd}
           onClose={() => setRenewAd(null)}
           onRenewed={handleRenewed}
+          t={t}
         />
       )}
       {showRenewToast && (
@@ -372,7 +376,7 @@ export default function ManageAdsPage() {
                 letterSpacing: '0.3em', textTransform: 'uppercase',
                 color: 'var(--gold)', marginBottom: '0.6rem',
               }}>
-                My Ads
+                {t('manage_my_ads')}
               </p>
               <h1 style={{
                 fontFamily: "'Kanit', sans-serif",
@@ -380,10 +384,10 @@ export default function ManageAdsPage() {
                 fontSize: 'clamp(1.75rem, 4vw, 2.6rem)',
                 color: 'var(--text)', lineHeight: 1.15, marginBottom: '0.5rem',
               }}>
-                Manage Your Listings
+                {t('manage_title')}
               </h1>
               <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: 1.6 }}>
-                Edit or remove your published ad listings from one place.
+                {t('manage_subtitle')}
               </p>
             </div>
 
@@ -401,7 +405,7 @@ export default function ManageAdsPage() {
               onMouseOver={(e) => { e.currentTarget.style.borderColor = 'var(--gold)'; e.currentTarget.style.color = 'var(--gold)'; }}
               onMouseOut={(e) => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.color = 'var(--text)'; }}
             >
-              ← My Account
+              {t('manage_back')}
             </Link>
           </div>
 
@@ -431,23 +435,23 @@ export default function ManageAdsPage() {
           {loading ? (
             <div style={emptyCardStyle}>
               <div style={spinnerStyle} />
-              <p style={{ color: 'var(--text-muted)', marginTop: '1rem' }}>Loading your ads…</p>
+              <p style={{ color: 'var(--text-muted)', marginTop: '1rem' }}>{t('manage_loading')}</p>
             </div>
           ) : ads.length === 0 ? (
             <div style={{ ...emptyCardStyle, gap: '0.75rem' }}>
               <p style={{ fontSize: '2.5rem' }}>📋</p>
               <p style={{ fontFamily: "'Kanit', sans-serif", fontWeight: 700, fontSize: '1.1rem', color: 'var(--text)' }}>
-                No ads published yet
+                {t('manage_no_ads')}
               </p>
               <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>
-                Create your first listing to see it here.
+                {t('manage_no_ads_sub')}
               </p>
               <Link
                 href="/account"
                 className="thai-btn"
                 style={{ padding: '0.6rem 1.5rem', fontSize: '0.875rem', borderRadius: '50px', textDecoration: 'none', marginTop: '0.5rem' }}
               >
-                Post an Ad
+                {t('manage_post_btn')}
               </Link>
             </div>
           ) : (
@@ -459,8 +463,8 @@ export default function ManageAdsPage() {
                 marginBottom: '1rem',
               }}>
                 {ads.length > PAGE_SIZE
-                  ? `Showing ${startNum}–${endNum} of ${ads.length} listings`
-                  : `${ads.length} listing${ads.length !== 1 ? 's' : ''}`}
+                  ? `${t('manage_showing')} ${startNum}–${endNum} ${t('manage_of')} ${ads.length} ${t('manage_listings')}`
+                  : `${ads.length} ${ads.length !== 1 ? t('manage_listings') : t('manage_listing')}`}
               </p>
 
               <div className="manage-grid">
@@ -495,7 +499,7 @@ export default function ManageAdsPage() {
                           : <span>📌</span>}
                         {expired && (
                           <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.45)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                            <span style={{ fontFamily: "'Kanit',sans-serif", fontWeight: 800, fontSize: '0.8rem', color: '#f47a8a', background: 'rgba(168,25,46,0.85)', padding: '0.3rem 0.8rem', borderRadius: '8px', letterSpacing: '0.1em' }}>EXPIRED</span>
+                            <span style={{ fontFamily: "'Kanit',sans-serif", fontWeight: 800, fontSize: '0.8rem', color: '#f47a8a', background: 'rgba(168,25,46,0.85)', padding: '0.3rem 0.8rem', borderRadius: '8px', letterSpacing: '0.1em' }}>{t('manage_expired')}</span>
                           </div>
                         )}
                       </div>
@@ -508,10 +512,10 @@ export default function ManageAdsPage() {
                             color: pkg.color, background: pkg.bg,
                             padding: '2px 8px', borderRadius: '20px', border: `1px solid ${pkg.color}40`,
                             fontFamily: "'Kanit', sans-serif",
-                          }}>{pkg.label}</span>
+                          }}>{t(`pkg_${ad.packageType}`)}</span>
                           {!expired && (
                             <span style={{ fontSize: '0.68rem', fontFamily: "'Kanit',sans-serif", fontWeight: 700, color: 'var(--accent-green)' }}>
-                              {daysRemaining(ad.createdAt, ad.packageType)}d left
+                              {daysRemaining(ad.createdAt, ad.packageType)}{t('manage_days_left')}
                             </span>
                           )}
                         </div>
@@ -553,7 +557,7 @@ export default function ManageAdsPage() {
                           onMouseOver={(e) => { e.currentTarget.style.background = 'rgba(46,204,138,0.22)'; }}
                           onMouseOut={(e) => { e.currentTarget.style.background = 'rgba(46,204,138,0.12)'; }}
                         >
-                          🔄 Renew Listing
+                          {t('manage_renew')}
                         </button>
                         <div style={{ display: 'flex', gap: '0.4rem' }}>
                           <Link
@@ -568,7 +572,7 @@ export default function ManageAdsPage() {
                             onMouseOver={(e) => { e.currentTarget.style.background = 'rgba(201,168,76,0.22)'; }}
                             onMouseOut={(e) => { e.currentTarget.style.background = 'rgba(201,168,76,0.12)'; }}
                           >
-                            ✏ Edit
+                            {t('manage_edit')}
                           </Link>
                           <button
                             type="button"
@@ -585,7 +589,7 @@ export default function ManageAdsPage() {
                             onMouseOver={(e) => { if (deletingId !== ad.id) e.currentTarget.style.background = 'rgba(168,25,46,0.22)'; }}
                             onMouseOut={(e) => { e.currentTarget.style.background = 'rgba(168,25,46,0.12)'; }}
                           >
-                            {deletingId === ad.id ? '⏳' : '✕ Delete'}
+                            {deletingId === ad.id ? t('manage_deleting') : t('manage_delete')}
                           </button>
                         </div>
                       </div>
@@ -598,7 +602,7 @@ export default function ManageAdsPage() {
               {totalPages > 1 && (
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.4rem', flexWrap: 'wrap', marginTop: '1.75rem' }}>
                   {page > 1 && (
-                    <button onClick={() => setPage(page - 1)} style={pgBtn(false)}>‹ Prev</button>
+                    <button onClick={() => setPage(page - 1)} style={pgBtn(false)}>{t('manage_prev')}</button>
                   )}
                   {buildPageRange(page, totalPages).map((p, i) =>
                     p === '…'
@@ -606,7 +610,7 @@ export default function ManageAdsPage() {
                       : <button key={p} onClick={() => setPage(p as number)} style={pgBtn(p === page)}>{p}</button>
                   )}
                   {page < totalPages && (
-                    <button onClick={() => setPage(page + 1)} style={{ ...pgBtn(false), padding: '0 1rem' }}>Next ›</button>
+                    <button onClick={() => setPage(page + 1)} style={{ ...pgBtn(false), padding: '0 1rem' }}>{t('manage_next')}</button>
                   )}
                 </div>
               )}

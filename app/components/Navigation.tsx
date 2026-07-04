@@ -1,11 +1,13 @@
 'use client';
 
 import { useAuth } from '../contexts/AuthContext';
+import { useLang } from '../contexts/LangContext';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 
 export default function Navigation() {
   const { user, logout, isLoading } = useAuth();
+  const { lang, toggleLang, t } = useLang();
   const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
@@ -28,15 +30,10 @@ export default function Navigation() {
   }
 
   const logoStyle: React.CSSProperties = {
-    fontFamily: "'Kanit', sans-serif",
-    fontWeight: 800,
-    fontSize: '1.25rem',
-    background: 'linear-gradient(135deg, var(--gold-light), var(--gold))',
-    WebkitBackgroundClip: 'text',
-    WebkitTextFillColor: 'transparent',
     textDecoration: 'none',
     flexShrink: 0,
-    whiteSpace: 'nowrap',
+    display: 'flex',
+    alignItems: 'center',
   };
 
   const avatarStyle: React.CSSProperties = {
@@ -75,7 +72,7 @@ export default function Navigation() {
     }}>
       {/* Logo — always anchored to the left, never moves */}
       <Link href="/" style={logoStyle}>
-        Ad<span style={{ color: 'var(--thai-red)', WebkitTextFillColor: 'var(--thai-red)' }}>Sabai</span>
+        <img src="/AdSabai_Logo_Vector.svg" alt="AdSabai" height="28" style={{ display: 'block' }} />
       </Link>
 
       {/* Right-side group — pushed to far right with margin-left:auto */}
@@ -98,7 +95,7 @@ export default function Navigation() {
                   onMouseOver={e => { e.currentTarget.style.borderColor = 'var(--thai-red)'; e.currentTarget.style.color = 'var(--thai-red)'; }}
                   onMouseOut={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.color = 'var(--text-muted)'; }}
                 >
-                  Logout
+                  {t('nav_logout')}
                 </button>
               </>
             ) : (
@@ -107,15 +104,44 @@ export default function Navigation() {
                   onMouseOver={e => e.currentTarget.style.color = 'var(--gold)'}
                   onMouseOut={e => e.currentTarget.style.color = 'var(--text-muted)'}
                 >
-                  Login
+                  {t('nav_login')}
                 </Link>
                 <Link href="/auth/register" className="thai-btn" style={{ padding: '0.5rem 1.2rem', fontSize: '0.85rem', textDecoration: 'none', display: 'inline-block' }}>
-                  Register
+                  {t('nav_register')}
                 </Link>
               </>
             )
           )}
         </div>
+
+        {/* Lang toggle — always visible */}
+        <button
+          onClick={toggleLang}
+          style={{
+            background: 'none',
+            border: '1px solid var(--border)',
+            color: 'var(--text-muted)',
+            fontSize: '0.7rem',
+            fontFamily: "'Kanit', sans-serif",
+            fontWeight: 700,
+            letterSpacing: '0.5px',
+            height: '34px',
+            padding: '0 0.55rem',
+            borderRadius: '8px',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexShrink: 0,
+            transition: 'border-color .2s, color .2s, background .2s',
+          }}
+          onMouseOver={e => { e.currentTarget.style.borderColor = 'var(--gold)'; e.currentTarget.style.color = 'var(--gold)'; e.currentTarget.style.background = 'rgba(201,168,76,0.08)'; }}
+          onMouseOut={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.color = 'var(--text-muted)'; e.currentTarget.style.background = 'none'; }}
+          title={lang === 'en' ? 'Switch to Thai' : 'Switch to English'}
+          aria-label="Toggle language"
+        >
+          {lang === 'en' ? 'TH' : 'EN'}
+        </button>
 
         {/* Theme toggle — always visible */}
         <button
@@ -139,16 +165,16 @@ export default function Navigation() {
                   onClick={logout}
                   style={{ background: 'none', border: '1px solid var(--border)', color: 'var(--text-muted)', fontSize: '0.82rem', padding: '0.6rem 0.85rem', borderRadius: '6px', cursor: 'pointer', whiteSpace: 'nowrap' }}
                 >
-                  Logout
+                  {t('nav_logout')}
                 </button>
               </>
             ) : (
               <>
                 <Link href="/auth/login" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '0.85rem', fontWeight: 500 }}>
-                  Login
+                  {t('nav_login')}
                 </Link>
                 <Link href="/auth/register" className="thai-btn" style={{ padding: '0.4rem 0.9rem', fontSize: '0.8rem', textDecoration: 'none', display: 'inline-block' }}>
-                  Register
+                  {t('nav_register')}
                 </Link>
               </>
             )

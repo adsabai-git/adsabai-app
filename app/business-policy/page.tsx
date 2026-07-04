@@ -24,16 +24,7 @@ export default function BusinessPolicy() {
 
         {/* Brand */}
         <div style={{ marginBottom: '0.4rem' }}>
-          <span style={{
-            fontFamily: "'Kanit', sans-serif",
-            fontWeight: 800,
-            fontSize: '1.4rem',
-            background: 'linear-gradient(135deg, var(--gold-light), var(--gold))',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-          }}>
-            Ad<span style={{ color: 'var(--thai-red)', WebkitTextFillColor: 'var(--thai-red)' }}>Sabai</span>
-          </span>
+          <img src="/AdSabai_Logo_Vector.svg" alt="AdSabai" height="30" style={{ display: 'block' }} />
         </div>
         <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginBottom: '2rem' }}>
           Easy Ads. Real Results.

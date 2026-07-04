@@ -309,10 +309,10 @@ export default function EditAdPage() {
 
             <div>
               <FieldLabel htmlFor="ed-price">Price</FieldLabel>
-              <input id="ed-price" type="number" value={price}
+              <input id="ed-price" type="text" value={price}
                 onChange={(e) => setPrice(e.target.value)}
                 style={inputStyle} onFocus={focusGold} onBlur={blurBorder}
-                placeholder="0.00"
+                placeholder="e.g. ฿1,500/day or Free or Negotiable"
               />
             </div>
 

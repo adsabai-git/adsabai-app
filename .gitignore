@@ -42,3 +42,5 @@ next-env.d.ts
 
 # scripts / QA tools (not part of the app)
 /scripts
+
+.vercel

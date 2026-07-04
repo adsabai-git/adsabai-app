@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { supabaseAdmin } from '../../../lib/supabase';
 import { isExpired } from '../../../lib/ad-packages';
 import ShareButtons from '../../components/ShareButtons';
+import ImageGallery from '../../components/ImageGallery';
 
 export const dynamic = 'force-dynamic';
 
@@ -27,7 +28,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   if (!ad) return {};
   const a = ad as any;
   const pageUrl = `https://adsabai.com/ads/${id}`;
-  const image = Array.isArray(a.imageUrls) && a.imageUrls.length > 0 ? a.imageUrls[0] : 'https://adsabai.com/og-default.png';
+
   return {
     title: `${a.title} – AdSabai`,
     description: (a.description as string).slice(0, 160),
@@ -36,14 +37,12 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
       description: (a.description as string).slice(0, 160),
       url: pageUrl,
       siteName: 'AdSabai',
-      images: [{ url: image, width: 800, height: 600 }],
       type: 'website',
     },
     twitter: {
       card: 'summary_large_image',
       title: `${a.title} – AdSabai`,
       description: (a.description as string).slice(0, 160),
-      images: [image],
     },
   };
 }
@@ -63,7 +62,6 @@ export default async function AdDetailPage({ params }: { params: Promise<{ id: s
 
   const ad = raw as any;
   const imgs: string[] = (() => { try { return JSON.parse(ad.imageUrls || '[]'); } catch { return []; } })();
-  const cover = imgs[0];
   const isPremium = ad.packageType === 'premium';
   const isStandard = ad.packageType === 'standard';
   const badgeColor = isPremium ? '#C9A84C' : isStandard ? '#2ECC8A' : '#9BA8B8';
@@ -101,12 +99,8 @@ export default async function AdDetailPage({ params }: { params: Promise<{ id: s
             boxShadow: '0 4px 32px rgba(0,0,0,0.08)',
           }}>
 
-            {/* Cover image */}
-            {cover && (
-              <div style={{ height: '320px', overflow: 'hidden' }}>
-                <img src={cover} alt={ad.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-              </div>
-            )}
+            {/* Cover image + gallery — handles lightbox */}
+            <ImageGallery images={imgs} title={ad.title} />
 
             <div style={{ padding: '1.75rem 2rem' }}>
 
@@ -157,18 +151,6 @@ export default async function AdDetailPage({ params }: { params: Promise<{ id: s
                 <div style={{ fontSize: '0.72rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#6b7280', marginBottom: '0.65rem', fontFamily: "'Kanit', sans-serif" }}>About this listing</div>
                 <p style={{ fontSize: '0.93rem', lineHeight: 1.75, color: '#374151', whiteSpace: 'pre-wrap' }}>{ad.description}</p>
               </div>
-
-              {/* Extra images */}
-              {imgs.length > 1 && (
-                <div style={{ marginBottom: '1.75rem' }}>
-                  <div style={{ fontSize: '0.72rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#6b7280', marginBottom: '0.65rem', fontFamily: "'Kanit', sans-serif" }}>Photos</div>
-                  <div className="ad-img-gallery">
-                    {imgs.map((src, i) => (
-                      <img key={i} src={src} alt={`Photo ${i + 1}`} style={{ width: '100%', aspectRatio: '4/3', objectFit: 'cover', borderRadius: '10px', border: '1px solid #e2e6ed' }} />
-                    ))}
-                  </div>
-                </div>
-              )}
 
               {/* Contact */}
               <div style={{ background: '#f4f6f9', border: '1px solid #e2e6ed', borderRadius: '12px', padding: '1.25rem 1.5rem', marginBottom: '1rem' }}>

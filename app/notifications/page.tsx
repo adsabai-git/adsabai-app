@@ -66,7 +66,14 @@ export default function NotificationsPage() {
 
     fetch('/api/notifications', { headers: { Authorization: `Bearer ${token}` } })
       .then(r => r.ok ? r.json() : Promise.reject(r.status))
-      .then(data => { setNotifs(data); setLoading(false); })
+      .then(data => {
+        setNotifs(data);
+        setLoading(false);
+        // Auto-mark all as read when page is opened
+        if (data.some((n: { read: boolean }) => !n.read)) {
+          fetch('/api/notifications', { method: 'PATCH', headers: { Authorization: `Bearer ${token}` } });
+        }
+      })
       .catch(() => { setError('Failed to load notifications.'); setLoading(false); });
   }, []);
 
@@ -108,13 +115,7 @@ export default function NotificationsPage() {
         borderBottom: '1px solid var(--border)',
         padding: '3.5rem 1.5rem 3rem', textAlign: 'center',
       }}>
-        <div style={{
-          fontFamily: "'Kanit', sans-serif", fontWeight: 800, fontSize: '1.5rem',
-          background: 'linear-gradient(135deg, var(--gold-light), var(--gold))',
-          WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '0.5rem',
-        }}>
-          Ad<span style={{ color: 'var(--thai-red)', WebkitTextFillColor: 'var(--thai-red)' }}>Sabai</span>
-        </div>
+        <img src="/AdSabai_Logo_Vector.svg" alt="AdSabai" height="36" style={{ display: 'block', margin: '0 auto 0.5rem' }} />
         <h1 style={{
           fontFamily: "'Kanit', sans-serif", fontWeight: 800,
           fontSize: 'clamp(1.8rem, 4vw, 2.5rem)', marginBottom: '0.5rem',

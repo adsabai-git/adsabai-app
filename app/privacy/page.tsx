@@ -24,16 +24,7 @@ export default function PrivacyPolicy() {
 
         {/* Brand */}
         <div style={{ marginBottom: '0.4rem' }}>
-          <span style={{
-            fontFamily: "'Kanit', sans-serif",
-            fontWeight: 800,
-            fontSize: '1.4rem',
-            background: 'linear-gradient(135deg, var(--gold-light), var(--gold))',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-          }}>
-            Ad<span style={{ color: 'var(--thai-red)', WebkitTextFillColor: 'var(--thai-red)' }}>Sabai</span>
-          </span>
+          <img src="/AdSabai_Logo_Vector.svg" alt="AdSabai" height="30" style={{ display: 'block' }} />
         </div>
         <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginBottom: '2rem' }}>
           Easy Ads. Real Results.
@@ -62,12 +53,11 @@ export default function PrivacyPolicy() {
         <Section title="1. Information We Collect">
           <p style={pStyle}>We collect the following types of information when you register or use AdSabai:</p>
           <ul style={ulStyle}>
-            <li style={liStyle}><strong>Account information:</strong> Full name, email address, phone number, and password</li>
+            <li style={liStyle}><strong>Account information:</strong> Full name, email address, and phone number</li>
             <li style={liStyle}><strong>Profile information:</strong> Business name, contact details, and profile photo (optional)</li>
             <li style={liStyle}><strong>Ad listing content:</strong> Text, images, categories, and pricing you submit for your listings</li>
             <li style={liStyle}><strong>Payment information:</strong> Billing details processed securely through our payment provider (Omise/OPN Payments). We do not store your card details directly.</li>
             <li style={liStyle}><strong>Usage data:</strong> Pages visited, time spent, clicks, and interactions with the platform</li>
-            <li style={liStyle}><strong>Device and technical data:</strong> IP address, browser type, operating system, and device identifiers</li>
             <li style={liStyle}><strong>Communications:</strong> Messages you send to our support team</li>
           </ul>
         </Section>
